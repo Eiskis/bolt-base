@@ -1,3 +1,4 @@
 # Install dependencies with Composer
 php composer.phar install
 php composer.phar install --working-dir="extensions/"
+npm install
