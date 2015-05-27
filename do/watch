@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Run Gulp to build (default) theme assets
+../theme/default/node_modules/.bin/gulp build
+../theme/default/node_modules/.bin/gulp watch

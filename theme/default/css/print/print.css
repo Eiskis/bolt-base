@@ -1,0 +1,8 @@
+
+@media print {
+
+	body {
+		min-width: none;
+	}
+
+}

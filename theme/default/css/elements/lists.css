@@ -1,0 +1,64 @@
+
+/*Visual numbered list*/
+
+ol {
+	
+}
+
+ol.visual {
+	list-style: none;
+	counter-reset: visual-counter;
+	padding-left: 0;
+}
+
+	ol.visual > li {
+		padding-left: 2.8em;
+		margin-bottom: 1.34em;
+	}
+
+	ol.visual > li:before {
+		content: counter(visual-counter);
+		counter-increment: visual-counter;
+
+		display: inline-block;
+		border-style: solid;
+		text-align: center;
+
+		margin-left: -3.0em;
+		margin-right: 1em;
+
+		padding: 0.4em;
+		width: 1em;
+		height: 1em;
+		line-height: 1em;
+
+		border-width: 1px;
+		border-color: #369eb3;
+		color: #369eb3;
+
+		border-radius: 100em;
+	}
+
+
+
+/*Colors for numbered list*/
+
+ol.visual-green > li:before {
+	border-color: #6b9d00;
+	color: #6b9d00;
+}
+
+ol.visual-blue > li:before {
+	border-color: #4687a7;
+	color: #4687a7;
+}
+
+ol.visual-red > li:before {
+	border-color: #c52f31;
+	color: #c52f31;
+}
+
+ol.visual-purple > li:before {
+	border-color: #7c0090;
+	color: #7c0090;
+}

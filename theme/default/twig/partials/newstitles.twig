@@ -1,0 +1,38 @@
+
+{% if not news %}
+	{% setcontent news = 'news/latest/6' %}
+{% endif %}
+
+{# People list #}
+{% if news is not empty %}
+
+	<div class="partial-newstitles relative">
+
+		<div class="partial-newstitles-content">
+			<ul class="plain">
+
+				{% for newsitem in news %}
+
+					<li><a href="{{ newsitem.link }}" class="partial-newstitles-item block">
+
+						<p class="logo"><img src="{{ image(newsitem.introimage) }}" alt="{{ newsitem.title }}" title="{{ newsitem.title }}"></p>
+
+						{# <p>{{ newsitem.datepublish|localdate }}</p> #}
+
+						<p>{{ newsitem.title }}</p>
+
+					</a></li>
+
+				{% endfor %}
+
+				{# {{ pager() }} #}
+
+			</ul>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+
+	</div>
+
+{% endif %}

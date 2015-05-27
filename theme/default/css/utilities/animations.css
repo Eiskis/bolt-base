@@ -1,0 +1,5 @@
+
+.animation-spin {
+	animation: spin 2s infinite linear;
+	display: inline-block;
+}

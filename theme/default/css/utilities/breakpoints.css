@@ -1,0 +1,55 @@
+
+@media handheld, only screen and (min-width: 25em) {
+	.hide-over-tiny {
+		display: none;
+	}
+}
+@media handheld, only screen and (max-width: 24.9375em) {
+	.hide-under-tiny {
+		display: none;
+	}
+}
+
+@media handheld, only screen and (min-width: 40em) {
+	.hide-over-small {
+		display: none;
+	}
+}
+@media handheld, only screen and (max-width: 39.9375em) {
+	.hide-under-small {
+		display: none;
+	}
+}
+
+@media handheld, only screen and (min-width: 55em) {
+	.hide-over-smallmedium {
+		display: none;
+	}
+}
+@media handheld, only screen and (max-width: 54.9375em) {
+	.hide-under-smallmedium {
+		display: none;
+	}
+}
+
+@media handheld, only screen and (min-width: 70em) {
+	.hide-over-medium {
+		display: none;
+	}
+}
+@media handheld, only screen and (max-width: 69.9375em) {
+	.hide-under-medium {
+		display: none;
+	}
+}
+
+@media handheld, only screen and (min-width: 105em) {
+	.hide-over-large {
+		display: none;
+	}
+}
+@media handheld, only screen and (max-width: 104.9375em) {
+	.hide-under-large {
+		display: none;
+	}
+}

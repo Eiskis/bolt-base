@@ -1,2 +1,2 @@
 # Deploy to production with Rocketeer. See config under .rocketeer/
-php rocketeer.phar deploy --on="production"
+php ../bin/rocketeer.phar deploy --on="production"

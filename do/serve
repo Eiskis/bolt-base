@@ -13,7 +13,7 @@
 # because the built-in server chokes on the URL rewriting. This is a bug in PHP, which they
 # apparently do not intend to fix anytime soon. See: https://bugs.php.net/bug.php?id=67671
 
-DOCROOT="."
+DOCROOT="../"
 POINT="index.php"
 
 if [ $1 ]; then

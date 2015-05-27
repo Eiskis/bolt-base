@@ -1,0 +1,330 @@
+
+.layout-customcontent-intro {
+	font-size: 1.2em;
+}
+
+.layout-customcontent-section {
+	max-width: 44em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
+/*Overflow*/
+@media handheld, only screen and (min-width: 45em) {
+	.layout-customcontent-overflow,
+	.layout-customcontent-image,
+	.layout-customcontent h2,
+	.layout-customcontent table,
+	.layout-customcontent pre {
+		margin-left: -5%;
+		margin-right: -5%;
+	}
+	.layout-customcontent-overflow,
+	.layout-customcontent h2,
+	.layout-customcontent table,
+	.layout-customcontent pre code {
+		padding-left: 5%;
+		padding-right: 5%;
+	}
+	.layout-customcontent table {
+		width: 110%;
+	}
+}
+
+@media handheld, only screen and (min-width: 70em) {
+	.layout-customcontent-overflow,
+	.layout-customcontent-image,
+	.layout-customcontent h2,
+	.layout-customcontent table,
+	.layout-customcontent pre {
+		margin-left: -10%;
+		margin-right: -10%;
+	}
+	.layout-customcontent-overflow,
+	.layout-customcontent h2,
+	.layout-customcontent table,
+	.layout-customcontent pre code {
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+	.layout-customcontent table {
+		width: 120%;
+	}
+}
+
+@media handheld, only screen and (min-width: 85em) {
+	.layout-customcontent-overflow,
+	.layout-customcontent-image,
+	.layout-customcontent h2,
+	.layout-customcontent table,
+	.layout-customcontent pre {
+		margin-left: -15%;
+		margin-right: -15%;
+	}
+	.layout-customcontent-overflow,
+	.layout-customcontent h2,
+	.layout-customcontent table,
+	.layout-customcontent pre code {
+		padding-left: 15%;
+		padding-right: 15%;
+	}
+	.layout-customcontent table {
+		width: 130%;
+	}
+}
+
+
+
+/*Elements*/
+
+.layout-customcontent-overflow,
+.layout-customcontent table,
+.layout-customcontent pre {
+	margin-top: 6%;
+	margin-bottom: 6%;
+}
+
+
+
+/*Inline*/
+.layout-customcontent a {
+	font-weight: 600;
+}
+
+.layout-customcontent strong {
+	color: #1c2b32;
+}
+
+
+
+/*Overflow*/
+.layout-customcontent-overflow {
+	border-top-width: 1px;
+}
+
+
+
+/*Images*/
+.layout-customcontent-image {
+	max-height: 18em;
+
+	margin-top: 10%;
+	margin-bottom: 10%;
+
+	overflow: hidden;
+	border-radius: 2px;
+}
+	@media handheld, only screen and (min-height: 24em) {
+		.layout-customcontent-image {
+			max-height: 20em;
+		}
+	}
+	@media handheld, only screen and (min-height: 28em) {
+		.layout-customcontent-image {
+			max-height: 24em;
+		}
+	}
+	@media handheld, only screen and (min-height: 32em) {
+		.layout-customcontent-image {
+			max-height: 28em;
+		}
+	}
+	@media handheld, only screen and (min-height: 36em) {
+		.layout-customcontent-image {
+			max-height: 32em;
+		}
+	}
+	@media handheld, only screen and (min-height: 40em) {
+		.layout-customcontent-image {
+			max-height: 36em;
+		}
+	}
+	.layout-customcontent-image img,
+	.layout-customcontent-image a {
+		display: block;
+	}
+	.layout-customcontent-image img {
+		max-height: 100%;
+	}
+
+
+
+/*Headings*/
+
+.layout-customcontent h2 {
+	font-size: 1.2em;
+	margin-top: 2.68em;
+	margin-bottom: 1.67em;
+	font-weight: 500;
+	letter-spacing: 0.15em;
+}
+
+.layout-customcontent h3 {
+	font-weight: 600;
+	color: #1c2b32;
+	letter-spacing: 0;
+	text-transform: none;
+	font-size: 1.2em;
+}
+
+
+
+/*Code*/
+.layout-customcontent pre code {
+	display: block;
+	padding: 2em;
+	background-color: #f5f6f7;
+	border-radius: 4px;
+	white-space: pre;
+	word-break: normal;
+	word-wrap: normal;
+}
+
+
+
+/*Quotes*/
+.layout-customcontent blockquote {
+	margin-top: 6%;
+	margin-left: 1em;
+}
+	@media handheld, only screen and (min-width: 40em) {
+		.layout-customcontent blockquote {
+			margin-left: 10%;
+		}
+	}
+
+.layout-customcontent blockquote h3,
+.layout-customcontent blockquote h4 {
+	/*font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Segoe UI", "Segoe WP", "Arial", sans-serif;*/
+	/*font-style: normal;*/
+}
+.layout-customcontent blockquote h3 {
+	font-size: 1em;
+	margin-bottom: 0;
+}
+.layout-customcontent blockquote h4 {
+	font-size: 1em;
+	margin: 0;
+	color: inherit;
+	text-transform: none;
+	font-weight: inherit;
+}
+
+
+
+
+/*Tables*/
+.layout-customcontent table {
+	box-sizing: border-box;
+	width: 100%;
+
+	border-color: #f0f1f2;
+	border-radius: 2px;
+	border-width: 1px;
+
+	line-height: 1.5;
+	font-size: 0.85em;
+}
+	.layout-customcontent table th {
+	}
+	.layout-customcontent table thead th {
+		font-weight: 600;
+		color: #8b9ba3;
+		text-transform: uppercase;
+	}
+	.layout-customcontent table th,
+	.layout-customcontent table td {
+		border-width: 1px;
+		border-color: #f0f1f2;
+	}
+
+
+
+/*Wide version (cannot afford sidebar)*/
+
+/*Overflow*/
+@media handheld, only screen and (min-width: 55em) {
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent-wide .layout-customcontent-image,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre {
+		margin-left: -15%;
+		margin-right: -15%;
+	}
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre code {
+		padding-left: 15%;
+		padding-right: 15%;
+	}
+	.layout-customcontent.layout-customcontent-wide table {
+		width: 130%;
+	}
+}
+
+@media handheld, only screen and (min-width: 65em) {
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent-wide .layout-customcontent-image,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre {
+		margin-left: -25%;
+		margin-right: -25%;
+	}
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre code {
+		padding-left: 25%;
+		padding-right: 25%;
+	}
+	.layout-customcontent.layout-customcontent-wide table {
+		width: 150%;
+	}
+}
+
+@media handheld, only screen and (min-width: 80em) {
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent-wide .layout-customcontent-image,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre {
+		margin-left: -35%;
+		margin-right: -35%;
+	}
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre code {
+		padding-left: 35%;
+		padding-right: 35%;
+	}
+	.layout-customcontent.layout-customcontent-wide table {
+		width: 170%;
+	}
+}
+
+@media handheld, only screen and (min-width: 95em) {
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent-wide .layout-customcontent-image,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre {
+		margin-left: -50%;
+		margin-right: -50%;
+	}
+	.layout-customcontent-wide .layout-customcontent-overflow,
+	.layout-customcontent.layout-customcontent-wide h2,
+	.layout-customcontent.layout-customcontent-wide table,
+	.layout-customcontent.layout-customcontent-wide pre code {
+		padding-left: 50%;
+		padding-right: 50%;
+	}
+	.layout-customcontent.layout-customcontent-wide table {
+		width: 200%;
+	}
+}

@@ -1,0 +1,130 @@
+
+.partial-sharebuttons {}
+
+.partial-sharebuttons li {
+	display: inline-block;
+	margin-left: 0.4em;
+	margin-right: 0.4em;
+}
+	.partial-sharebuttons li.first {
+		margin-left: 0;
+	}
+	.partial-sharebuttons li.last {
+		margin-right: 0;
+	}
+
+/*Responsive adjustments*/
+@media handheld, only screen and (min-width: 32em) {
+	.partial-sharebuttons.partial-sharebuttons-showlabels i {
+		margin-right: 0.5em;
+	}
+}
+
+@media handheld, only screen and (max-width: 32em) {
+
+	/*Alignment*/
+	.partial-sharebuttons.partial-sharebuttons-showlabels {
+		text-align: center;
+	}
+
+	/*Pad*/
+	.partial-sharebuttons.partial-sharebuttons-showlabels li {
+		display: block;
+		margin: 0.67em 0;
+	}
+
+	/*Button sizing*/
+	.partial-sharebuttons.partial-sharebuttons-showlabels .button {
+		display: block;
+		max-width: 14em;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+}
+
+@media handheld, only screen and (max-width: 40em) {
+	.partial-sharebuttons.partial-sharebuttons-showlabels .button {
+		padding-top: 0.5em;
+		padding-bottom: 0.4em;
+	}
+}
+
+@media handheld, only screen and (max-width: 32em) {
+	.partial-sharebuttons.partial-sharebuttons-showlabels i {
+		margin-right: 0.5em;
+	}
+}
+
+
+/*Label alignments on block style*/
+/*@media handheld, only screen and (max-width: 32em) {
+	.partial-sharebuttons.partial-sharebuttons-showlabels i {
+		float: left;
+		line-height: inherit;
+	}
+	.partial-sharebuttons.partial-sharebuttons-showlabels .label {
+		clear: none;
+		float: left;
+		line-height: inherit;
+	}
+}*/
+
+
+
+/*Colors*/
+.partial-sharebuttons .button {
+	color: #fff;
+	text-transform: none;
+	padding: 0.2em 1em;
+	text-transform: uppercase;
+}
+	.partial-sharebuttons .facebook {
+		background-color: #3b5998;
+	}
+		.partial-sharebuttons .facebook:hover {
+			background-color: #5573B2;
+		}
+	.partial-sharebuttons .twitter {
+		background-color: #55acee;
+	}
+		.partial-sharebuttons .twitter:hover {
+			background-color: #7dc4fa;
+		}
+	.partial-sharebuttons .linkedin {
+		background-color: #0077b5;
+	}
+		.partial-sharebuttons .linkedin:hover {
+			background-color: #2198d9;
+		}
+
+/*Inverted*/
+.inverted .partial-sharebuttons .button,
+.inverted .partial-sharebuttons .button:hover {
+	border-width: 1px;
+	border-color: #fff;
+}
+	.inverted .partial-sharebuttons .button {
+		background-color: transparent;
+	}
+	.inverted .partial-sharebuttons .button:hover {
+		background-color: #fff;
+	}
+		.inverted .partial-sharebuttons .facebook:hover {
+			color: #3b5998;
+		}
+		.inverted .partial-sharebuttons .twitter:hover {
+			color: #55acee;
+		}
+		.inverted .partial-sharebuttons .linkedin:hover {
+			color: #0077b5;
+		}
+
+/*Icons only*/
+.partial-sharebuttons-iconsonly .label {
+	display: none;
+}
+.partial-sharebuttons-iconsonly .button {
+	line-height: 1;
+	padding: 0.6em;
+}

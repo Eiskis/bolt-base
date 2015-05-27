@@ -1,0 +1,80 @@
+
+{# FIXME: could be set somewhere else #}
+{% set ogtype = 'website' %}
+{% set sitetitle = app.config.get('general/sitename') %}
+{% set sitedescription = app.config.get('general/payoff') %}
+{% set iconurl = 'images/icons/icon.png' %} {# PNG #}
+{% set splashimageurl = 'images/splash/splash.jpg' %}
+
+
+
+{# Adjustments #}
+{% set title = sitetitle %}
+{% set splashimageurl = paths.theme ~ splashimageurl %}
+
+{# Splash images #}
+{% if record %}
+
+	{# Article type #}
+	{% if record.contenttype.slug in ['posts', 'news'] %}
+		{% set ogtype = 'article' %}
+	{% endif %}
+
+	{# Teaser text #}
+	{% if record.teaser is not empty %}
+		{% set sitedescription = record.teaser %}
+	{% endif %}
+
+	{# Splash image #}
+	{% if record.splashimage is not empty %}
+		{% set splashimageurl = paths.files ~ record.splashimage %}
+	{% endif %}
+
+	{# Record-specific title #}
+	{% if record.title is not empty %}
+		{% set title = record.title ~ ' - ' ~ title %}
+	{% endif %}
+
+{% endif %}
+
+{# Adjustments #}
+{% set splashimageurl = paths.hosturl ~ splashimageurl %}
+
+
+
+{# The tags #}
+
+{# Basics #}
+<title>{{ title }}</title>
+<meta name="application-name" content="{{ sitetitle }}">
+<meta name="description" content="{{ sitedescription }}">
+
+{# Open Graph (Facebook) #}
+<meta property="og:site_name" content="{{ sitetitle }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ sitedescription }}">
+<meta property="og:url" content="{{ paths.canonicalurl }}">
+<meta property="og:image" content="{{ splashimageurl }}">
+<meta property="og:app_id" content="{{ facebookappid }}">
+<meta property="og:type" content="{{ ogtype }}">
+
+{# Main and alternative locales #}
+<meta property="og:locale" content="{{ locale }}">
+{% for loc in locales %}
+	{% if loc != locale %}
+		<meta property="og:locale:alternate" content="{{ loc }}">
+	{% endif %}
+{% endfor %}
+
+{# If type allows, add author #}
+{% if ogtype == 'article' %}
+	<meta property="article:author" content="{{ facebookurl }}">
+	<meta property="article:publisher" content="{{ facebookurl }}">
+{% endif %}
+
+{# Mobile platforms #}
+<meta name="theme-color" content="#27a9e1">
+<link rel="icon" href="{{ paths.theme }}{{ iconurl }}" type="image/png">
+<link rel="apple-touch-icon" href="{{ paths.theme }}{{ iconurl }}">
+<link rel="apple-touch-startup-image" href="{{ splashimageurl }}">
+<meta name="msapplication-TileImage" content="{{ splashimageurl }}">

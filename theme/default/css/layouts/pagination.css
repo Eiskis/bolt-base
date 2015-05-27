@@ -1,0 +1,61 @@
+
+/*Pagination menu positioning*/
+.layout-pagination {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+.layout-pagination li {
+	display: inline-block;
+}
+.layout-pagination-link {
+	box-sizing: border-box;
+}
+	.layout-pagination-link-middle {
+	}
+
+
+
+/*No middle item*/
+.layout-pagination-simple .layout-pagination-link {
+}
+	.layout-pagination-simple .layout-pagination-link-middle {
+		display: none;
+	}
+
+
+
+/*Look*/
+
+.layout-pagination-link-middle {
+	border-left-width: 1px;
+	border-right-width: 1px;
+}
+	.layout-pagination-simple .layout-pagination-link-first {
+		border-right-width: 1px;
+		text-align: right;
+	}
+	.layout-pagination-simple .layout-pagination-link-last {
+		text-align: left;
+	}
+
+.layout-pagination-link .button {
+	display: block;
+	padding-left: 2em;
+	padding-right: 2em;
+}
+	.layout-pagination-link-first .button {
+		padding-left: 1em;
+	}
+		.layout-pagination.simple .layout-pagination-link-first .button {
+			border-right-width: 1px;
+		}
+		.layout-pagination-link-first i {
+			margin-right: 0.5em;
+		}
+	.layout-pagination-link-last .button {
+		padding-right: 1em;
+	}
+	.layout-pagination-link-last i {
+		margin-left: 0.5em;
+	}

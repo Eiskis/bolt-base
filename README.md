@@ -2,6 +2,21 @@
 Base
 ====
 
+## TODO
+
+- Bower for theme
+- gulp-bower-* integration for theme
+- rocketeer confs
+- theme cleanup
+
+## Reqs
+
+- Apache/nginx
+- mod_rewrite, `.htaccess` allowed
+- PHP5 (plus php on command line)
+- SQLite
+- Node + NPM
+
 ## Scripts
 
 - `./install`: Install Composer and NPM dependencies.

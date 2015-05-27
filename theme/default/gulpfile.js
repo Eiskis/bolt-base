@@ -11,29 +11,15 @@ var conf = {
 	debug: false,
 	browserlist: 'last 2 version, > 1%, Android, BlackBerry, iOS 7',
 	paths: {
-		css: 'theme/default/css/',
-		js: 'theme/default/js/'
+		css: 'css/',
+		js: 'js/'
 	},
 	files: {
 		css: [
-			'lib/**/*.css',
-			'look/**/*.css',
-			'elements/**/*.css',
-			'layouts/**/*.css',
-			'utilities/**/*.css',
-			'records/**/*.css',
-			'pages/**/*.css',
-			'menus/**/*.css',
-
-			'partials/*.css',
-			'partials/marketing/**/*.css',
-			'partials/support/**/*.css',
-
-			'print/**/*.css'
+			'**/*.css'
 		],
 		js: [
-			'lib/**/*.js',
-			'custom/**/*.js'
+			'**/*.js'
 		]
 	}
 };
@@ -41,8 +27,10 @@ var conf = {
 // Prefix file paths with the theme path
 (function (conf) {
 	for (var ext in conf.files) {
-		for (var i = 0; i < conf.files[ext].length; i++) {
-			conf.files[ext][i] = conf.paths[ext] + conf.files[ext][i];
+		if (conf.paths[ext] instanceof Array) {
+			for (var i = 0; i < conf.files[ext].length; i++) {
+				conf.files[ext][i] = conf.paths[ext] + conf.files[ext][i];
+			}
 		}
 	}
 })(conf);

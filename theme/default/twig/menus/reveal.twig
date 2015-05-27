@@ -1,0 +1,26 @@
+
+{% macro display_menu_item(item, loop, level) %}
+
+	<li class="index-{{ loop.index }}{% if loop.first %} first{% endif %}{% if loop.last %} last{% endif %} level-{{ level }}{% if item|current %} selected{% endif %}{% if item.class is defined %} {{ item.class }}{% endif %}">
+
+		<a href="{{ paths.root }}{{ item.path }}" {% if item.title is defined %}title='{{ item.title|escape }}'{% endif %}
+		   class="button white">{{item.label}}</a>
+
+		{# Submenu items #}
+		{% if item.submenu is defined %}
+			<ul class="reset plain">
+				{% for submenu in item.submenu %}
+					{{ _self.display_menu_item(submenu, loop, (level + 1)) }}
+				{% endfor %}
+			</ul>
+		{% endif %}
+
+	</li>
+
+{% endmacro %}
+
+<ul class="menu-reveal reset plain">
+	{% for item in menu %}
+		{{ _self.display_menu_item(item, loop, 0) }}
+	{% endfor %}
+</ul>

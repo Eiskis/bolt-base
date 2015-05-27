@@ -1,0 +1,30 @@
+
+{# Fetch content #}
+{% setcontent locations = 'locations' %}
+{% if not jobs %}
+	{% setcontent jobs = 'jobs' %}
+{% endif %}
+
+{# Job list #}
+{% if jobs %}
+
+	{% setcontent units = 'units' %}
+
+	<div class="partial-jobgrid grid small-half medium-third large-third">
+
+		{% for job in jobs %}
+			{% set location = locations[job.location] %}
+			<div class="grid-cell">
+				<a href="{{ job.link }}" class="block plain relative radius">
+					<h3 class="reset">{{ job.title }}</h3>
+					<p class="reset">{{ location.title }}</p>
+				</a>
+			</div>
+
+		{% endfor %}
+
+		{# {{ pager() }} #}
+
+	</div>
+
+{% endif %}

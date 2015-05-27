@@ -1,0 +1,86 @@
+{% extends 'frames/marketing.twig' %}
+
+{% block body %}
+
+	{# Fetch content #}
+	{% setcontent people = 'people' %}
+	{% set person = people[post.author] %}
+
+	<div class="record-post">
+		<div class="row headerpad">
+			<div class="row-content buffer">
+
+				<div class="record-post-heading align-center-over-small">
+
+					<p><img src="{{ thumbnail(person.portrait, 80, 80) }}" class="avatar" alt="{{ person.title }}" title="{{ person.title }}"></p>
+
+					<h4 class="reset-bottom"><a href="{{ paths.root ~ post.contenttype.slug }}">Omniata Blog</a> | <a href="{{ person.link }}" data-action="popup" class="plain">{{ person.title }}</a> | {{ post.datepublish|localdate }}</h4>
+
+					<h1 class="reset">{{ post.title }}</h1>
+
+					{% if post.intro %}
+						<div class="layout-customcontent-intro keep-center limit-small">
+							{{ post.intro }}
+						</div>
+					{% endif %}
+
+					{% include 'partials/sharebuttons.twig' with {
+						twitterhandle: person.twitter,
+						title: post.title,
+						summary: post.teaser
+					} %}
+						{# iconsonly: true, #}
+
+				</div>
+
+				<div class="layout-customcontent layout-customcontent-wide">
+					<div class="layout-customcontent-section">
+
+						{% if post.body %}
+							{{ post.body }}
+						{% endif %}
+
+						<div class="buffer-top even align-center">
+
+							{% include 'partials/sharebuttons.twig' with {
+								twitterhandle: person.twitter,
+								title: post.title,
+								summary: post.teaser
+							} %}
+
+						</div>
+
+						<div class="buffer-top even">
+							{% include 'partials/recordnavigation.twig' with {
+								'listinglink': paths.root ~ post.contenttype.slug,
+								'record': post
+							} only %}
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row verylightgrey">
+			<div class="row-content buffer">
+
+				<div class="buffer-top even">
+					<div class="card white limit-tiny keep-center">
+						<div class="card-content buffer">
+							{% include 'partials/personintro.twig' with {
+								person: person,
+								link: false
+							} only %}
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+

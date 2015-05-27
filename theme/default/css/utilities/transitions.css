@@ -1,0 +1,64 @@
+
+/*Defaults*/
+a,
+label,
+.button,
+.textinput {
+	transition-property: opacity, color, background-color, border-color, box-shadow;
+	transition-duration: 125ms;
+}
+
+/*Color*/
+.transition,
+.transition-fast,
+.transition-medium,
+.transition-slow {
+	transition-property: opacity, color, background-color, border-color, box-shadow, border-radius, transform;
+}
+	.transition-color {
+		transition-property: opacity, color, background-color, border-color, box-shadow;
+	}
+	.transition-transform {
+		transition-property: transform;
+	}
+
+/*Duration*/
+.transition,
+.transition-fast,
+.transition-color,
+.transition-transform {
+	transition-duration: 125ms;
+}
+	.transition-medium {
+		transition-duration: 250ms;
+	}
+	.transition-slow {
+		transition-duration: 500ms;
+	}
+
+/*Delay*/
+.transition-delay {
+	transition-delay: 100ms;
+}
+	.transition-delay-medium {
+		transition-delay: 300ms;
+	}
+	.transition-delay-slow {
+		transition-delay: 600ms;
+	}
+
+/*Easing functions*/
+.transition,
+.transition-fast,
+.transition-medium,
+.transition-slow,
+.transition-color,
+.transition-transform {
+	transition-timing-function: ease-in-out;
+}
+	.transition-funky {
+		transition-timing-function: cubic-bezier(0.4, 0.6, 0.32, 1.4);
+	}
+	.transition-ease {
+		transition-timing-function: ease-in-out;
+	}

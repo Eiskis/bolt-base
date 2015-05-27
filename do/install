@@ -1,0 +1,5 @@
+# Install dependencies with Composer
+php ../bin/composer.phar install
+php ../bin/composer.phar install --working-dir="extensions/"
+cd ../theme/default/
+npm install

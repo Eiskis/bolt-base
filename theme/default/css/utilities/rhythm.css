@@ -1,0 +1,39 @@
+
+.collapse-rhythm {
+	line-height: 1;
+}
+
+.tight-rhythm {
+	line-height: 1.5;
+}
+
+.collapse-rhythm h1,
+.collapse-rhythm h2,
+.collapse-rhythm h3,
+.collapse-rhythm h4,
+.normalize-rhythm h1,
+.normalize-rhythm h2,
+.normalize-rhythm h3,
+.normalize-rhythm h4
+{
+	line-height: inherit;
+}
+
+.no-rhythm h1,
+.no-rhythm h2,
+.no-rhythm h3,
+.no-rhythm h4,
+.no-rhythm h5,
+.no-rhythm h6,
+.no-rhythm p,
+.no-rhythm ul,
+.no-rhythm ol,
+
+.no-rhythm dl,
+.no-rhythm dt,
+.no-rhythm dd,
+.no-rhythm img
+{
+ 	margin-top: 0;
+ 	margin-bottom: 0;
+}

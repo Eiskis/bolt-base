@@ -1,0 +1,11 @@
+
+/*News items*/
+
+.partial-newstitles-item .logo {
+	height: 3em;
+	line-height: 3em;
+	vertical-align: middle;
+}
+	.partial-newstitles-item .logo img {
+		max-width: 80%;
+	}

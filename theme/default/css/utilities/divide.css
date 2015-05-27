@@ -1,0 +1,26 @@
+
+.divide {
+	column-gap: 2em;
+	column-width: 18em;
+}
+
+/*Column counts*/
+.divide,
+.divide-two {
+	column-count: 2;
+}
+	.divide-three {
+		column-count: 3;
+	}
+	.divide-four {
+		column-count: 4;
+	}
+
+
+
+/*Fixes*/
+.divide > p:first-child,
+.divide > ul:first-child,
+.divide > ol:first-child {
+	margin-top: 0;
+}

@@ -1,0 +1,54 @@
+
+{# Fetch content #}
+{% if not posts %}
+	{% setcontent posts = 'posts' %}
+{% endif %}
+
+
+
+{# Job list #}
+{% if posts %}
+
+	<div class="layout-postlist">
+
+		{% setcontent people = 'people' %}
+		{% setcontent units = 'units' %}
+
+		{% for post in posts %}
+
+			{% set person = people[post.author] %}
+
+			{% set unit = units[post.unit] %}
+
+			<div class="layout-postlist-item no-rhythm">
+
+				<!-- Post extract -->
+				<a href="{{ post.link }}" class="plain block relative">
+
+					<!-- Post details -->
+					<div class="layout-postlist-item-details">
+						<ul class="plain collapse tight-rhythm">
+							<li><img class="avatar" src="{{ thumbnail(person.portrait, 240, 240) }}" alt="{{ person.title }}" title="{{ person.title }}"></li>
+							<li><h4>{{ person.title }}</h4></li>
+							<li class="date">{{ post.datepublish|localdate }}</li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+
+					<!-- Post intro -->
+					<div class="layout-postlist-item-body">
+						<h1>{{ post.title }}</h1>
+						<p>{{ post.teaser }}</p>
+					</div>
+
+					<div class="clear"></div>
+				</a>
+
+			</div>
+
+		{% endfor %}
+
+		{{ pager('posts', 2, 'pagers/posts.twig') }}
+	</div>
+
+{% endif %}

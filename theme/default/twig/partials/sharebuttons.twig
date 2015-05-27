@@ -1,0 +1,89 @@
+{% spaceless %}
+
+	{# Set content #}
+	{% if not url %}
+		{% set url = paths.canonicalurl %}
+	{% endif %}
+
+
+
+	{# Set Facebook url #}
+
+	{# FIXME: should be trimmed #}
+	{% set facebookurl %}
+		https://www.facebook.com/dialog/share?
+			app_id={{ facebookappid }}
+			&display=popup
+			&href={{ url }}
+			&redirect_uri={{ url }}
+
+	{% endset %}
+
+	{# FIXME: hacky trimming #}
+	{% set facebookurl = facebookurl|replace({
+		' ': '',
+		'	': '',
+		"\n": ''
+	}) %}
+
+
+
+	{# Set LinkedIn url #}
+	{% set linkedinurl %}
+		https://www.linkedin.com/shareArticle?
+			url={{ url }}
+			&mini=true
+			&source=Omniata
+			{% if title is not empty %}
+				&title={{ title|url_encode }}
+			{% endif %}
+			{% if summary is not empty %}
+				&summary={{ summary|url_encode }}
+			{% endif %}
+	{% endset %}
+
+	{# FIXME: hacky trimming #}
+	{% set linkedinurl = linkedinurl|replace({
+		' ': '',
+		'	': '',
+		"\n": ''
+	}) %}
+
+
+
+	{# Set Twitter url #}
+
+	{# FIXME: should be trimmed #}
+	{% set twitterurl %}
+		{# https://twitter.com/share? #}
+		https://twitter.com/intent/tweet
+			?url={{ url|url_encode }}
+
+			{# Related #}
+			&related=omniata_inc
+			{% if twitterhandle is not empty %}
+				,{{ twitterhandle }}
+			{% endif %}
+
+			{% if summary is not empty %}
+				&text={{ summary|url_encode }}
+				{% if twitterhandle is not empty %}
+					{{ ' '|url_encode }}@{{ twitterhandle }}
+				{% endif %}
+			{% endif %}
+	{% endset %}
+
+	{# FIXME: hacky trimming #}
+	{% set twitterurl = twitterurl|replace({
+		' ': '',
+		'	': '',
+		"\n": ''
+	}) %}
+
+{% endspaceless %}
+
+<div class="partial-sharebuttons {% if iconsonly %}partial-sharebuttons-iconsonly{% else %}partial-sharebuttons-showlabels{% endif %}">
+
+	<ul class="plain inline"><li class="first"><a href="{{ facebookurl }}" class="button round clear-after facebook" target="_blank"><i class="icon-facebook"></i><span class="label">Recommend</span></a></li><li class="middle"><a href="{{ linkedinurl }}" class="button round clear-after linkedin" target="_blank"><i class="icon-linkedin"></i><span class="label">Share</span></a></li><li class="last"><a href="{{ twitterurl }}" class="button round clear-after twitter" target="_blank"><i class="icon-twitter"></i><span class="label">Tweet{% if twitterhandle is not empty %} us{% endif %}</span></a></li></ul>
+
+</div>

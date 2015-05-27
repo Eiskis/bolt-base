@@ -1,0 +1,191 @@
+
+/*Placeholder text*/
+.page-support-searchinput .placeholder {
+	text-transform: uppercase;
+}
+	.page-support-searchinput ::-webkit-input-placeholder {
+		text-transform: uppercase;
+	}
+	.page-support-searchinput :-moz-placeholder {
+		text-transform: uppercase;
+	}
+	.page-support-searchinput ::-moz-placeholder {
+		text-transform: uppercase;
+	}
+	.page-support-searchinput :-ms-input-placeholder {
+		text-transform: uppercase;
+	}
+
+/*Intro*/
+.page-support .background .page-support-intro.inverted {
+	text-shadow: 0 1px 2em rgba(28, 43, 50, 1);
+}
+
+/*Form*/
+.page-support-searchinput form {
+	max-width: 30em;
+	overflow: hidden;
+	box-shadow: 0 2px 2px rgba(28, 43, 50, 0.5);
+}
+
+	.page-support-searchinput form:hover {
+		box-shadow: 0 2px 1em rgba(28, 43, 50, 1);
+	}
+
+/*Input*/
+.page-support-searchinput input[type="search"] {
+	width: 100%;
+	padding: 1em 1.4em;
+	background-color: transparent;
+	line-height: 1.6;
+}
+
+/*Submit button*/
+.page-support-searchinput input[type="submit"] {
+	display: block;
+	width: 100%;
+	font-size: 1.6em;
+	height: 2.15em;
+	line-height: 2.15em;
+	font-family: 'icons';
+	color: #1c2b32;
+	box-shadow: 0 0 4em rgba(28, 43, 50, 0.2);
+}
+
+	.page-support-searchinput input[type="submit"]:hover,
+	.page-support-searchinput input[type="submit"]:focus {
+		box-shadow: 0 0 4em rgba(28, 43, 50, 0.3);
+	}
+	.page-support-searchinput input[type="submit"]:active,
+	.page-support-searchinput input[type="submit"]:focus {
+		outline: 0;
+	}
+
+/*Fixed column widths*/
+.page-support-searchinput .column.fixed {
+	width: 4em;
+}
+.page-support-searchinput .column.fluid > .column-content {
+	margin-right: 4em;
+}
+.page-support-searchinput .column.fluid.right > .column-content {
+	margin-left: 4em;
+}
+
+/*Responses*/
+.page-support-searchinput .form-response {
+	overflow-x: hidden;
+	overflow-y: auto;
+	max-height: 15.2em;
+
+	z-index: 20;
+	position: absolute;
+	width: 100%;
+	top: 4em;
+	left: 0;
+
+	box-shadow: 0 2px 2px rgba(28, 43, 50, 0.1);
+}
+
+	.page-support-searchinput .form-response .search-noresults,
+	.page-support-searchinput .form-response a {
+		padding: 0.5em 1em;
+	}
+	.page-support-searchinput .form-response a {
+		border-top-width: 1px;
+		border-color: #f0f1f2;
+	}
+	.page-support-searchinput .form-response a:hover,
+	.page-support-searchinput .form-response a:focus {
+		background-color: #f5f6f7;
+	}
+	.page-support-searchinput .form-response a:first-of-type {
+		border-top-width: 0;
+	}
+
+/*Menu*/
+.page-support .menu-supporthome {
+	max-width: 36em;
+	margin-left: auto;
+	margin-right: auto;
+}
+	@media handheld, only screen and (min-width: 25em) {
+		.page-support .menu-supporthome {
+			padding-left: 5%;
+		}
+	}
+	@media handheld, only screen and (min-width: 55em) {
+		.page-support .menu-supporthome {
+			max-width: 48em;
+		}
+	}
+	@media handheld, only screen and (min-width: 70em) {
+		.page-support .menu-supporthome {
+			max-width: 60em;
+		}
+	}
+
+/*Positioning*/
+.page-support ul.menu-supporthome > li {
+	margin-bottom: 6%;
+}
+
+@media handheld, only screen and (min-width: 25em) {
+	.page-support ul.menu-supporthome > li {
+		float: left;
+		clear: none;
+		width: 50%;
+	}
+	.page-support ul.menu-supporthome > li:nth-child(2n+1) {
+		clear: both;
+	}
+}
+	@media handheld, only screen and (min-width: 55em) {
+		.page-support ul.menu-supporthome > li {
+			width: 33%;
+		}
+		.page-support ul.menu-supporthome > li:nth-child(2n+1) {
+			clear: none;
+		}
+		.page-support ul.menu-supporthome > li:nth-child(3n+1) {
+			clear: both;
+		}
+		.page-support ul.menu-supporthome > li:nth-child(4n+1) {
+			clear: none;
+		}
+
+		/*Tools*/
+		.page-support .menu-supporthome .tools {
+			width: 100%;
+		}
+		.page-support .menu-supporthome .tools li {
+			float: left;
+			clear: none;
+			width: 31%;
+			padding-right: 2%;
+		}
+	}
+	@media handheld, only screen and (min-width: 70em) {
+		.page-support ul.menu-supporthome > li {
+			width: 25%;
+		}
+		.page-support ul.menu-supporthome > li:nth-child(2n+1) {
+			clear: none;
+		}
+		.page-support ul.menu-supporthome > li:nth-child(3n+1) {
+			clear: none;
+		}
+		.page-support ul.menu-supporthome > li:nth-child(4n+1) {
+			clear: both;
+		}
+
+		/*Tools*/
+		.page-support .menu-supporthome .tools {
+			width: 75%;
+		}
+		.page-support .menu-supporthome .tools li {
+			float: left;
+			clear: none;
+			padding-right: 0.6em;
+		}
+	}

@@ -1,0 +1,148 @@
+
+/*Vertical*/
+.align-top {
+	vertical-align: top;
+}
+	.align-middle,
+	.align-vertical-center {
+		vertical-align: middle;
+	}
+	.align-baseline {
+		vertical-align: baseline;
+	}
+	.align-bottom {
+		vertical-align: bottom;
+	}
+
+
+
+/*Horizontal*/
+.align-left {
+	text-align: left;
+}
+	.align-center {
+		text-align: center;
+	}
+	.align-right {
+		text-align: right;
+	}
+
+/*Tiny*/
+@media handheld, only screen and (min-width: 25em) {
+	.align-left-over-tiny {
+		text-align: left;
+	}
+		.align-center-over-tiny {
+			text-align: center;
+		}
+		.align-right-over-tiny {
+			text-align: right;
+		}
+}
+@media handheld, only screen and (max-width: 24.9375em) {
+	.align-left-under-tiny {
+		text-align: left;
+	}
+		.align-center-under-tiny {
+			text-align: center;
+		}
+		.align-right-under-tiny {
+			text-align: right;
+		}
+}
+
+/*Small*/
+@media handheld, only screen and (min-width: 40em) {
+	.align-left-over-small {
+		text-align: left;
+	}
+		.align-center-over-small {
+			text-align: center;
+		}
+		.align-right-over-small {
+			text-align: right;
+		}
+}
+@media handheld, only screen and (max-width: 39.9375em) {
+	.align-left-under-small {
+		text-align: left;
+	}
+		.align-center-under-small {
+			text-align: center;
+		}
+		.align-right-under-small {
+			text-align: right;
+		}
+}
+
+/*Small*/
+@media handheld, only screen and (min-width: 55em) {
+	.align-left-over-smallmedium {
+		text-align: left;
+	}
+		.align-center-over-smallmedium {
+			text-align: center;
+		}
+		.align-right-over-smallmedium {
+			text-align: right;
+		}
+}
+@media handheld, only screen and (max-width: 54.9375em) {
+	.align-left-under-smallmedium {
+		text-align: left;
+	}
+		.align-center-under-smallmedium {
+			text-align: center;
+		}
+		.align-right-under-smallmedium {
+			text-align: right;
+		}
+}
+
+/*Medium*/
+@media handheld, only screen and (min-width: 70em) {
+	.align-left-over-medium {
+		text-align: left;
+	}
+		.align-center-over-medium {
+			text-align: center;
+		}
+		.align-right-over-medium {
+			text-align: right;
+		}
+}
+@media handheld, only screen and (max-width: 69.9375em) {
+	.align-left-under-medium {
+		text-align: left;
+	}
+		.align-center-under-medium {
+			text-align: center;
+		}
+		.align-right-under-medium {
+			text-align: right;
+		}
+}
+
+/*Large*/
+@media handheld, only screen and (min-width: 105em) {
+	.align-left-over-large {
+		text-align: left;
+	}
+		.align-center-over-large {
+			text-align: center;
+		}
+		.align-right-over-large {
+			text-align: right;
+		}
+}
+@media handheld, only screen and (max-width: 104.9375em) {
+	.align-left-under-large {
+		text-align: left;
+	}
+		.align-center-under-large {
+			text-align: center;
+		}
+		.align-right-under-large {
+			text-align: right;
+		}
+}

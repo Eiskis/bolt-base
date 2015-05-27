@@ -1,0 +1,24 @@
+{% extends 'frames/marketing.twig' %}
+
+{% block body %}
+
+	{# Fetch content #}
+	{% setcontent people = 'people' limit 200 %}
+
+	{# Print #}
+	<div class="record-people row headerpad">
+		<div class="buffer">
+
+			<h1 class="align-center">Meet the Team</h1>
+
+			{# {% include 'partials/peoplegrid.twig' with { 'people': people } only %} #}
+			{% include 'partials/peopletiles.twig' with { 'people': people } only %}
+			{# {% include 'partials/contacttiles.twig' with { 'people': people } only %} #}
+			{# {% include 'partials/contactgrid.twig' with { 'people': people } only %} #}
+
+		</div>
+	</div>
+
+{% endblock %}
+
+

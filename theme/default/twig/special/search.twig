@@ -1,0 +1,17 @@
+{% extends 'frames/plain.twig' %}
+
+{% block body %}
+
+	{% if not records %}
+
+		<p class="search-noresults reset">No search results</p>
+
+	{% else %}
+		{% for record in records %}
+			<a href="{{ record.link }}" class="block no-rhythm type-ellipsis">{{ record.title }}</a>
+		{% endfor %}
+	{% endif %}
+
+	{# {{ pager() }} #}
+
+{% endblock %}

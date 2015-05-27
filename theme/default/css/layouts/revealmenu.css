@@ -1,0 +1,80 @@
+
+/*Display*/
+.layout-revealmenu .menu-reveal {
+	max-height: 30em;
+	overflow-y: auto;
+	position: relative;
+}
+.layout-revealmenu.off {
+	display: none;
+}
+	.layout-revealmenu.off.animating {
+		display: block;
+	}
+
+@media handheld, only screen and (min-width: 55em) {
+	.layout-revealmenu {
+		display: none;
+	}
+}
+
+/*States*/
+.layout-revealmenu,
+.layout-revealmenu.on.animating {
+
+	/*Positioning*/
+	position: fixed;
+	z-index: 100;
+	left: 0;
+	bottom: 100%;
+	width: 100%;
+	transform: translate3d(0, 0, 0);
+
+	/*Look*/
+	background-color: #fff;
+	box-shadow: 0 0 2.5em transparent;
+
+	/*Transition*/
+	transition-duration: 300ms;
+	transition-timing-function: cubic-bezier(0.4, 0.6, 0.32, 1);
+}
+
+	.layout-revealmenu.on {
+		transform: translate3d(0, 100%, 0);
+		box-shadow: 0 0 2.5em rgba(46, 50, 51, 0.4);
+		transition-duration: 400ms;
+	}
+
+/*Layout*/
+@media handheld, only screen and (min-width: 25em) {
+	.layout-revealmenu .menu-reveal > li {
+		width: 50%;
+		float: left;
+		clear: none;
+	}
+		.layout-revealmenu .menu-reveal > li:nth-child(2n+1) {
+			clear: both;
+		}
+}
+
+
+
+/*Buttons*/
+.layout-revealmenu .button {
+	display: block;
+	padding: 0.6em 1.2em;
+}
+	.layout-revealmenu .button:hover,
+	.layout-revealmenu .button:active {
+		background-color: #f0f1f2;
+	}
+
+/*Close*/
+.layout-revealmenu-close {
+	border-top-width: 1px;
+	border-color: #f0f1f2;
+}
+	.layout-revealmenu-close .button {
+		text-align: center;
+		color: #8b9ba3;
+	}

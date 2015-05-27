@@ -1,0 +1,9 @@
+
+{# Print tags that point to JS files #}
+{# FIXME: should be automated, can change based on environment (compiled assets) #}
+{% for path in assets.jslibraries %}
+	<script type="text/javascript" src="{{ path }}"></script>
+{% endfor %}
+{% for path in assets.jsfiles %}
+	<script type="text/javascript" src="{{ paths.theme }}js/{{ path }}"></script>
+{% endfor %}

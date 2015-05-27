@@ -1,0 +1,58 @@
+
+{# Fetch content #}
+{% if not posts %}
+	{% setcontent posts = 'posts/latest/6' %}
+{% endif %}
+
+
+
+{# Job list #}
+{% if posts %}
+
+	{% setcontent units = 'units' %}
+	{% setcontent people = 'people' %}
+
+	<div class="partial-posttitles relative">
+
+		<div class="partial-posttitles-content">
+
+			{% for post in posts %}
+
+				{% set unit = units[post.unit] %}
+
+				{% if post.author %}
+					{% set person = people[post.author] %}
+				{% endif %}
+
+					<div class="partial-posttitles-item normalize-rhythm no-rhythm tight-rhythm">
+						<a href="{{ post.link }}" class="partial-posttitles-item-content plain block relative clear-after">
+
+							<div class="column fluid right">
+								<div class="column-content">
+									<p>{{ post.datepublish|localdate }}</p>
+									<h3>{{ post.title }}</h3>
+								</div>
+							</div>
+
+							<div class="column fixed right">
+								{% if unit %}
+									<span class="tag transition absolute block round {{ unit.colorname }}">&nbsp;</span>
+								{% endif %}
+								<img class="avatar transition" src="{{ thumbnail(person.portrait, 120, 120) }}" alt="{{ person.title }}" title="{{ person.title }}">
+							</div>
+
+						</a>
+					</div>
+
+			{% endfor %}
+			<div class="clear"></div>
+
+			{# {{ pager() }} #}
+
+		</div>
+
+		<div class="clear"></div>
+
+	</div>
+
+{% endif %}

@@ -1,0 +1,34 @@
+{% extends 'frames/plain.twig' %}
+
+{% block body %}
+
+	{# Fetch content #}
+	{% setcontent posts = 'posts' where {
+		author: person.id
+	} %}
+
+	<div class="record-person">
+		<div class="row">
+			<div class="row-content buffer">
+
+				{% include 'partials/personintro.twig' with {
+					'person': person
+				} only %}
+
+				{% if posts %}
+					<div class="record-person-posts buffer-top even">
+
+						{% include 'partials/postlisting.twig' with {
+							'posts': posts
+						} only %}
+
+					</div>
+				{% endif %}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+

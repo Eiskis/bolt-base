@@ -1,0 +1,113 @@
+{% extends 'frames/marketing.twig' %}
+
+{% block body %}
+
+	{# Fetch content #}
+	{% setcontent news = 'news/latest/6' %}
+	{# {% setcontent posts = 'posts/latest/6' %} #}
+
+
+
+	{# Base #}
+	<div class="page-home">
+
+		{# Header #}
+		{% if page.headerbackgroundimage is not empty %}
+			{% set headerstyling %}
+				{% if page.headerbackgroundimage %}
+					background-image: url({{ paths.files ~ page.headerbackgroundimage }});
+				{% endif %}
+			{% endset %}
+		{% endif %}
+
+		<div class="row headerpad {% if page.headerbackgroundimage %} inverted background{% endif %}" style="{{ headerstyling }}">
+			<div class="row-content buffer">
+
+				<div class="limit-small keep-center align-center-over-tiny">
+
+					{% if page.heading %}
+						<h1>{{ page.heading }}</h1>
+					{% endif %}
+
+					{% if page.headercontent %}
+						{{ page.headercontent|raw }}
+					{% endif %}
+
+				</div>
+
+			</div>
+		</div>
+
+		{# Main content #}
+		<div class="row">
+			<div class="row-content buffer">
+
+				<div class="layout-customcontent-section">
+					<div class="layout-customcontent">
+
+						{% if page.intro %}
+							{{ page.intro }}
+						{% endif %}
+
+						{% if page.body1 %}
+							{{ page.body1 }}
+						{% endif %}
+
+						{% if page.contentimage1 %}
+							<p><img src="{{ image(page.contentimage1) }}"></p>
+						{% endif %}
+
+						{% if page.body2 %}
+							{{ page.body2 }}
+						{% endif %}
+
+						{% if page.contentimage2 %}
+							<p><img src="{{ image(page.contentimage2) }}"></p>
+						{% endif %}
+
+						{% if page.body3 %}
+							{{ page.body3 }}
+						{% endif %}
+
+						{% if page.contentimage3 %}
+							<p><img src="{{ image(page.contentimage3) }}"></p>
+						{% endif %}
+
+						{% if page.body4 %}
+							{{ page.body4 }}
+						{% endif %}
+
+						{% if page.contentimage4 %}
+							<p><img src="{{ image(page.contentimage4) }}"></p>
+						{% endif %}
+
+						{% if page.body5 %}
+							{{ page.body5 }}
+						{% endif %}
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		{# Main content #}
+		<div class="row blue inverted">
+			<div class="row-content buffer">
+
+				<div class="limit-smallmedium limit-medium keep-center">
+
+					<h2 class="align-center">Press</h2>
+
+					{% if news is not empty %}
+						{% include 'partials/newstitles.twig' with { news: news } %}
+					{% endif %}
+
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% setcontent units = 'units' %}
+{% set unit = units[person.unit] %}
+
+<div class="partial-personintro">
+
+	<p class="partial-personintro-avatar">{% if link %}<a href="{{ person.link }}" data-action="popup" class="plain">{% endif %}<img src="{{ thumbnail(person.image, 320, 320) }}" class="border-box avatar" alt="{{ person.title }}" title="{{ person.title }}">{% if link %}</a>{% endif %}</p>
+
+	<div class="partial-personintro-content">
+
+		<h3>{% if link %}<a href="{{ person.link }}" class="plain">{% endif %}{{ person.title }}{% if link %}</a>{% endif %}</h3>
+
+		{% if person.intro %}
+			{{ person.intro }}
+		{% endif %}
+
+		<ul class="partial-personintro-details plain">
+			{% if person.position %}
+				<li>{{ person.position }}</li>
+			{% endif %}
+			{% if person.email %}
+				<li><a href="mailto:{{ person.email }}">{{ person.email }}</a></li>
+			{% endif %}
+			{% if person.phone %}
+				<li><a href="tel:{{ person.phone }}" class="plain">{{ person.phone }}</a></li>
+			{% endif %}
+			{% if person.twitter is not empty %}
+				<li><a href="https://twitter.com/{{ person.twitter }}" target="_blank">@{{ person.twitter }}</a></li>
+			{% endif %}
+		</ul>
+
+		{% if link %}<p><a href="{{ person.link }}" class="button stroke">More from {{ person.title }}</a>{% endif %}
+
+	</div>
+
+</div>

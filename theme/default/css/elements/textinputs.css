@@ -1,0 +1,45 @@
+
+/*Placeholder text*/
+.placeholder {
+	color: #8b9ba3;
+}
+	::-webkit-input-placeholder {
+		color: #8b9ba3;
+	}
+	:-moz-placeholder {
+		color: #8b9ba3;
+	}
+	::-moz-placeholder {
+		color: #8b9ba3;
+	}
+	:-ms-input-placeholder {
+		color: #8b9ba3;
+	}
+
+
+
+/*Normal input fields*/
+.textinput {
+	-webkit-appearance: textfield;
+	outline: 0;
+
+	color: inherit;
+	padding: 0.4em 0.8em;
+	border-style: solid;
+	cursor: pointer;
+}
+
+.textinput:not(.plain) {
+	background-color: #fff;
+	border-color: #cad4d9;
+	border-width: 1px;
+	border-radius: 2px;
+	box-shadow: inset 0 1px 0.3em rgba(28, 43, 50, 0.15);
+}
+	.textinput:focus {
+		cursor: default;
+	}
+	.textinput:not(.plain):focus {
+		border-color: #93d4f0;
+		box-shadow: 0 1px 0.6em rgba(39, 169, 225, 0.3);
+	}

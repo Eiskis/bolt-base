@@ -1,0 +1,68 @@
+
+/*Cells*/
+.partial-peoplegrid .grid-cell {
+	height: 6.2em;
+}
+	@media handheld, only screen and (min-width: 40em) {
+		.partial-peoplegrid .grid-cell {
+			height: 6.2em;
+			/*padding-top: 0.5em;*/
+			padding-bottom: 0.5em;
+		}
+	}
+	@media handheld, only screen and (min-width: 70em) {
+		.partial-peoplegrid .grid-cell {
+			padding-left: 1em;
+			padding-right: 1em;
+		}
+	}
+
+
+
+/*Tags*/
+.partial-peoplegrid .tag.absolute {
+	left: 1em;
+	transform: translate3d(-0.5em, 0, 0);
+}
+
+
+
+/*Button*/
+.partial-peoplegrid .grid-cell .button {
+	padding: 1em 0.5em 1em 1.5em;
+	font-size: inherit;
+	font-weight: inherit;
+}
+.partial-peoplegrid .grid-cell .button:hover {
+	background-color: rgba(0, 0, 0, 0.04);
+}
+	.verylightgrey .partial-peoplegrid .grid-cell .button:hover {
+		background-color: #fff;
+	}
+	.partial-peoplegrid .grid-cell .button:hover .tag.absolute {
+		transform: translate3d(-0.5em, -0.5em, 0);
+	}
+
+
+
+/*Inverted*/
+.inverted .partial-peoplegrid .grid-cell .button:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+
+/*Avatar size*/
+.partial-peoplegrid .avatar {
+	display: block;
+}
+.partial-peoplegrid .column.fixed {
+	width: 4.5em;
+}
+.partial-peoplegrid .column.fluid > .column-content {
+	margin-right: 5.5em;
+}
+.partial-peoplegrid .column.fluid.right > .column-content {
+	margin-right: 0;
+	margin-left: 5.5em;
+}
