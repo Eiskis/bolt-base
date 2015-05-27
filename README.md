@@ -6,9 +6,10 @@ Base
 
 - Bower for theme deps
 - `gulp-bower-*` integration for theme
-- Rocketeer confs
+- ~~Rocketeer confs~~
 - Theme cleanup
-- Fetch bins in scripts when needed, don't keep in repo
+- Updating Bolt
+- ~~Fetch bins in scripts when needed, don't keep in repo~~
 - CSS paths rebase: https://github.com/42Zavattas/gulp-css-url-rebase
 - Satellite deployment: https://github.com/rocketeers/satellite
 - Check how to deal with permissions (could possibly be handled in remote.php)
