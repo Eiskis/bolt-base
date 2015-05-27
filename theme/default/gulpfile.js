@@ -3,7 +3,10 @@
 var args = require('yargs').argv;
 var del = require('del');
 var gulp = require('gulp');
-var g = require('gulp-load-plugins')();
+
+// Mostly autoloaded plugins
+var plugins = require('gulp-load-plugins')();
+plugins.bowerFiles = require('main-bpwer-files');
 
 
 
@@ -11,10 +14,8 @@ var g = require('gulp-load-plugins')();
 var conf = {
 	debug: false,
 	browserlist: 'last 2 version, > 1%, Android, BlackBerry, iOS 7',
-	destination: {
-		css: 'public/',
-		js: 'public/'
-	},
+	bowerComponentsPath: 'bower_components',
+	destination: 'public/',
 	source: {
 		css: [
 			'css/**/*.css'
@@ -38,33 +39,55 @@ if (args.debug) {
 
 // Clean up CSS
 gulp.task('clear-css', function (cb) {
-	del(conf.destination.css + 'all.min.css', cb)
+	del(conf.destination + 'lib.min.css', cb);
+	del(conf.destination + 'all.min.css', cb);
+});
+
+// Bower components
+gulp.task('css-libraries', function() {
+	return gulp.src(mainBowerFiles(['**/*.css']), { base: conf.bowerComponentsPath })
+		.pipe(plugins.plumber())
+		.pipe(plugins.concat('lib.css'))
+		.pipe(plugins.if(conf.debug, plugins.minifyCss()))
+		.pipe(plugins.rename({suffix: '.min'}))
+		.pipe(gulp.dest(conf.destination));
 });
 
 // Compile, autoprefix and, minify CSS
-gulp.task('css', ['clear-css'], function () {
+gulp.task('css', ['clear-css', 'css-libraries'], function () {
 	return gulp.src(conf.source.css)
-		.pipe(g.plumber())
-		.pipe(g.concat('all.css'))
-		.pipe(g.autoprefixer(conf.browserlist))
-		.pipe(g.if(conf.debug, g.minifyCss()))
-		.pipe(g.rename({suffix: '.min'}))
-		.pipe(gulp.dest(conf.destination.css));
+		.pipe(plugins.plumber())
+		.pipe(plugins.concat('all.css'))
+		.pipe(plugins.autoprefixer(conf.browserlist))
+		.pipe(plugins.if(conf.debug, plugins.minifyCss()))
+		.pipe(plugins.rename({suffix: '.min'}))
+		.pipe(gulp.dest(conf.destination));
 });
 
 // Clean up JS
 gulp.task('clear-js', function (cb) {
-	del(conf.destination.js + 'all.min.js', cb)
+	del(conf.destination + 'lib.min.js', cb);
+	del(conf.destination + 'all.min.js', cb);
+});
+
+// Bower components
+gulp.task('js-libraries', function() {
+	return gulp.src(mainBowerFiles(['**/*.js']), { base: conf.bowerComponentsPath })
+		.pipe(plugins.plumber())
+		.pipe(plugins.concat('all.js', {newLine: ';'}))
+		.pipe(plugins.if(conf.debug, plugins.uglify()))
+		.pipe(plugins.rename({suffix: '.min'}))
+		.pipe(gulp.dest(conf.destination));
 });
 
 // Compile, uglify JS
-gulp.task('js', ['clear-js'], function () {
+gulp.task('js', ['clear-js', 'js-libraries'], function () {
 	return gulp.src(conf.source.js)
-		.pipe(g.plumber())
-		.pipe(g.concat('all.js', {newLine: ';'}))
-		.pipe(g.if(conf.debug, g.uglify()))
-		.pipe(g.rename({suffix: '.min'}))
-		.pipe(gulp.dest(conf.destination.js));
+		.pipe(plugins.plumber())
+		.pipe(plugins.concat('all.js', {newLine: ';'}))
+		.pipe(plugins.if(conf.debug, plugins.uglify()))
+		.pipe(plugins.rename({suffix: '.min'}))
+		.pipe(gulp.dest(conf.destination));
 });
 
 // Watch for changes, recompile when needed
@@ -72,7 +95,7 @@ gulp.task('watch', function () {
 	for (var ext in conf.source) {
 		(function () {
 			var e = ext;
-			g.watch(conf.source[e], g.batch(function () {
+			plugins.watch(conf.source[e], plugins.batch(function () {
 				gulp.start(e);
 			}));
 		})()
