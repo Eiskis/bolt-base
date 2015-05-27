@@ -42,7 +42,7 @@ gulp.task('clean-css', function (cb) {
 });
 
 // Compile, autoprefix and, minify CSS
-gulp.task('css', ['clean-js'], function () {
+gulp.task('css', ['clean-css'], function () {
 	return gulp.src(conf.source.css)
 		.pipe(g.plumber())
 		.pipe(g.concat('all.css'))
