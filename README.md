@@ -78,6 +78,19 @@ The *theme/default/* is really your playground. Start with *theme/default/config
 
 `do/watch` for changes to auto build CSS and JS with Gulp as you make changes.
 
+Add dependencies locally like so:
+
+	cd theme/default/
+	npm install gulp-plugin --save
+
+	# If you have bower installed locally
+	bower install bower-component --save
+
+	# If you don't have bower installed locally
+	./node_modules/.bin/bower install bower-component --save
+
+The manifests will be committed. Upon deployment, these will be installed on remote independently.
+
 ## Deployment
 
 When you're ready to deploy, set the repo and remote details in the *.rocketeer/* config files.
