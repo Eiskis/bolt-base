@@ -12,6 +12,13 @@
 # Changing these might give unexpected results or even break your website. If
 # possible, only add NEW routes above or below these.
 
+pagebinding:
+    path: /{slug}
+    defaults:
+        _controller: controller.frontend:record
+        contenttypeslug: page
+    contenttype: pages
+
 homepage:
     path: /
     defaults:
