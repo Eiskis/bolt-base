@@ -4,6 +4,18 @@
 cd "$(dirname "$0")"
 cd ..
 
+# Download Composer binary
+if [ ! -f bin/composer.phar ]; then
+	echo "Downloading Composer..."
+	curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer.phar
+fi
+
+# Download Rocketeer binary
+if [ ! -f bin/rocketeer.phar ]; then
+	echo "Downloading Rocketeer..."
+	curl -o bin/rocketeer.phar http://rocketeer.autopergamene.eu/versions/rocketeer.phar
+fi
+
 # Install dependencies with Composer
 php bin/composer.phar install
 php bin/composer.phar install --working-dir="extensions/"
