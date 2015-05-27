@@ -4,6 +4,8 @@
   "description": "",
   "main": "",
   "dependencies": {
+    "bower": "^1.4.1",
+    "del": "^1.2.0",
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^2.3.0",
     "gulp-batch": "^1.0.5",
@@ -14,13 +16,12 @@
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.2.0",
-    "yargs": "^3.9.1",
-    "gulp-watch": "^4.2.4"
+    "gulp-watch": "^4.2.4",
+    "yargs": "^3.9.1"
   },
-  "devDependencies": {
-    "del": "^1.2.0"
-  },
+  "devDependencies": {},
   "scripts": {
+    "bower-install": "bower install",
     "build": "gulp build",
     "clear": "gulp clear",
     "build-and-watch": "gulp build-and-watch"
