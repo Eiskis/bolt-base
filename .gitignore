@@ -15,8 +15,7 @@ vendor/
 phpunit.xml
 
 # Unless you want to store vendor's "state" in your Git repo.
-# composer.phar
-# composer.lock
+# bin
 
 # Files related to testing
 tests/codeception/_output
@@ -52,7 +51,7 @@ Vagrantfile
 /tags
 .*.swp
 .swp
-# *.lock
+*.lock
 .gitignore
 .buildpath
 .project

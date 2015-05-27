@@ -4,10 +4,11 @@ Base
 
 ## TODO
 
-- Bower for theme
-- gulp-bower-* integration for theme
-- rocketeer confs
-- theme cleanup
+- Bower for theme deps
+- `gulp-bower-*` integration for theme
+- Rocketeer confs
+- Theme cleanup
+- Fetch bins in scripts, don't keep in repo
 
 ## Reqs
 
