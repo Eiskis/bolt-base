@@ -1,3 +1,23 @@
+
+Base
+====
+
+## Credentials
+
+- Username: root
+- Password: rootroot
+- Email: root@root.root
+
+## Extensions
+
+- [Bolt Redirector](https://extensions.bolt.cm/view/d325689f-ace6-4700-bffd-1197d9c0cec8)
+- [ColourSpectrum](https://extensions.bolt.cm/view/abf573f0-d8cc-11e4-a99b-c5c5895e3a0c)
+- [JSON Access](https://extensions.bolt.cm/view/a5eb8c95-01ad-44a8-9a13-4a4ecb92acb4)
+- [RSS Feed](https://extensions.bolt.cm/view/87e7ff17-31dc-4f8b-bc4a-05159b8293a3)
+- [Sitemap](https://extensions.bolt.cm/view/e89b81c7-bbd3-4221-82b9-070ba6680c45)
+
+
+
 Bolt
 ====
 
