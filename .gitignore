@@ -52,7 +52,7 @@ Vagrantfile
 /tags
 .*.swp
 .swp
-*.lock
+# *.lock
 .gitignore
 .buildpath
 .project
