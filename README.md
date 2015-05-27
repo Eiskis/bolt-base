@@ -4,16 +4,23 @@ Base
 
 ## TODO
 
-- Bower for theme deps
-- `gulp-bower-*` integration for theme
-- ~~Rocketeer confs~~
-- Theme cleanup
-- Updating Bolt
-- ~~Fetch bins in scripts when needed, don't keep in repo~~
-- CSS paths rebase: https://github.com/42Zavattas/gulp-css-url-rebase
-- Satellite deployment: https://github.com/rocketeers/satellite
-- Check how to deal with permissions (could possibly be handled in remote.php)
-	- Part of Apache config?
+- Theme
+	- Template cleanup
+	- Bower for theme deps
+	- `gulp-bower-*` integration for theme
+	- Split Gulp tasks into files
+	- CSS paths rebase: https://github.com/42Zavattas/gulp-css-url-rebase
+- Deployment
+	- Satellite deployment: [github.com/rocketeers/satellite](https://github.com/rocketeers/satellite)
+	- ~~Base confs~~
+- Bolt update process
+- Bin
+	- ~~No bins in repo~~
+	- ~~Fetch bins in scripts when needed upon install~~
+- Environment
+	- Document Apache config
+	- How to deal with permission scheme (no sudo, specify users on remote...)
+	- Ansible? Docker?
 
 ## Environment requirements
 
