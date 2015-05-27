@@ -8,4 +8,4 @@ cd ..
 curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
 
 # Download Rocketeer binary
-scp http://rocketeer.autopergamene.eu/versions/rocketeer.phar bin/rocketeer.phar
+curl -o bin/rocketeer.phar http://rocketeer.autopergamene.eu/versions/rocketeer.phar
