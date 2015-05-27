@@ -12,8 +12,8 @@ var conf = {
 	debug: false,
 	browserlist: 'last 2 version, > 1%, Android, BlackBerry, iOS 7',
 	destination: {
-		css: 'css/',
-		js: 'js/'
+		css: 'public/',
+		js: 'public/'
 	},
 	source: {
 		css: [
