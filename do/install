@@ -1,5 +1,13 @@
+#!/usr/bin/env bash
+
+# Handle working directory
+cd "$(dirname "$0")"
+cd ..
+
 # Install dependencies with Composer
-php ../bin/composer.phar install
-php ../bin/composer.phar install --working-dir="extensions/"
-cd ../theme/default/
+php bin/composer.phar install
+php bin/composer.phar install --working-dir="extensions/"
+
+# Install node dependencies for theme
+cd theme/default/
 npm install

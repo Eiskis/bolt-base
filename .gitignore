@@ -16,7 +16,7 @@ phpunit.xml
 
 # Unless you want to store vendor's "state" in your Git repo.
 # composer.phar
-composer.lock
+# composer.lock
 
 # Files related to testing
 tests/codeception/_output

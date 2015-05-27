@@ -1,2 +1,8 @@
+#!/usr/bin/env bash
+
+# Handle working directory
+cd "$(dirname "$0")"
+cd ..
+
 # Deploy to production with Rocketeer. See config under .rocketeer/
-php ../bin/rocketeer.phar deploy --on="production"
+php bin/rocketeer.phar deploy --on="production"

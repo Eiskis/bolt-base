@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
+
+# Handle working directory
+cd "$(dirname "$0")"
+cd ..
+
 # Run Gulp to build (default) theme assets
-../theme/default/node_modules/.bin/gulp build
+theme/default/node_modules/.bin/gulp build
