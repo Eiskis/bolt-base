@@ -10,15 +10,15 @@ database:
     databasename: bolt
 
 # The name of the website
-sitename: A sample site
-payoff: The amazing payoff goes here
+sitename: Site name
+payoff: Site description with a catchy tagline
 
 # The theme to use. Be sure to copy the {theme_path}/base-2014 folder, and
 # change the name here accordingly.
 #
 # Don't edit the templates in theme/base-2014, because they _will_ get updated
 # in next releases
-theme: base-2014
+theme: default
 
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see: 
@@ -29,7 +29,7 @@ theme: base-2014
 #
 # This can be done as [nl_NL, Dutch_Netherlands] when specifying multiple
 # locales, ensure the first is a standard locale.
-locale: en_GB
+locale: en_US
 #timezone: UTC
 
 # Set maintenance mode on or off.
