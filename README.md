@@ -5,11 +5,11 @@ Base
 ## TODO
 
 - Theme
+	- ~~Bower for theme deps~~
+	- ~~Gulp + Bower integration~~
 	- Template cleanup
-	- Bower for theme deps
-	- `gulp-bower-*` integration for theme: https://www.npmjs.com/package/gulp-bower
 	- Split Gulp tasks into files
-	- CSS paths rebase: https://github.com/42Zavattas/gulp-css-url-rebase
+	- CSS paths rebase: [github.com/42Zavattas/gulp-css-url-rebase](https://github.com/42Zavattas/gulp-css-url-rebase)
 - Deployment
 	- Satellite deployment: [github.com/rocketeers/satellite](https://github.com/rocketeers/satellite)
 	- ~~Base confs~~

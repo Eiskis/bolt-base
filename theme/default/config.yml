@@ -17,14 +17,14 @@ config:
             external:
                 - '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,700,300,600,800,400'
             internal:
-                - public/lib.min.css
-                - public/all.min.css
+                - public/lib.css
+                - public/all.css
         js:
             external:
                 # - //code.jquery.com/jquery-2.1.1.min.js
             internal:
-                - public/lib.min.js
-                - public/all.min.js
+                - public/lib.js
+                - public/all.js
 
 # Template filenames. If you 're creating a theme for distribution, you can specify
 # the filenames of the templates here. The templates you will set in this config
