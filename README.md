@@ -8,7 +8,7 @@ Base
 - `gulp-bower-*` integration for theme
 - Rocketeer confs
 - Theme cleanup
-- Fetch bins in scripts, don't keep in repo
+- Fetch bins in scripts when needed, don't keep in repo
 
 ## Reqs
 

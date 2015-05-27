@@ -4,5 +4,6 @@
 cd "$(dirname "$0")"
 cd ..
 
-# Run Gulp to build (default) theme assets
-./theme/default/node_modules/.bin/gulp build
+# Run Gulp to build theme assets
+cd theme/default/
+npm run build

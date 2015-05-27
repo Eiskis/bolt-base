@@ -32,8 +32,17 @@ if (args.debug) {
 
 
 
-// Compile, autoprefix and, minify
-gulp.task('css', function () {
+//
+// TASKS
+//
+
+// Clean up CSS
+gulp.task('clean-css', function (cb) {
+	del(conf.destination.css + 'all.min.css', cb)
+});
+
+// Compile, autoprefix and, minify CSS
+gulp.task('css', ['clean-js'], function () {
 	return gulp.src(conf.source.css)
 		.pipe(g.plumber())
 		.pipe(g.concat('all.css'))
@@ -43,31 +52,19 @@ gulp.task('css', function () {
 		.pipe(gulp.dest(conf.destination.css));
 });
 
+// Clean up JS
+gulp.task('clean-js', function (cb) {
+	del(conf.destination.js + 'all.min.js', cb)
+});
+
 // Compile, uglify JS
-gulp.task('js', function () {
+gulp.task('js', ['clean-js'], function () {
 	return gulp.src(conf.source.js)
 		.pipe(g.plumber())
 		.pipe(g.concat('all.js', {newLine: ';'}))
 		.pipe(g.if(conf.debug, g.uglify()))
 		.pipe(g.rename({suffix: '.min'}))
 		.pipe(gulp.dest(conf.destination.js));
-});
-
-
-
-// Clean up
-gulp.task('clean', function (cb) {
-	del([
-		conf.destination.css + 'all.min.css',
-		conf.destination.js + 'all.min.js'
-	], cb)
-});
-
-
-
-// Build all
-gulp.task('build', [], function () {
-	gulp.start('css', 'js');
 });
 
 // Watch for changes, recompile when needed
@@ -84,7 +81,21 @@ gulp.task('watch', function () {
 
 
 
+//
+// SHORTHANDS
+//
+
+// Build all
+gulp.task('build', function () {
+	gulp.start('css', 'js');
+});
+
+// Build all and start watching for changes
+gulp.task('build-and-watch', ['build'], function () {
+	gulp.start('watch');
+});
+
 // Default
 gulp.task('default', [], function () {
-	gulp.start('build', 'watch');
+	gulp.start('build-and-watch');
 });

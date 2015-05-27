@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "watch": "gulp build-and-watch"
+    "build-and-watch": "gulp build-and-watch"
   },
   "repository": {
     "type": "git",
