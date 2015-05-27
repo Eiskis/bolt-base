@@ -24,8 +24,21 @@ return [
     // Tasks to execute after the core Rocketeer Tasks
     'after'  => [
         'setup'   => [],
-        'deploy'  => [],
-        'cleanup' => [],
+        'deploy'  => [
+
+            // Rocketeer already runs 'composer install', so we don't use do/install here
+            'php composer.phar install --working-dir="extensions/"'
+
+        ],
+        'cleanup' => [
+
+            // Clean up cache, check DB
+            'do/clean',
+
+            // Build assets
+            'do/build'
+
+        ],
     ],
 
     // Custom Tasks to register with Rocketeer

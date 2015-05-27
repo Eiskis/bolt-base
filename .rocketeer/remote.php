@@ -20,7 +20,7 @@ return [
 
     // The root directory where your applications will be deployed
     // This path *needs* to start at the root, ie. start with a /
-    'root_directory' => '/home/www/',
+    'root_directory' => '/var/www/',
 
     // The folder the application will be cloned in
     // Leave empty to use `application_name` as your folder name
@@ -30,8 +30,8 @@ return [
     // Use this to list folders that need to keep their state, like
     // user uploaded data, file-based databases, etc.
     'shared'         => [
-        'storage/logs',
-        'storage/sessions',
+        'app/database/bolt.db',
+        'files'
     ],
 
     // Execution
@@ -59,9 +59,12 @@ return [
 
         // The folders and files to set as web writable
         'files'    => [
-            'app/database/production.sqlite',
-            'storage',
-            'public',
+            'app/cache',
+            'files',
+            'app/database',
+            'app/config',
+            'theme',
+            'extensions'
         ],
 
         // Here you can configure what actions will be executed to set
@@ -69,9 +72,10 @@ return [
         // a single command as a string or an array of commands
         'callback' => function ($task, $file) {
             return [
-                sprintf('chmod -R 755 %s', $file),
+                sprintf('chmod -R 777 %s', $file),
+                // sprintf('chmod -R 755 %s', $file),
                 sprintf('chmod -R g+s %s', $file),
-                sprintf('chown -R www-data:www-data %s', $file),
+                sprintf('chown -R www-data:www-data %s', $file)
             ];
         },
 
