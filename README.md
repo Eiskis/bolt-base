@@ -9,17 +9,21 @@ Base
 	- ~~Gulp + Bower integration~~
 	- Template cleanup
 	- Split Gulp tasks into files
-	- CSS paths rebase: [github.com/42Zavattas/gulp-css-url-rebase](https://github.com/42Zavattas/gulp-css-url-rebase)
+	- [CSS paths rebase](https://github.com/42Zavattas/gulp-css-url-rebase)
 - Deployment
-	- Satellite deployment: [github.com/rocketeers/satellite](https://github.com/rocketeers/satellite)
 	- ~~Base confs~~
-- Bolt update process
+	- [Satellite deployment](https://github.com/rocketeers/satellite)
 - Bin
 	- ~~No bins in repo~~
 	- ~~Fetch bins in scripts when needed upon install~~
+- Bolt update process?
 - Environment
-	- Document Apache config
-	- How to deal with permission scheme (no sudo, specify users on remote...)
+	- ~~Document Apache config~~
+	- Ensure permission scheme works (avoid sudo, specify users/groups on remote...)
+		- dbcheck_ts
+		- files/
+		- database
+		- *.ymls
 	- Ansible? Docker?
 
 ## Environment requirements
