@@ -26,5 +26,11 @@
     "scripts": {
         "post-package-install": "Bolt\\Composer\\ExtensionInstaller::handle",
         "post-package-update": "Bolt\\Composer\\ExtensionInstaller::handle"
+    },
+    "require": {
+        "bolt/jsonaccess": "^1.1",
+        "bolt/sitemap": "^1.0",
+        "foundrycode/boltredirector": "^1.0",
+        "timcooper/colourspectrum": "^1.0"
     }
 }
