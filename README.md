@@ -2,6 +2,13 @@
 Base
 ====
 
+## Scripts
+
+- `./install`: Install Composer and NPM dependencies.
+- `./serve`: Use PHP's built-in web server to serve the site on localhost:8000.
+- `./deploy`: Use Rocketeer to deploy the site on a remote server.
+
+
 ## Credentials
 
 - Username: root
