@@ -14,7 +14,7 @@ Base
 - Check how to deal with permissions (could possibly be handled in remote.php)
 	- Part of Apache config?
 
-## Reqs
+## Environment requirements
 
 - Apache/nginx
 - mod_rewrite, `.htaccess` allowed
@@ -24,10 +24,12 @@ Base
 
 ## Scripts
 
-- `./install`: Install Composer and NPM dependencies.
-- `./serve`: Use PHP's built-in web server to serve the site on localhost:8000.
-- `./deploy`: Use Rocketeer to deploy the site on a remote server.
-
+1. `do/install`: Install dependencies (Composer, NPM)
+2. `do/clean`: Clear cache, check + update DB (app/nut)
+3. `do/build`: Build assets (Gulp)
+4. `do/watch`: Build assets and keep watching for changes (Gulp)
+5. `do/serve`: Put site on [localhost:8000](http://localhost:8000) (PHP's web server)
+6. `do/deploy`: Use Rocketeer to deploy the site on a remote server.
 
 ## Credentials
 

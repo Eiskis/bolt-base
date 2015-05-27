@@ -6,5 +6,7 @@ cd ..
 
 # Clear Bolt's cache
 php app/nut cache:clear
+
+# Check and update database
 php app/nut database:check
 php app/nut database:update

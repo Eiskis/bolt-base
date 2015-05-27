@@ -37,12 +37,12 @@ if (args.debug) {
 //
 
 // Clean up CSS
-gulp.task('clean-css', function (cb) {
+gulp.task('clear-css', function (cb) {
 	del(conf.destination.css + 'all.min.css', cb)
 });
 
 // Compile, autoprefix and, minify CSS
-gulp.task('css', ['clean-css'], function () {
+gulp.task('css', ['clear-css'], function () {
 	return gulp.src(conf.source.css)
 		.pipe(g.plumber())
 		.pipe(g.concat('all.css'))
@@ -53,12 +53,12 @@ gulp.task('css', ['clean-css'], function () {
 });
 
 // Clean up JS
-gulp.task('clean-js', function (cb) {
+gulp.task('clear-js', function (cb) {
 	del(conf.destination.js + 'all.min.js', cb)
 });
 
 // Compile, uglify JS
-gulp.task('js', ['clean-js'], function () {
+gulp.task('js', ['clear-js'], function () {
 	return gulp.src(conf.source.js)
 		.pipe(g.plumber())
 		.pipe(g.concat('all.js', {newLine: ';'}))
@@ -88,6 +88,11 @@ gulp.task('watch', function () {
 // Build all
 gulp.task('build', function () {
 	gulp.start('css', 'js');
+});
+
+// Clean all
+gulp.task('clear', function () {
+	gulp.start('clear-css', 'clear-js');
 });
 
 // Build all and start watching for changes

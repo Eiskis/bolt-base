@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Handle working directory
+cd "$(dirname "$0")"
+cd ..
+
+# Download Composer binary
+curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
+
+# Download Rocketeer binary
+scp http://rocketeer.autopergamene.eu/versions/rocketeer.phar bin/rocketeer.phar

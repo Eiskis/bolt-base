@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "gulp build",
+    "clear": "gulp clear",
     "build-and-watch": "gulp build-and-watch"
   },
   "repository": {
