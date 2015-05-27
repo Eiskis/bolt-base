@@ -24,4 +24,4 @@ if [ $2 ]; then
   POINT=$2
 fi
 
-php -S localhost:8000 -t $DOCROOT $POINT 2>> bolt.log &
+php -S localhost:8000 -t $DOCROOT $POINT 2>> bolt.log
