@@ -1,17 +1,21 @@
+# Rocketeer
+.rocketeer/logs/*
+
 # Bolt specific stuff. Don't put config files, databases or 'vendor' in Git.
 app/cache/*
-app/config/*.yml
-app/config/extensions/
-app/database/*
-*config.yml
-files/*
-extensions/*
+# app/config/*.yml
+app/config/*_local.yml
+# app/config/extensions/
+# app/database/*
+# *config.yml
+# files/*
+# extensions/*
 thumbs/
 vendor/
 phpunit.xml
 
 # Unless you want to store vendor's "state" in your Git repo.
-composer.phar
+# composer.phar
 composer.lock
 
 # Files related to testing
