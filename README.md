@@ -42,6 +42,7 @@ Base
 4. `do/watch`: Build assets and keep watching for changes (Gulp)
 5. `do/serve`: Put site on [localhost:8000](http://localhost:8000) (PHP's web server)
 6. `do/deploy`: Use Rocketeer to deploy the site on a remote server.
+7. `do/update`: Update Composer, NPM and Bower dependencies.
 
 ## Credentials
 
