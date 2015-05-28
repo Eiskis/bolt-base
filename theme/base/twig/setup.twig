@@ -1,4 +1,13 @@
 {% spaceless %}
-	{% set theme.conf.locale = app.config.get('general/locale') %}
+
+	{# Dynamically augment theme conf #}
+	{% set theme.config.debug = app.config.get('general/debug') %}
+	{% set theme.config.locale = app.config.get('general/locale') %}
+	{% set theme.config.sitename = app.config.get('general/sitename') %}
+	{% set theme.config.description = app.config.get('general/payoff') %}
+
+	{# Paths #}
+	{% set paths.public = paths.theme ~ 'public/' %}
+	{% set paths.images = paths.public ~ 'images/' %}
 {% endspaceless %}
 {% block html %}{% endblock %}

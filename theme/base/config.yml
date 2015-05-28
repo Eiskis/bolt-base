@@ -11,40 +11,46 @@ config:
             id: UA-12345678
         facebook:
             id: 1234567891234567
-            url: https://www.facebook.com/facebookpagename
+            username: username
+        twitter:
+            username: username
+        linkedin:
+            username: companyname
     assetlinks:
         css:
             external:
                 - '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,700,300,600,800,400'
             internal:
-                - public/lib.css
-                - public/all.css
+                - build/lib.css
+                - build/all.css
         js:
             external:
                 # - //code.jquery.com/jquery-2.1.1.min.js
             internal:
-                - public/lib.js
-                - public/all.js
+                - build/lib.js
+                - build/all.js
 
 # Template filenames. If you 're creating a theme for distribution, you can specify
 # the filenames of the templates here. The templates you will set in this config
 # file will override the ones in the global app/config/config.yml, so beware!
-maintenance_template: twig/maintenance.twig
-homepage_template: twig/contenttypes/page.twig
-record_template: twig/record.twig
-listing_template: twig/listing.twig
-search_results_template: twig/search.twig
+maintenance_template: twig/special/maintenance.twig
+homepage_template: twig/special/home.twig
+record_template: twig/special/record.twig
+listing_template: twig/special/listing.twig
+search_results_template: twig/special/search.twig
 
+# Custom template fields
 templatefields:
-    extrafields.twig:
-        section_1:
-            type: text
-            label: Section 1
-        section_2:
-            type: html
-            label: Section 2
-        image:
-            type: image
+    # twig/pages/contact.twig:
+    # twig/pages/notfound.twig:
+        # section_1:
+        #     type: text
+        #     label: Section 1
+        # section_2:
+        #     type: html
+        #     label: Section 2
+        # image:
+        #     type: image
 
 # There can be defined the templates for the template chooser
 #templateselect:

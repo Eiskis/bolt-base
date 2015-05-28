@@ -12,7 +12,7 @@
 	{# FIXME: should be trimmed #}
 	{% set facebookurl %}
 		https://www.facebook.com/dialog/share?
-			app_id={{ facebookappid }}
+			app_id={{ theme.config.services.facebook.id }}
 			&display=popup
 			&href={{ url }}
 			&redirect_uri={{ url }}
@@ -33,7 +33,7 @@
 		https://www.linkedin.com/shareArticle?
 			url={{ url }}
 			&mini=true
-			&source=Omniata
+			&source={{ theme.config.sitename }}
 			{% if title is not empty %}
 				&title={{ title|url_encode }}
 			{% endif %}
@@ -60,7 +60,7 @@
 			?url={{ url|url_encode }}
 
 			{# Related #}
-			&related=omniata_inc
+			&related={{ theme.config.services.twitter.username }}
 			{% if twitterhandle is not empty %}
 				,{{ twitterhandle }}
 			{% endif %}

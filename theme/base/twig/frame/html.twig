@@ -23,11 +23,16 @@
 				<h1>No body content</h1>
 			{% endblock %}
 
-			{# {% include 'partials/debug.twig' %} #}
+			{% if theme.config.debug %}
+				{% include 'twig/frame/debug.twig' %}
+			{% endif %}
 
 			{% spaceless %}
+
 				{% include 'twig/frame/js.twig' %}
+
 				{% include 'twig/frame/tracking.twig' %}
+
 			{% endspaceless %}
 
 		</body>

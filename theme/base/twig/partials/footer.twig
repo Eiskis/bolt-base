@@ -1,9 +1,4 @@
 
-{# Set content #}
-{% set facebookurl = 'https://www.facebook.com/omniata.inc' %}
-{% set twitterurl = 'https://twitter.com/omniata_inc' %}
-{% set linkedinurl = 'https://www.linkedin.com/company/omniata-inc-' %}
-
 {# Fetch content #}
 {% setcontent jobs = 'jobs/' %}
 {% setcontent posts = 'posts/latest/4' %}
@@ -21,7 +16,7 @@
 
 				<div class="reset column tiny-half">
 
-					<h3>Omniata.com</h3>
+					<h3>About</h3>
 
 					{# Footer menu #}
 					<ul class="partial-footer-menu clear-after plain">
@@ -77,9 +72,9 @@
 			<div class="partial-footer-socialmedia buffer-top clear-after">
 
 				<ul class="plain inline">
-					<li class="first"><a href="{{ facebookurl }}" class="button plain round clear-after facebook" target="_blank"><i class="icon-facebook"></i></a></li>
-					<li class="middle"><a href="{{ twitterurl }}" class="button plain round clear-after twitter" target="_blank"><i class="icon-twitter"></i></a></li>
-					<li class="last"><a href="{{ linkedinurl }}" class="button plain round clear-after linkedin" target="_blank"><i class="icon-linkedin"></i></a></li>
+					<li class="first"><a href="https://www.facebook.com/{{ theme.config.services.facebook.username }}" class="button plain round clear-after facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+					<li class="middle"><a href="https://twitter.com/{{ theme.config.services.twitter.username }}" class="button plain round clear-after twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+					<li class="last"><a href="https://www.linkedin.com/company/{{ theme.config.services.linkedin.username }}" class="button plain round clear-after linkedin" target="_blank"><i class="icon-linkedin"></i></a></li>
 				</ul>
 
 			</div>

@@ -4,7 +4,7 @@ Base
 
 ## TODO
 
-- Theme
+- Template + theme
 	- ~~Bower for theme deps~~
 	- ~~Gulp + Bower integration~~
 	- Template cleanup
@@ -13,6 +13,7 @@ Base
 	- Don't hardcode theme name
 		- Scripts
 		- Readmes
+	- Localization
 - Deployment
 	- ~~Base confs~~
 	- [Satellite deployment](https://github.com/rocketeers/satellite)
