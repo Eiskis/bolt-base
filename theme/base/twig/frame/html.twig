@@ -1,41 +1,49 @@
 {% extends 'twig/setup.twig' %}
 {% block html %}
-	<!DOCTYPE html>
-	<html lang="{{ language }}">
+	{% spaceless %}
 
-		{% spaceless %}
+		{# Set variables #}
+		{% set rootclasses = [] %}
+
+		{# {% if theme.config.debug %}
+			{% set rootclasses = rootclasses|merge(['debug']) %}
+		{% endif %}
+
+		{% if record is not empty %}
+			{% set rootclasses = rootclasses|merge([
+				('record-' ~ record.contenttype.singular_slug),
+				('record-' ~ record.contenttype.singular_slug ~ '-' ~ record.slug)
+			]) %}
+		{% endif %} #}
+
+
+
+		{# Pring head #}
+		<!DOCTYPE html>
+		<html lang="{{ language }}"{% if rootclasses is not empty %} class="{{ rootclasses|join(' ') }}"{% endif %}>
 
 			<head>
-
 				{% include 'twig/frame/meta.twig' %}
-
 				{% include 'twig/frame/viewport.twig' %}
-
 				{% include 'twig/frame/css.twig' %}
-
 			</head>
 
-		{% endspaceless %}
+			<body>
 
-		<body{% if record is not empty %} class="body-record-{{ record.contenttype.singular_slug }} body-record-{{ record.contenttype.singular_slug }}-{{record.slug}}"{% endif %}>
+	{% endspaceless %}
+	{% block layout %}<h1>No body content</h1>{% endblock %}
+	{% spaceless %}
 
-			{% block frame %}
-				<h1>No body content</h1>
-			{% endblock %}
+		{% if theme.config.debug %}
+			{% include 'twig/frame/debug.twig' %}
+		{% endif %}
 
-			{% if theme.config.debug %}
-				{% include 'twig/frame/debug.twig' %}
-			{% endif %}
+		{% include 'twig/frame/js.twig' %}
 
-			{% spaceless %}
+		{% include 'twig/frame/tracking.twig' %}
 
-				{% include 'twig/frame/js.twig' %}
+			</body>
+		</html>
 
-				{% include 'twig/frame/tracking.twig' %}
-
-			{% endspaceless %}
-
-		</body>
-	</html>
-
+	{% endspaceless %}
 {% endblock %}

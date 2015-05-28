@@ -1,0 +1,42 @@
+
+{# Fetch content #}
+{% setcontent jobs = 'jobs/' %}
+{% setcontent posts = 'posts/latest/4' %}
+{% setcontent news = 'news/latest/4' %}
+
+
+
+<!-- Footer -->
+<div class="partial-footer row verydarkgrey">
+	<div class="row-content buffer">
+
+		<div class="layout-article-section-overflow">
+
+			<h3>{{ theme.sitename }}</h3>
+
+			{# Footer menu #}
+			<ul class="partial-footer-menu clear-after plain">
+				{{ menu('main', 'twig/partials/menus/footer.twig') }}
+			</ul>
+
+
+
+			{# Social media #}
+			<div class="partial-footer-socialmedia buffer-top clear-after">
+
+				<ul class="plain inline">
+					<li class="first"><a href="https://www.facebook.com/{{ theme.config.services.facebook.username }}" class="button plain round clear-after facebook" target="_blank"><i class="icon-facebook"></i></a></li>
+					<li class="middle"><a href="https://twitter.com/{{ theme.config.services.twitter.username }}" class="button plain round clear-after twitter" target="_blank"><i class="icon-twitter"></i></a></li>
+					<li class="last"><a href="https://www.linkedin.com/company/{{ theme.config.services.linkedin.username }}" class="button plain round clear-after linkedin" target="_blank"><i class="icon-linkedin"></i></a></li>
+				</ul>
+
+			</div>
+
+			{# Logo #}
+			<p class="align-center">{% include 'twig/partials/logo.twig' with { negative: true } %}</p>
+
+		</div>
+
+	</div>
+
+</div>

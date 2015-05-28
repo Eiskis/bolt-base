@@ -1,12 +1,12 @@
 
 @media handheld, only screen and (min-width: 40em) {
-	.record-post-heading h1 {
+	.contenttype-post-heading h1 {
 		font-size: 3em;
 	}
 }
 
 @media handheld, only screen and (min-width: 70em) {
-	.record-post-heading h1 {
+	.contenttype-post-heading h1 {
 		font-size: 4em;
 	}
 }

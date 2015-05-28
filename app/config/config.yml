@@ -18,7 +18,7 @@ payoff: Site description with a catchy tagline
 #
 # Don't edit the templates in theme/base-2014, because they _will_ get updated
 # in next releases
-theme: default
+theme: base
 
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see: 

@@ -1,4 +1,4 @@
-{% extends 'frames/marketing.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
@@ -6,11 +6,11 @@
 	{% setcontent people = 'people' %}
 	{% set person = people[post.author] %}
 
-	<div class="record-post">
+	<div class="contenttype-post">
 		<div class="row headerpad">
 			<div class="row-content buffer">
 
-				<div class="record-post-heading align-center-over-small">
+				<div class="contenttype-post-heading align-center-over-small">
 
 					<p><img src="{{ thumbnail(person.portrait, 80, 80) }}" class="avatar" alt="{{ person.title }}" title="{{ person.title }}"></p>
 

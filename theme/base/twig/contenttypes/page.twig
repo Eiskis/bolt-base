@@ -1,32 +1,19 @@
-{% extends 'frames/marketing.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
-	<div class="record-page">
+	<div class="contenttype-page">
 
-		{# Header #}
-		{% if page.headerbackgroundimage is not empty %}
-			{% set headerstyling %}
-				{% if page.headerbackgroundimage %}
-					background-image: url({{ paths.files ~ page.headerbackgroundimage }});
-				{% endif %}
-			{% endset %}
-		{% endif %}
-
-		<div class="row headerpad {% if page.headerbackgroundimage %} inverted background{% endif %}" style="{{ headerstyling }}">
+		<div class="row">
 			<div class="row-content buffer">
 
-				<div class="limit-small keep-center align-center-over-tiny">
+				{% if page.heading %}
+					<h1>{{ page.heading }}</h1>
+				{% endif %}
 
-					{% if page.heading %}
-						<h1>{{ page.heading }}</h1>
-					{% endif %}
-
-					{% if page.headercontent %}
-						{{ page.headercontent|raw }}
-					{% endif %}
-
-				</div>
+				{% if page.headercontent %}
+					{{ page.headercontent }}
+				{% endif %}
 
 			</div>
 		</div>

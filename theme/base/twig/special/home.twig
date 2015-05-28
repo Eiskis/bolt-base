@@ -1,24 +1,9 @@
-{% extends 'frames/marketing.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
-	{# Fetch content #}
-	{% setcontent people = 'people' %}
-	{% set person = people[record.author] %}
-
 	<div class="row">
 		<div class="row-content buffer">
-
-			{# Taxonomy-based tags #}
-			{# {% if record.taxonomy %}
-				{% if record.taxonomy.tags %}
-					<p>Tags: 
-						{% for link, value in record.taxonomy.tags %}
-							<a href="{{ link }}">{{ value }}</a>{% if not loop.last %}, {% endif %}
-						{% endfor %}
-					</p>
-				{% endif %}
-			{% endif %} #}
 
 			<div class="layout-customcontent layout-customcontent-wide">
 				<div class="layout-customcontent-section">
@@ -46,7 +31,7 @@
 						{{ record.body }}
 					{% endif %}
 
-					{% include 'partials/sharebuttons.twig' with {
+					{% include 'twig/partials/sharebuttons.twig' with {
 						iconsonly: true,
 						twitterhandle: person.twitter,
 						title: record.title,

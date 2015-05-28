@@ -1,0 +1,14 @@
+
+{# Default to tags from record #}
+{% if tags is not defined %}
+	{% if record.taxonomy %}
+		{% if record.taxonomy.tags %}
+			{% set tags = record.taxonomy.tags %}
+		{% endif %}
+	{% endif %}
+{% endif %}
+
+{# List taxonomy-based tags #}
+{% for link, value in record.taxonomy.tags %}
+	<li><a href="{{ link }}">{{ value }}</a>{% if not loop.last %}, {% endif %}</li>
+{% endfor %}

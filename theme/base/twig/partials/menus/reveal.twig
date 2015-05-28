@@ -19,8 +19,6 @@
 
 {% endmacro %}
 
-<ul class="menu-reveal reset plain">
-	{% for item in menu %}
-		{{ _self.display_menu_item(item, loop, 0) }}
-	{% endfor %}
-</ul>
+{% for item in menu %}
+	{{ _self.display_menu_item(item, loop, 0) }}
+{% endfor %}

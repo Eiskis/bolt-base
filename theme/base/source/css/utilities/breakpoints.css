@@ -21,17 +21,6 @@
 	}
 }
 
-@media handheld, only screen and (min-width: 55em) {
-	.hide-over-smallmedium {
-		display: none;
-	}
-}
-@media handheld, only screen and (max-width: 54.9375em) {
-	.hide-under-smallmedium {
-		display: none;
-	}
-}
-
 @media handheld, only screen and (min-width: 70em) {
 	.hide-over-medium {
 		display: none;

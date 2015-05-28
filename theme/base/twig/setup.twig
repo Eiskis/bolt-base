@@ -1,13 +1,31 @@
 {% spaceless %}
 
 	{# Dynamically augment theme conf #}
-	{% set theme.config.debug = app.config.get('general/debug') %}
-	{% set theme.config.locale = app.config.get('general/locale') %}
-	{% set theme.config.sitename = app.config.get('general/sitename') %}
-	{% set theme.config.description = app.config.get('general/payoff') %}
+	{% if theme %}
 
-	{# Paths #}
-	{% set paths.public = paths.theme ~ 'public/' %}
-	{% set paths.images = paths.public ~ 'images/' %}
+		{# Copy some items from global config #}
+		{% if theme.copyfromappconfig %}
+
+			{% for key, value in theme.copyfromappconfig %}
+				{% set theme = theme|merge({
+					'config': theme.config|merge({
+						(key): (app.config.get(('general/' ~ value)))
+					})
+				}) %}
+			{% endfor %}
+
+		{% endif %}
+
+		{# Paths #}
+		{% if theme.paths %}
+			{% for key, value in theme.paths %}
+				{% set paths = paths|merge({
+					(key): (paths.theme ~ value)
+				}) %}
+			{% endfor %}
+		{% endif %}
+
+	{% endif %}
+
 {% endspaceless %}
 {% block html %}{% endblock %}

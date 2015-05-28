@@ -1,10 +1,21 @@
 # Config file for this default theme
 # http://www.yaml.org/start.html
 
+# setup.twig will put these into theme.config for use
+copyfromappconfig:
+    debug: debug
+    locale: locale
+    sitename: sitename
+    sitedescription: payoff
+
+# setup.twig will prefix and put these in the global paths section
+paths:
+    fonts: public/fonts/
+    images: public/images/
+
 # Variables that are in this file, can be used in your twig template like {{ theme.foo }}
 # Note: If variables do not immediately show up, clear the cache, in the Bolt Backend.
 config:
-    # locale: en_US    # Set in main config
     language: en
     services:
         googleanalytics:

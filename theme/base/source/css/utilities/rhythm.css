@@ -4,35 +4,33 @@
 }
 
 .tight-rhythm {
-	line-height: 1.5;
+	line-height: 1.4;
 }
 
-.collapse-rhythm h1,
-.collapse-rhythm h2,
-.collapse-rhythm h3,
-.collapse-rhythm h4,
-.normalize-rhythm h1,
-.normalize-rhythm h2,
-.normalize-rhythm h3,
-.normalize-rhythm h4
-{
+.plain-rhythm h1,
+.plain-rhythm h2,
+.plain-rhythm h3,
+.plain-rhythm h4,
+.plain-rhythm h5,
+.plain-rhythm h6 {
 	line-height: inherit;
 }
 
-.no-rhythm h1,
-.no-rhythm h2,
-.no-rhythm h3,
-.no-rhythm h4,
-.no-rhythm h5,
-.no-rhythm h6,
-.no-rhythm p,
-.no-rhythm ul,
-.no-rhythm ol,
+.plain-rhythm h1,
+.plain-rhythm h2,
+.plain-rhythm h3,
+.plain-rhythm h4,
+.plain-rhythm h5,
+.plain-rhythm h6,
 
-.no-rhythm dl,
-.no-rhythm dt,
-.no-rhythm dd,
-.no-rhythm img
+.plain-rhythm p,
+.plain-rhythm ul,
+.plain-rhythm ol,
+
+.plain-rhythm dl,
+.plain-rhythm dt,
+.plain-rhythm dd,
+.plain-rhythm img
 {
  	margin-top: 0;
  	margin-bottom: 0;

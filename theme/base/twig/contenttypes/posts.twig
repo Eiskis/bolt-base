@@ -1,13 +1,12 @@
-{% extends 'frames/marketing.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
 	{# Fetch content #}
 	{% setcontent posts = 'posts/latest/10' allowpaging %}
-	{% setcontent people = 'people/random/8' %}
 
-	<div class="layout-postlist record-posts">
-		<div class="row headerpad">
+	<div class="contenttype-posts">
+		<div class="row">
 			<div class="row-content buffer">
 
 				{% include 'partials/postlisting.twig' with {

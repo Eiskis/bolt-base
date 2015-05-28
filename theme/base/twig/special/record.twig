@@ -1,4 +1,4 @@
-{% extends 'frames/marketing.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
@@ -46,7 +46,7 @@
 						{{ record.body }}
 					{% endif %}
 
-					{% include 'partials/sharebuttons.twig' with {
+					{% include 'twig/partials/sharebuttons.twig' with {
 						iconsonly: true,
 						twitterhandle: person.twitter,
 						title: record.title,

@@ -1,17 +1,21 @@
-{% extends 'frames/plain.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
-	{% if not records %}
+	<div class="special-search">
 
-		<p class="search-noresults reset">No search results</p>
+		{% if not records %}
 
-	{% else %}
-		{% for record in records %}
-			<a href="{{ record.link }}" class="block no-rhythm type-ellipsis">{{ record.title }}</a>
-		{% endfor %}
-	{% endif %}
+			<p class="special-search-noresults reset">No search results</p>
 
-	{# {{ pager() }} #}
+		{% else %}
+			{% for record in records %}
+				<a href="{{ record.link }}" class="block no-rhythm type-ellipsis">{{ record.title }}</a>
+			{% endfor %}
+		{% endif %}
+
+		{# {{ pager() }} #}
+
+	</div>
 
 {% endblock %}

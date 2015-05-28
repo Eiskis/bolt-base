@@ -1,29 +1,19 @@
-{% extends 'frames/plain.twig' %}
+{% extends 'twig/layouts/full.twig' %}
 
 {% block body %}
 
-	{# Fetch content #}
-	{% setcontent posts = 'posts' where {
+	{# Sample: Fetch content #}
+	{# {% setcontent posts = 'posts' where {
 		author: person.id
-	} %}
+	} %} #}
 
-	<div class="record-person">
+	<div class="contenttype-person">
 		<div class="row">
 			<div class="row-content buffer">
 
-				{% include 'partials/personintro.twig' with {
-					'person': person
-				} only %}
+				<h1>{{ person.title }}</h1>
 
-				{% if posts %}
-					<div class="record-person-posts buffer-top even">
-
-						{% include 'partials/postlisting.twig' with {
-							'posts': posts
-						} only %}
-
-					</div>
-				{% endif %}
+				<p>{{ person.intro }}</p>
 
 			</div>
 		</div>

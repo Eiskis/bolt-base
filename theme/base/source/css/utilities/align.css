@@ -75,30 +75,6 @@
 		}
 }
 
-/*Small*/
-@media handheld, only screen and (min-width: 55em) {
-	.align-left-over-smallmedium {
-		text-align: left;
-	}
-		.align-center-over-smallmedium {
-			text-align: center;
-		}
-		.align-right-over-smallmedium {
-			text-align: right;
-		}
-}
-@media handheld, only screen and (max-width: 54.9375em) {
-	.align-left-under-smallmedium {
-		text-align: left;
-	}
-		.align-center-under-smallmedium {
-			text-align: center;
-		}
-		.align-right-under-smallmedium {
-			text-align: right;
-		}
-}
-
 /*Medium*/
 @media handheld, only screen and (min-width: 70em) {
 	.align-left-over-medium {
