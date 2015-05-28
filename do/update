@@ -9,6 +9,6 @@ php bin/composer.phar update
 php bin/composer.phar update --working-dir="extensions/"
 
 # Install node dependencies for theme
-cd theme/default/
+cd theme/base/
 npm update
 ./node_modules/.bin/bower update

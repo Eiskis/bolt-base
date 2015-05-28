@@ -15,7 +15,7 @@ var conf = {
 	debug: false,
 	browserlist: 'last 2 version, > 1%, Android, BlackBerry, iOS 7',
 	bowerComponentsPath: 'bower_components',
-	destination: 'public/',
+	destination: 'build/',
 	source: {
 		css: [
 			'css/**/*.css'

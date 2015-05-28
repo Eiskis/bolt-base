@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Handle working directory
+cd "$(dirname "$0")"
+cd ..
+
+#
+# Prune project
+#
+# - Clean up the project from unnecessary files
+# - Mainly for running in production server
+# - This removes plenty of stuff that is kept in Git, including .git itself
+# - Project cannot be built after this (so run prune only after building)
+
+# Git: remove all traces of Git files
+find . | grep .git | xargs rm -rf
+
+# Rocketeer confs
+rm -rf .rocketeer/
+
+# Docs
+rm changelog.md
+rm contributing.md
+rm README.md
+rm app/LICENSE.txt
+rm app/src/README.md
+
+# Theme
+rm -rf theme/base/source/
+rm -rf theme/base/node_modules/
+rm -rf theme/base/bower_components/
+rm -rf theme/base/bower.json
+rm theme/base/README.md
+
+# CI & tests
+rm -rf tests/
+rm .scrutinizer.yml
+rm .travis.yml
+rm .travis.nginx.yml
+rm codeception.yml
+rm phpunit.xml.dist

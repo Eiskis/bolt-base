@@ -10,9 +10,6 @@ Base
 	- Template cleanup
 	- Split Gulp tasks into files
 	- [CSS paths rebase](https://github.com/42Zavattas/gulp-css-url-rebase)
-	- Don't hardcode theme name
-		- Scripts
-		- Readmes
 - Deployment
 	- ~~Base confs~~
 	- [Satellite deployment](https://github.com/rocketeers/satellite)
@@ -41,7 +38,7 @@ Base
 ## Scripts included
 
 1. `do/install`: Install dependencies (Composer, NPM)
-2. `do/clear`: Clear cache, check DB & update schema if needed (app/nut)
+2. `do/clean`: Clear cache, check + update DB (app/nut)
 3. `do/build`: Build assets (Gulp)
 4. `do/watch`: Build assets and keep watching for changes (Gulp)
 5. `do/serve`: Put site on [localhost:8000](http://localhost:8000) (PHP's web server)
@@ -79,17 +76,17 @@ Site should be up at [localhost:8000](http://localhost:8000).
 
 [Log in](http://localhost:8000/bolt) as `root`:`rootroot` and change the password.
 
-Configure the site with the `app/config/*.yml` files. `do/clear` if you edit content types or taxonomies.
+Configure the site with the `app/config/*.yml` files. `do/clean` if you edit content types or taxonomies.
 
 ## Theme development
 
-The *theme/base/* is really your playground. Start with *theme/base/config/*.
+The *theme/default/* is really your playground. Start with *theme/default/config/*.
 
 `do/watch` for changes to auto build CSS and JS with Gulp as you make changes.
 
 Add dependencies locally like so:
 
-	cd theme/base/
+	cd theme/default/
 	npm install gulp-plugin --save
 
 	# If you have bower installed locally

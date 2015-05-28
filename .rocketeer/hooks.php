@@ -32,11 +32,14 @@ return [
         ],
         'cleanup' => [
 
+            // Build assets
+            'do/build',
+
             // Clean up cache, check DB
             'do/clean',
 
-            // Build assets
-            'do/build'
+            // Clean up project folder
+            'do/prune'
 
         ],
     ],

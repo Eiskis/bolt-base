@@ -21,6 +21,6 @@ php bin/composer.phar install
 php bin/composer.phar install --working-dir="extensions/"
 
 # Install node dependencies for theme
-cd theme/default/
+cd theme/base/
 npm install
 ./node_modules/.bin/bower install
