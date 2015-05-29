@@ -9,36 +9,27 @@ Still broken as hell, don't use it.
 ## TODO
 
 - Template + theme
-	- ~~Bower for theme deps~~
-	- ~~Gulp + Bower integration~~
 	- RSS & sitemap links
-	- Template cleanup
 	- Split Gulp tasks into files
-	- [CSS paths rebase](https://github.com/42Zavattas/gulp-css-url-rebase)
+	- Make `gulp watch` reliable
+	- ~~[CSS paths rebase](https://github.com/42Zavattas/gulp-css-url-rebase)~~
 	- Don't hardcode theme name
 		- Scripts
 		- Readmes
-	- Localization
 - Deployment
-	- ~~Base confs~~
-	- [Satellite deployment](https://github.com/rocketeers/satellite)
 	- Strategy that runs `./install` and not composer + hooks
-- Bin
-	- ~~No bins in repo~~
-	- ~~Fetch bins in scripts when needed upon install~~
-- Bolt update process?
+	- [Satellite deployment](https://github.com/rocketeers/satellite)
+- Localization
+	- Labels in theme templates
+	- Editable content
+- Investigate Bolt update process
 - Environment
-	- ~~Document Apache config~~
 	- Ensure permission scheme works (avoid sudo, specify users/groups on remote...)
 		- dbcheck_ts
 		- files/
 		- database
 		- *.ymls
-	- Ansible? Docker?
-- Default content types
-	- Pages
-	- Snippets
-- paths
+	- Ansible scripts?
 - nextcss
 - recipes on top level
 - preprocessor support?

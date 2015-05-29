@@ -15,8 +15,8 @@ var config = {
 	debug: false,
 	browserlist: 'last 2 version, > 1%, Android, BlackBerry, iOS 7',
 	bowerComponentsPath: 'bower_components',
-	destination: 'build/',
-	cssUrlPrefix: '../public/',
+	destination: 'public/build/',
+	cssUrlPrefix: '../',
 	source: {
 		css: [
 			'source/**/*.css'
@@ -46,17 +46,17 @@ gulp.task('clear-css', function (cb) {
 });
 
 // Bower components
-gulp.task('css-libraries', function() {
+gulp.task('css-vendor', function() {
 	return gulp.src(plugins.bowerFiles(['**/*.css']), { base: config.bowerComponentsPath })
 		.pipe(plugins.plumber())
-		.pipe(plugins.concat('lib.css'))
+		.pipe(plugins.concat('vendor.css'))
 		.pipe(plugins.if(!config.debug, plugins.minifyCss()))
 		// .pipe(plugins.rename({suffix: '.min'}))
 		.pipe(gulp.dest(config.destination));
 });
 
 // Compile, autoprefix and, minify CSS
-gulp.task('css', ['clear-css', 'css-libraries'], function () {
+gulp.task('css', ['clear-css', 'css-vendor'], function () {
 	var files = gulp.src(config.source.css);
 	return files
 		.pipe(plugins.plumber())
@@ -78,7 +78,7 @@ gulp.task('clear-js', function (cb) {
 });
 
 // Bower components
-gulp.task('js-libraries', function() {
+gulp.task('js-vendor', function() {
 	return gulp.src(plugins.bowerFiles(['**/*.js']), { base: config.bowerComponentsPath })
 		.pipe(plugins.plumber())
 		.pipe(plugins.concat('all.js', {newLine: ';'}))
@@ -88,11 +88,11 @@ gulp.task('js-libraries', function() {
 });
 
 // Compile, uglify JS
-gulp.task('js', ['clear-js', 'js-libraries'], function () {
+gulp.task('js', ['clear-js', 'js-vendor'], function () {
 	var files = gulp.src(config.source.js);
 	return files
 		.pipe(plugins.plumber())
-		.pipe(plugins.concat('lib.js', {newLine: ';'}))
+		.pipe(plugins.concat('vendor.js', {newLine: ';'}))
 		.pipe(plugins.if(!config.debug, plugins.uglify()))
 		// .pipe(plugins.rename({suffix: '.min'}))
 		.pipe(gulp.dest(config.destination));

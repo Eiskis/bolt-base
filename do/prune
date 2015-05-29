@@ -26,10 +26,13 @@ rm app/LICENSE.txt
 rm app/src/README.md
 
 # Theme
-rm -rf theme/base/source/
-rm -rf theme/base/node_modules/
 rm -rf theme/base/bower_components/
-rm -rf theme/base/bower.json
+rm -rf theme/base/node_modules/
+rm -rf theme/base/recipes/
+rm -rf theme/base/source/
+rm theme/base/bower.json
+rm theme/base/gulpfile.js
+rm theme/base/package.json
 rm theme/base/README.md
 
 # CI & tests

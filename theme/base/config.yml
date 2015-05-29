@@ -18,19 +18,20 @@ passtojs:
     paths: 'paths'
 
 # link to these files in HTML templates
+# bower components are automatically linked
 assetlinks:
     css:
         external:
             # - '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,700,300,600,800,400'
         internal:
-            - build/lib.css
-            - build/all.css
+            # - public/build/vendor.css
+            - public/build/all.css
     js:
         external:
             - //code.jquery.com/jquery-2.1.1.min.js
         internal:
-            - build/lib.js
-            - build/all.js
+            - public/build/vendor.js
+            - public/build/all.js
 
 # Variables that are in this file, can be used in your twig template like {{ theme.foo }}
 # Note: If variables do not immediately show up, clear the cache, in the Bolt Backend.
