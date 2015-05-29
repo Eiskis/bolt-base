@@ -2,6 +2,10 @@
 Base
 ====
 
+Base setup for creating a new Bolt CMS project.
+
+Still broken as hell, don't use it.
+
 ## TODO
 
 - Template + theme
