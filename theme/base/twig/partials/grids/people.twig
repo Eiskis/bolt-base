@@ -8,7 +8,7 @@
 
 	{% setcontent units = 'units' %}
 
-	<div class="partial-peoplegrid grid small-half medium-third large-third">
+	<div class="partial-grid-people grid small-half medium-third large-third">
 
 		{% for person in people %}
 
@@ -16,7 +16,7 @@
 			{% set postcount = posts|length %}
 			{% set unit = units[person.unit] %}
 
-			<div class="partial-peoplegrid-person grid-cell">
+			<div class="partial-grid-people-person grid-cell">
 				<a href="{{ person.link }}" data-action="popup" class="block plain button relative">
 					<div class="column fluid right">
 						<div class="column-content no-rhythm normalize-rhythm tight-rhythm">
@@ -30,7 +30,7 @@
 							<span class="tag transition absolute block round {{ unit.colorname ? unit.colorname : 'verydarkgrey' }}">{{ postcount }}</span>
 						{% endif %}
 
-						<img class="partial-peoplegrid-avatar avatar" src="{{ thumbnail(person.image, 120, 120) }}" alt="{{ person.title }}" title="{{ person.title }}">
+						<img class="partial-grid-people-avatar avatar" src="{{ thumbnail(person.image, 120, 120) }}" alt="{{ person.title }}" title="{{ person.title }}">
 					</div>
 					<div class="clear"></div>
 				</a>

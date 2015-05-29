@@ -1,15 +1,15 @@
 
-.template-contactgrid {
+.partial-grid-contacts {
 }
 
 
 
 /*Cells*/
-.template-contactgrid .grid-cell {
+.partial-grid-contacts .grid-cell {
 	height: 10em;
 }
 	@media handheld, only screen and (min-width: 40em) {
-		.template-contactgrid .grid-cell {
+		.partial-grid-contacts .grid-cell {
 			padding: 1.5em;
 		}
 	}
@@ -17,17 +17,17 @@
 
 
 /*Container size*/
-.template-contactgrid {
+.partial-grid-contacts {
 	margin-left: auto;
 	margin-right: auto;
 }
 	/*@media handheld, only screen and (max-width: 70em) {
-		.template-contact .template-contactgrid {
+		.template-contact .partial-grid-contacts {
 			max-width: 45em;
 		}
 	}*/
 	@media handheld, only screen and (max-width: 105em) {
-		.template-contactgrid {
+		.partial-grid-contacts {
 			margin-left: auto;
 			margin-right: auto;
 			max-width: 55em;
@@ -37,41 +37,41 @@
 
 
 /*Avatar size*/
-.template-contactgrid .grid-cell-content {
+.partial-grid-contacts .grid-cell-content {
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 22em;
 }
-.template-contactgrid .avatar {
+.partial-grid-contacts .avatar {
 	display: block;
 }
-.template-contactgrid .column.fixed {
+.partial-grid-contacts .column.fixed {
 	width: 5.5em;
 }
-.template-contactgrid .column.fluid > .column-content {
+.partial-grid-contacts .column.fluid > .column-content {
 	margin-right: 7em;
 }
-.template-contactgrid .column.fluid.right > .column-content {
+.partial-grid-contacts .column.fluid.right > .column-content {
 	margin-right: 0;
 	margin-left: 7em;
 }
 
 	@media handheld, only screen and (max-width: 40em) {
-		.template-contactgrid .avatar {
+		.partial-grid-contacts .avatar {
 			margin-top: 0.2em;
 		}
 	}
 	@media handheld, only screen and (min-width: 40em) and (max-width: 55em) {
-		.template-contactgrid .avatar {
+		.partial-grid-contacts .avatar {
 			display: block;
 		}
-		.template-contactgrid .column.fixed {
+		.partial-grid-contacts .column.fixed {
 			width: 3.5em;
 		}
-		.template-contactgrid .column.fluid > .column-content {
+		.partial-grid-contacts .column.fluid > .column-content {
 			margin-right: 4.5em;
 		}
-		.template-contactgrid .column.fluid.right > .column-content {
+		.partial-grid-contacts .column.fluid.right > .column-content {
 			margin-right: 0;
 			margin-left: 4.5em;
 		}
