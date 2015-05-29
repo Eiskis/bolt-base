@@ -1,0 +1,41 @@
+{% if pager.totalpages > 1 %}
+
+	{% set link = pager.makelink() %}
+
+	<!-- Pagination links -->
+	<ul class="pagination pagination-simple plain {{ class }}">
+
+		{# Previous #}
+		<li class="pagination-link pagination-link-first"><a href="{{ link }}{{ pager.current-1 }}" class="{% if pager.current < 2 %}disabled{% endif %}"><i class="icon-chevron-left"></i><span class="hide-under-small">Previous<span class="hide-under-medium"> page</span></span></a></li>
+
+		{# First #}
+		{# {% if pager.current > surr+1 %}
+			<li><a href="{{ link }}{{ 1 }}">&laquo; 1</a></li>
+		{% endif %} #}
+
+		{# Marker when pages have been skipped before current page #}
+		{# {% if pager.current > surr+2 %}
+			<li class="disabled"><a href="#">...</a></li>
+		{% endif %} #}
+
+		{#  #}
+		{# {% for i in max(1, pager.current-surr)..min(pager.current+surr, pager.totalpages) %}
+			<li {% if i==pager.current %}class='active'{%endif%}><a href="{{ link }}{{ i }}">{{ i }}</a></li>
+		{% endfor %} #}
+
+		{# Marker when pages are skipped after current page #}
+		{# {% if pager.current < (pager.totalpages - surr - 1) %}
+			<li class="disabled"><a href="#">...</a></li>
+		{% endif %} #}
+
+		{# Last #}
+		{# {% if pager.current < pager.totalpages-surr %}
+			<li><a href="{{ link }}{{ pager.totalpages }}">{{ pager.totalpages }} &raquo; </a></li>
+		{% endif %} #}
+
+		{# Next #}
+		<li class="pagination-link pagination-link-last"><a href="{{ link }}{{ pager.current+1 }}" class="{% if pager.totalpages <= pager.current  %}disabled{% endif %}"><span class="hide-under-small">Next<span class="hide-under-medium"> page</span></span><i class="icon-chevron-right"></i></a></li>
+
+	</ul>
+
+{% endif %}

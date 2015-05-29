@@ -1,0 +1,82 @@
+
+.button {
+	display: inline-block;
+	padding: 0.67em 1em 0.67em 1em;
+
+	transition-property: color, background-color, border-color, box-shadow, padding, transform;
+}
+
+	.button.round {
+		padding-left: 1.6em;
+		padding-right: 1.6em;
+	}
+
+	.button.plain {
+		text-transform: inherit;
+	}
+
+	/*Stroke button*/
+	.button.stroke {
+		border-width: 1px;
+		border-color: #27a9e1;
+	}
+		.button.stroke:focus,
+		.button.stroke:hover {
+			color: #0093d2;
+		}
+	.inverted .button.stroke {
+		border-color: #fff;
+		color: #fff;
+	}
+		.inverted .button.stroke:hover,
+		.inverted .button.stroke:hover {
+			background-color: rgba(0, 0, 0, 0.15);
+			color: #fff;
+		}
+
+	/*Content color within swatches*/
+	.button.blue:hover,
+	.button.blue:focus,
+	.button.grey:hover,
+	.button.grey:focus,
+	.button.darkgrey:hover,
+	.button.darkgrey:focus,
+	.button.verydarkgrey:hover,
+	.button.verydarkgrey:focus {
+		color: #fff;
+	}
+
+	/*Button colors*/
+	.button.white {
+		color: #27a9e1;
+	}
+		.button.white:hover,
+		.button.white:focus {
+			background-color: #f0f1f2;
+		}
+	.button.blue:hover,
+	.button.blue:focus {
+		background-color: #0093d2;
+	}
+
+	/*Greyscale buttons*/
+	.button.white:hover,
+	.button.white:focus {
+		background-color: #e7ebec;
+	}
+	.button.lightgrey:hover,
+	.button.lightgrey:focus {
+		background-color: #abb4b4;
+	}
+	.button.grey:hover,
+	.button.grey:focus {
+		background-color: #4e6262;
+	}
+	.button.darkgrey:hover,
+	.button.darkgrey:focus {
+		background-color: #abb4b4;
+	}
+	.button.verydarkgrey:hover,
+	.button.verydarkgrey:focus {
+		background-color: #4e6262;
+	}

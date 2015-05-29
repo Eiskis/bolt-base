@@ -1,0 +1,36 @@
+
+.inverted {
+	color: #fff;
+}
+
+/*Content color within swatches*/
+.blue,
+.grey,
+.darkgrey {
+	color: #fff;
+}
+
+/*Swatches*/
+.blue {
+	background-color: #27a9e1;
+}
+	.blue-offset {
+		background-color: #0093d2;
+	}
+
+/*Greyscale swatches*/
+.white {
+	background-color: #fff;
+}
+.verylightgrey {
+	background-color: #fafafa;
+}
+.lightgrey {
+	background-color: #eaeaea;
+}
+.grey {
+	background-color: #ccc;
+}
+.darkgrey {
+	background-color: #222;
+}

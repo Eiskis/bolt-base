@@ -1,9 +1,13 @@
 
 {# Print tags that point to JS files #}
 {# FIXME: should be automated, can change based on environment (compiled assets) #}
-{% for path in assets.csslibraries %}
-	<link rel="stylesheet" type="text/css" href="{{ path }}">
-{% endfor %}
-{% for path in assets.cssfiles %}
-	<link rel="stylesheet" type="text/css" href="{{ paths.theme }}{{ path }}">
-{% endfor %}
+{% if theme.assetlinks %}
+	{% if theme.assetlinks.css %}
+		{% for path in theme.assetlinks.css.external %}
+			<link rel="stylesheet" type="text/css" href="{{ path }}">
+		{% endfor %}
+		{% for path in theme.assetlinks.css.internal %}
+			<link rel="stylesheet" type="text/css" href="{{ paths.theme }}{{ path }}">
+		{% endfor %}
+	{% endif %}
+{% endif %}

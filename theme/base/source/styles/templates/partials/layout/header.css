@@ -1,0 +1,21 @@
+
+.partial-layout-header .row-content.buffer {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.partial-layout-header ul li {
+	display: inline-block;
+}
+
+.partial-layout-header a {
+	padding: 1em;
+}
+
+.partial-layout-header ul:first-of-type:not(.right) {
+	margin-left: -1em;
+}
+
+.partial-layout-header ul.right:last-of-type {
+	margin-right: -1em;
+}

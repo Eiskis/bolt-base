@@ -1,0 +1,18 @@
+
+/*Icon usage*/
+[class^="icon-"], [class*=" icon-"] {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	line-height: 1em;
+}
+body [class^="icon-"]:before,
+body [class*=" icon-"]:before {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	line-height: 1em;
+	margin-left: 0;
+	margin-right: 0;
+	text-align: center;
+}

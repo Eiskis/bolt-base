@@ -74,7 +74,7 @@ cron_hour: 3
 # Note: If you've changed the filename, and your changes do not show up on
 #       the website, be sure to check for a config.yml file in your theme's
 #       folder. If a template is set there, it will override the setting here.
-homepage: page/1
+homepage: snippet/index
 homepage_template: index.twig
 
 # The default content for the 404 page. Uses the 'record_template' template by
@@ -86,7 +86,7 @@ homepage_template: index.twig
 # Note 1: The record specified in this parameter must be set to 'published'
 # Note 2: If you are logged on, and debug is set to 'true', you will NOT see the
 #         404 page!
-notfound: page/not-found
+notfound: snippet/not-found
 
 # The default template and amount of records to use for listing-pages on the
 # site. 

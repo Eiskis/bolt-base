@@ -9,16 +9,13 @@
 {# Job list #}
 {% if posts %}
 
-	<div class="layout-postlist">
+	<div class="contenttype-posts">
 
 		{% setcontent people = 'people' %}
-		{% setcontent units = 'units' %}
 
 		{% for post in posts %}
 
 			{% set person = people[post.author] %}
-
-			{% set unit = units[post.unit] %}
 
 			<div class="layout-postlist-item no-rhythm">
 
@@ -48,7 +45,7 @@
 
 		{% endfor %}
 
-		{{ pager('posts', 2, 'pagers/posts.twig') }}
+		{{ pager('posts', 2, 'twig/pagers/simple.twig') }}
 	</div>
 
 {% endif %}

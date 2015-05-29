@@ -1,0 +1,51 @@
+
+/*Global defaults*/
+body {
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.6;
+}
+
+	@media handheld, only screen and (min-width: 25em) {
+		body {
+			line-height: 1.75;
+		}
+	}
+	@media handheld, only screen and (min-width: 105em) {
+		body {
+			font-size: 1.2em;
+		}
+	}
+
+
+
+/*Italics*/
+blockquote {
+	font-family: "Georgia", serif;
+	font-style: italic;
+}
+
+
+
+/*Headings*/
+h1, h2, h3, h4, dt, th, code {
+	word-break: normal;
+	hyphens: manual;
+}
+
+	h1, h2, h3 {
+		line-height: 1.4;
+	}
+
+	h1 {}
+
+	h2 {}
+
+	h3 {}
+
+	h4, h5, h5 {
+		font-size: inherit;
+	}
+
+	h5, h6 {
+		font-weight: inherit;
+	}

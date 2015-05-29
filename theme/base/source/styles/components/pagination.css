@@ -1,0 +1,55 @@
+
+/*Pagination menu positioning*/
+.pagination {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+.pagination li {
+	display: inline-block;
+}
+.pagination-link {
+	box-sizing: border-box;
+}
+	.pagination-link-middle {
+	}
+
+
+
+/*No middle item*/
+.pagination-simple .pagination-link {
+}
+	.pagination-simple .pagination-link-middle {
+		display: none;
+	}
+
+
+
+/*Look*/
+
+.pagination-link-middle {}
+	.pagination-simple .pagination-link-first {
+		text-align: right;
+	}
+	.pagination-simple .pagination-link-last {
+		text-align: left;
+	}
+
+.pagination-link a {
+	display: block;
+	padding-left: 2em;
+	padding-right: 2em;
+}
+	.pagination-link-first a {
+		padding-left: 1em;
+	}
+		.pagination.simple .pagination-link-first a {}
+		.pagination-link-first i {
+			margin-right: 0.5em;
+		}
+	.pagination-link-last a {
+		padding-right: 1em;
+	}
+	.pagination-link-last i {
+		margin-left: 0.5em;
+	}

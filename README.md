@@ -11,6 +11,7 @@ Still broken as hell, don't use it.
 - Template + theme
 	- ~~Bower for theme deps~~
 	- ~~Gulp + Bower integration~~
+	- RSS & sitemap links
 	- Template cleanup
 	- Split Gulp tasks into files
 	- [CSS paths rebase](https://github.com/42Zavattas/gulp-css-url-rebase)
@@ -34,6 +35,18 @@ Still broken as hell, don't use it.
 		- database
 		- *.ymls
 	- Ansible? Docker?
+- Default content types
+	- Pages
+	- Snippets
+- paths
+- nextcss
+- recipes on top level
+- preprocessor support?
+- ko gulp tasks
+    - add attr data-component="my-component"
+    - wrap css
+
+
 
 ## Environment requirements
 

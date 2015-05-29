@@ -10,8 +10,27 @@ copyfromappconfig:
 
 # setup.twig will prefix and put these in the global paths section
 paths:
-    fonts: public/fonts/
-    images: public/images/
+    public: public/
+
+# Pass stuff to JavaScript as global objects. Set each to false to disable.
+passtojs:
+    config: 'config'
+    paths: 'paths'
+
+# link to these files in HTML templates
+assetlinks:
+    css:
+        external:
+            # - '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,700,300,600,800,400'
+        internal:
+            - build/lib.css
+            - build/all.css
+    js:
+        external:
+            - //code.jquery.com/jquery-2.1.1.min.js
+        internal:
+            - build/lib.js
+            - build/all.js
 
 # Variables that are in this file, can be used in your twig template like {{ theme.foo }}
 # Note: If variables do not immediately show up, clear the cache, in the Bolt Backend.
@@ -27,45 +46,31 @@ config:
             username: username
         linkedin:
             username: companyname
-    assetlinks:
-        css:
-            external:
-                - '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,700,300,600,800,400'
-            internal:
-                - build/lib.css
-                - build/all.css
-        js:
-            external:
-                # - //code.jquery.com/jquery-2.1.1.min.js
-            internal:
-                - build/lib.js
-                - build/all.js
 
 # Template filenames. If you 're creating a theme for distribution, you can specify
 # the filenames of the templates here. The templates you will set in this config
 # file will override the ones in the global app/config/config.yml, so beware!
-maintenance_template: twig/special/maintenance.twig
-homepage_template: twig/special/home.twig
-record_template: twig/special/record.twig
-listing_template: twig/special/listing.twig
-search_results_template: twig/special/search.twig
+homepage_template: twig/main/index.twig
+listing_template: twig/main/records.twig
+maintenance_template: twig/main/maintenance.twig
+record_template: twig/main/record.twig
+search_results_template: twig/main/search.twig
 
 # Custom template fields
-templatefields:
-    # twig/pages/contact.twig:
-    # twig/pages/notfound.twig:
-        # section_1:
-        #     type: text
-        #     label: Section 1
-        # section_2:
-        #     type: html
-        #     label: Section 2
-        # image:
-        #     type: image
+# templatefields:
+#     twig/main/notfound.twig:
+#         section_1:
+#             type: text
+#             label: Section 1
+#         section_2:
+#             type: html
+#             label: Section 2
+#         image:
+#             type: image
 
 # There can be defined the templates for the template chooser
-#templateselect:
+# templateselect:
 #    templates:
 #        record:
 #            name: 'Template for Records'
-#            filename: 'record.twig'
+#            filename: 'twig/contenttypes.page.twig'

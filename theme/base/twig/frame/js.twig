@@ -1,9 +1,22 @@
 
 {# Print tags that point to JS files #}
 {# FIXME: should be automated, can change based on environment (compiled assets) #}
-{% for path in assets.jslibraries %}
-	<script type="text/javascript" src="{{ path }}"></script>
-{% endfor %}
-{% for path in assets.jsfiles %}
-	<script type="text/javascript" src="{{ paths.theme }}js/{{ path }}"></script>
-{% endfor %}
+{% if theme.assetlinks %}
+	{% if theme.assetlinks.js %}
+		{% for path in theme.assetlinks.js.external %}
+			<script type="text/javascript" src="{{ path }}"></script>
+		{% endfor %}
+		{% for path in theme.assetlinks.js.internal %}
+			<script type="text/javascript" src="{{ paths.theme }}js/{{ path }}"></script>
+		{% endfor %}
+	{% endif %}
+{% endif %}
+
+{% if theme.passtoscripts %}
+	{% if theme.passtoscripts.config %}
+		<script type="text/javascript">window[{{ theme.passtoscripts.config }}] = JSON.parse({{ theme.config|json_encode|raw }});</script>
+	{% endif %}
+	{% if theme.passtoscripts.paths %}
+		<script type="text/javascript">window[{{ theme.passtoscripts.paths }}] = JSON.parse({{ paths|json_encode|raw }});</script>
+	{% endif %}
+{% endif %}

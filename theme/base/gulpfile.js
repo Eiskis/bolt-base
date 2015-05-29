@@ -11,24 +11,25 @@ plugins.bowerFiles = require('main-bower-files');
 
 
 // Custom configs
-var conf = {
+var config = {
 	debug: false,
 	browserlist: 'last 2 version, > 1%, Android, BlackBerry, iOS 7',
 	bowerComponentsPath: 'bower_components',
 	destination: 'build/',
+	cssUrlPrefix: '../public/',
 	source: {
 		css: [
-			'css/**/*.css'
+			'source/**/*.css'
 		],
 		js: [
-			'js/**/*.js'
+			'source/**/*.js'
 		]
 	}
 };
 
 // Command line arguments
 if (args.debug) {
-	conf.debug = true;
+	config.debug = true;
 }
 
 
@@ -40,64 +41,69 @@ if (args.debug) {
 // Clean up CSS
 gulp.task('clear-css', function (cb) {
 	del([
-		conf.destination + '**/*.css'
+		config.destination + '**/*.css'
 	], cb);
 });
 
 // Bower components
 gulp.task('css-libraries', function() {
-	return gulp.src(plugins.bowerFiles(['**/*.css']), { base: conf.bowerComponentsPath })
+	return gulp.src(plugins.bowerFiles(['**/*.css']), { base: config.bowerComponentsPath })
 		.pipe(plugins.plumber())
 		.pipe(plugins.concat('lib.css'))
-		.pipe(plugins.if(!conf.debug, plugins.minifyCss()))
+		.pipe(plugins.if(!config.debug, plugins.minifyCss()))
 		// .pipe(plugins.rename({suffix: '.min'}))
-		.pipe(gulp.dest(conf.destination));
+		.pipe(gulp.dest(config.destination));
 });
 
 // Compile, autoprefix and, minify CSS
 gulp.task('css', ['clear-css', 'css-libraries'], function () {
-	return gulp.src(conf.source.css)
+	var files = gulp.src(config.source.css);
+	return files
 		.pipe(plugins.plumber())
 		.pipe(plugins.concat('all.css'))
-		.pipe(plugins.autoprefixer(conf.browserlist))
-		.pipe(plugins.if(!conf.debug, plugins.minifyCss()))
+		.pipe(plugins.cssUrlAdjuster({
+			prepend: config.cssUrlPrefix
+		}))
+		.pipe(plugins.autoprefixer(config.browserlist))
+		.pipe(plugins.if(!config.debug, plugins.minifyCss()))
 		// .pipe(plugins.rename({suffix: '.min'}))
-		.pipe(gulp.dest(conf.destination));
+		.pipe(gulp.dest(config.destination));
 });
 
 // Clean up JS
 gulp.task('clear-js', function (cb) {
 	del([
-		conf.destination + '**/*.js'
+		config.destination + '**/*.js'
 	], cb);
 });
 
 // Bower components
 gulp.task('js-libraries', function() {
-	return gulp.src(plugins.bowerFiles(['**/*.js']), { base: conf.bowerComponentsPath })
+	return gulp.src(plugins.bowerFiles(['**/*.js']), { base: config.bowerComponentsPath })
 		.pipe(plugins.plumber())
 		.pipe(plugins.concat('all.js', {newLine: ';'}))
-		.pipe(plugins.if(!conf.debug, plugins.uglify()))
+		.pipe(plugins.if(!config.debug, plugins.uglify()))
 		// .pipe(plugins.rename({suffix: '.min'}))
-		.pipe(gulp.dest(conf.destination));
+		.pipe(gulp.dest(config.destination));
 });
 
 // Compile, uglify JS
 gulp.task('js', ['clear-js', 'js-libraries'], function () {
-	return gulp.src(conf.source.js)
+	var files = gulp.src(config.source.js);
+	return files
 		.pipe(plugins.plumber())
 		.pipe(plugins.concat('lib.js', {newLine: ';'}))
-		.pipe(plugins.if(!conf.debug, plugins.uglify()))
+		.pipe(plugins.if(!config.debug, plugins.uglify()))
 		// .pipe(plugins.rename({suffix: '.min'}))
-		.pipe(gulp.dest(conf.destination));
+		.pipe(gulp.dest(config.destination));
 });
 
 // Watch for changes, recompile when needed
 gulp.task('watch', function () {
-	for (var ext in conf.source) {
+	for (var ext in config.source) {
 		(function () {
 			var e = ext;
-			plugins.watch(conf.source[e], plugins.batch(function () {
+			plugins.watch(config.source[e], plugins.batch(function () {
 				gulp.start(e);
 			}));
 		})()

@@ -1,0 +1,27 @@
+
+/*Normal input fields*/
+.textinput {
+	width: auto;
+	max-width: 100%;
+	box-sizing: border-box;
+
+	-webkit-appearance: textfield;
+	border-radius: 0;
+	border-style: solid;
+	background-color: transparent;
+	outline-color: transparent;
+	outline-style: solid;
+	color: inherit;
+	font-size: inherit;
+	font-family: inherit;
+	line-height: inherit;
+
+	cursor: pointer;
+}
+	.textinput:focus {
+		cursor: default;
+	}
+
+/*Look*/
+.textinput:not(.plain) {}
+	.textinput:not(.plain):focus {}

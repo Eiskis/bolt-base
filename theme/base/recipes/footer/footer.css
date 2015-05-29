@@ -1,0 +1,24 @@
+
+.partial-footer {}
+
+.partial-footer h3 {
+	margin-top: 2.68em;
+	color: #8b9ba3;
+}
+
+.partial-footer a {
+	color: inherit;
+}
+	.partial-footer a:hover {
+		color: #27a9e1;
+	}
+
+
+
+/*Lists*/
+.partial-footer-menu {
+	padding-right: 2em;
+}
+.partial-footer-menu a {
+	display: block;
+}

@@ -1,0 +1,23 @@
+{% extends 'twig/layouts/full.twig' %}
+
+{% block body %}
+
+	<div class="main-record">
+		<div class="row">
+			<div class="row-content buffer">
+
+				<h2>{{ record.title }}</h2>
+
+				{% if record.body %}
+					{{ record.body }}
+				{% endif %}
+
+				<p>{{ record.datepublish|localdate }}</li>
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+

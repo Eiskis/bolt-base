@@ -1,0 +1,62 @@
+
+/*Theme*/
+body {
+	background-color: #fff;
+	color: #4e6d7b;
+}
+
+a {
+	color: #27a9e1;
+}
+	a:focus,
+	a:hover {
+		color: #0093d2;
+	}
+	a.plain {
+		color: inherit;
+	}
+
+/*Placeholder text*/
+.placeholder {}
+	::-webkit-input-placeholder {}
+	:-moz-placeholder {}
+	::-moz-placeholder {}
+	:-ms-input-placeholder {}
+
+/*Default border color*/
+header,
+section,
+footer,
+div,
+p,
+table,
+form,
+span,
+code,
+em,
+i,
+img,
+strong,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+blockquote,
+.textinput {
+	border-color: #eee;
+}
+	table,
+	th,
+	td {
+		border-color: #eee;
+	}

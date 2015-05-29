@@ -1,22 +1,14 @@
 
-{# Global header #}
 <div class="partial-layout-header">
 	<div class="row">
 		<div class="row-content buffer even">
 
-			{# Logo #}
 			<ul class="collapse reset plain">
-				<li>{% include 'twig/partials/logo.twig' %}</li>
+				<li><a href="{{ paths.root }}">{{ theme.config.sitename }}</a></li>
 			</ul>
 
-			{# Full menu #}
-			<ul class="partial-layout-header-menu collapse reset plain right hide-under-small">
-				{{ menu('main', 'twig/partials/menus/main.twig') }}
-			</ul>
-
-			{# Collapsible menu toggle #}
-			<ul class="layout-header-menu collapse reset plain right hide-over-small">
-				<li class="layout-header-toggle"><a href="" class="button" data-action="toggle" data-target=".partial-marketing-revealmenu"><i class="icon-menu"></i></a></li>
+			<ul class="partial-header-menu collapse reset plain right">
+				{{ menu('main', 'twig/menus/simple.twig') }}
 			</ul>
 
 			<div class="clear"></div>

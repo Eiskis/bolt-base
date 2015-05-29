@@ -1,0 +1,28 @@
+{% extends 'twig/layouts/full.twig' %}
+
+{% block body %}
+
+	<div class="main-search">
+		<div class="row">
+			<div class="row-content buffer">
+
+				{% if not records %}
+
+					<p class="main-search-noresults reset">No search results</p>
+
+				{% else %}
+
+					<p class="main-search-count">{{ searchresult.no_of_results }} results for <em>{{ search }}</em>.</p>
+
+					{% for record in records %}
+						<p><a href="{{ record.link }}" class="block">{{ record.title }}</a></p>
+					{% endfor %}
+				{% endif %}
+
+				{{ pager('', 2, 'twig/pagers/simple.twig') }}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

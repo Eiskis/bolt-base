@@ -1,0 +1,20 @@
+
+{# Fetch content #}
+{% setcontent posts = 'posts/latest/4' %}
+
+{# Footer #}
+<div class="partial-footer">
+	<div class="row">
+		<div class="row-content buffer">
+
+			<h1>{{ theme.config.sitename }}</h1>
+
+			<ul class="partial-footer-menu clear-after plain">
+				{{ menu('main', 'twig/menus/simple.twig') }}
+			</ul>
+
+			{% include 'twig/partials/socialmedialinks.twig' %}
+
+		</div>
+	</div>
+</div>

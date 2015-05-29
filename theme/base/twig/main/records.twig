@@ -1,0 +1,25 @@
+{% extends 'twig/layouts/full.twig' %}
+
+{% block body %}
+
+	<div class="main-listing">
+		<div class="row">
+			<div class="row-content buffer">
+
+				{% for record in records %}
+
+					<a href="{{ record.link }}" class="plain block">
+						<h2>{{ record.title }}</h2>
+						<p>{{ record.excerpt(300) }}</p>
+						<p>{{ record.datepublish|localdate }}</li>
+					</a>
+
+				{% endfor %}
+
+				{{ pager('', 2, 'twig/pagers/simple.twig') }}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

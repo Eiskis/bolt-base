@@ -1,0 +1,19 @@
+{% extends 'twig/layouts/full.twig' %}
+
+{% block body %}
+
+	<div class="main-index">
+		<div class="row">
+			<div class="row-content buffer">
+
+				{% if record.body %}
+					{{ record.body }}
+				{% endif %}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+

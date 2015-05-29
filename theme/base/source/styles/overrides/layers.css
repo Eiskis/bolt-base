@@ -1,0 +1,44 @@
+
+/*Buffer spaces*/
+
+.row-content.buffer,
+.row-content.buffer-top {
+	padding-top: 2%;
+}
+	.row-content.buffer.even,
+	.row-content.buffer-top.even {
+		padding-top: 6%;
+	}
+.row-content.buffer,
+.row-content.buffer-right {
+	padding-right: 6%;
+}
+.row-content.buffer,
+.row-content.buffer-bottom {
+	padding-bottom: 6%;
+}
+.row-content.buffer,
+.row-content.buffer-left {
+	padding-left: 6%;
+}
+
+.buffer,
+.buffer-top {
+	padding-top: 2%;
+}
+.buffer.even,
+.buffer-top.even {
+	padding-top: 6%;
+}
+.buffer,
+.buffer-right {
+	padding-right: 6%;
+}
+.buffer,
+.buffer-bottom {
+	padding-bottom: 6%;
+}
+.buffer,
+.buffer-left {
+	padding-left: 6%;
+}
