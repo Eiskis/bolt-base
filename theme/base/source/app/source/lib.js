@@ -1,73 +1,11 @@
 (function (root) {
 
-	var Lib = function () {
+	var Main = function (root) {
 		var self = this;
+		self.win = root;
+		self.debug = false;
 
 		self.bindings = {
-
-			// Mark scrolled document
-			documentScrolling: function (event) {
-				var scroll = $(document).scrollTop();
-				var body = $(document.body);
-				if (scroll > 0) {
-					body.addClass('scrolled');
-				} else {
-					body.removeClass('scrolled');
-				}
-			},
-
-			popupLinks: function (event) {
-				event.preventDefault();
-				var link = $(this);
-				var target = link.attr('href');
-				var image = link.attr('data-target-image') ? true : false;
-
-				// AJAX popup
-				if (target) {
-					$.magnificPopup.open({
-						type: (image ? 'image' : 'ajax'),
-						closeOnContentClick: image,
-						fixedContentPos: true,
-						tLoading: '',
-						preloader: true,
-						removalDelay: 800,
-						closeBtnInside: false,
-						items: {
-							src: target
-						}
-					});
-				}
-
-			},
-
-			scrollLinks: function (event) {
-				event.preventDefault();
-
-				// Find target object
-				var targetAttr = this.getAttribute('data-target');
-				if (!targetAttr) {
-					targetAttr = this.getAttribute('href');
-				}
-
-				if (targetAttr) {
-					var target = $(targetAttr).first();
-
-					if (target.length) {
-
-						// Offset fixed title bar
-						var offset = 0;
-						var titlebar = $('.layout-header.fixed');
-						if (titlebar.length) {
-							offset = titlebar.outerHeight();
-						}
-
-						// Scroll
-						naturalScroll.scrollTop(document.body, Math.ceil(target.offset().top - offset));
-					}
-
-				}
-
-			},
 
 			toggleLinks: function (event) {
 				event.preventDefault();
@@ -145,7 +83,7 @@
 
 				var prevent = function () {
 
-					// THink of the children
+					// Think of the children
 					// FIXME: might be slow, fails on fast scrolls
 					// if (scopedChildren.length) {
 					// 	for (var i = 0; i < scopedChildren.length; i++) {
@@ -183,158 +121,135 @@
 
 		};
 
-		self.inits = {
 
-			// Wrap image into specific paragraph and popup link
-			customContentImage: function (image) {
-				var link = $('<a></a>').attr('href', image.attr('src')).attr('data-action', 'popup').attr('data-target-image', true);
-				image.parent().addClass('layout-customcontent-image').wrapInner(link);
+
+		// Init routines
+		self.routines = {
+
+			jQuery: {
+				test: function (win) {
+					return win.jQuery ? true : false;
+				},
+				callback: function (win) {
+					var doc = $(win.document);
+
+					// Toggle triggers
+					// doc.on('click', '[data-action="toggle"]', self.bindings.toggleLinks);
+
+					// Scoped scroll
+					// doc.on('DOMMouseScroll mousewheel', '[data-scroll="scoped"]', self.bindings.scrollScoping);
+
+				}
 			},
 
-			formAutoInteraction: function (form, responseElement) {
-
-				// Focus
-				form.on('click', '[data-action="focus"]', function (event) {
-					event.preventDefault();
-					var input = $(this);
-					input.parents('form').first().find(input.attr('data-target')).focus();
-				});
-
-				// Auto submit form when its marked input elements change
-				form.on('input change', '[data-action="submit-on-change"]', function (event) {
-					$(this).submit();
-				});
-
-				// Response element showing/hiding
-				form.on('input change focusin', '[data-action="submit-on-change"]', function (event) {
-					var input = $(this);
-					if ($.trim(input.val()).length) {
-						responseElement.removeClass('hidden');
-					}
-				});
-				form.on('focusout', '[data-action="submit-on-change"]', function (event) {
-					var input = $(this);
-					setTimeout(function () {
-						if (!input.is(':focus')) {
-							responseElement.addClass('hidden');
-						}
-					}, 200);
-				});
-
+			ScrollScoper: {
+				test: function (win) {
+					return win.ScrollScoper ? true : false;
+				},
+				callback: function (win) {
+					return win.ScrollScoper.attach(win.document, true);
+				}
 			},
 
-			// Submit handler
-			formSubmit: function (form, responseElement) {
-				form.on('submit', function (event) {
-					event.preventDefault();
-					var data = {};
-					var target = form.attr('data-target');
-					var inputs = form.find('textarea, input:not([type="submit"])');
+			naturalScroll: {
 
-					// Method
-					var method = 'post';
-					if (form.attr('method') && form.attr('method').toLowerCase() === 'get') {
-						method = 'get';
-					}
+				callback: function (win) {
+					var binding = function (event) {
+						event.preventDefault();
 
-					// Get form data
-					inputs.each(function (i, input) {
-						input = $(input);
-						var name = input.attr('name');
-						if (name) {
-							data[$.trim(name)] = $.trim(input.val());
-						}
-					});
-
-					// Done
-					$[method](target, data).done(function (d) {
-						if (responseElement) {
-							responseElement.html(d);
+						// Find target object
+						var targetAttr = this.getAttribute('data-target');
+						if (!targetAttr) {
+							targetAttr = this.getAttribute('href');
 						}
 
-					// Error callback
-					// }).fail(function () {
-					});
+						if (targetAttr) {
+							var target = $(targetAttr).first();
 
-				});
-			}
+							// Scroll
+							if (target.length) {
+								naturalScroll.scrollTop(win.document.body, Math.ceil(target.offset().top));
+							}
 
-		};
+						}
 
+					};
 
-
-		// All of the document
-		self.initDocument = function (container) {
-
-			// Libs
-			if (window.FastClick) {
-				window.FastClick.attach(container);
-			}
-
-			if (window.hljs) {
-				window.hljs.initHighlightingOnLoad();
-			}
-
-			// Mark scrolled document reliably
-			$(document).on('scroll touchmove', self.bindings.documentScrolling);
-			$(window).on('resize', self.bindings.documentScrolling);
-			self.bindings.documentScrolling();
-
-			// Popup triggers
-			$(container).on('click', '[data-action="popup"]', self.bindings.popupLinks);
-
-			// Scroll links
-			$(container).on('click', '[data-action="scroll"]', self.bindings.scrollLinks);
-
-			// Toggle triggers
-			$(container).on('click', '[data-action="toggle"]', self.bindings.toggleLinks);
-
-			// Scoped scroll
-			$(container).on('DOMMouseScroll mousewheel', '.scopedscroll', self.bindings.scrollScoping);
-
-		};
-
-		// Individual views (like AJAX loaded content after page load)
-		self.initView = function (container) {
-
-			// Mark top-level menu items selected
-			// FIXME: shouldn't be done in JS
-			$('.menu', container).each(function (i, menu) {
-				menu = $(menu);
-				var selectedListItems = menu.find('li.selected');
-				selectedListItems.each(function (j, li) {
-					li = $(li);
-					li.parents('li:not(.selected)').addClass('selected');
-				});
-			});
-
-			// Initialize AJAX forms
-			$('form[data-target]', container).each(function (i, form) {
-				form = $(form);
-				var responseElement = form.next('.form-response');
-
-				// Response element given, launch "auto" behavior (used in search)
-				if (responseElement.length) {
-					self.inits.formAutoInteraction(form, responseElement);
-					self.inits.formSubmit(form, responseElement);
-
-				// Submit
-				} else {
-					self.inits.formSubmit(form);
+					// Scroll links
+					$(win.document.body).on('click', '[data-action="scroll"]', binding);
 				}
 
-			});
+			},
 
-			// Wrap custom content images
-			$('.layout-customcontent p img', container).each(function (i, image) {
-				self.inits.customContentImage($(image));
-			});
+			FastClick: {
+				test: function (win) {
+					return win.FastClick ? true : false;
+				},
+				callback: function (win) {
+					return win.FastClick.attach(win.document.body);
+				}
+			}
 
-			return container;
+		};
+
+
+
+		self.trace = function () {
+			if (self.debug) {
+				return self.notice.apply(this, arguments);
+			}
+			return self;
+		};
+
+		self.notice = function () {
+			if (console && console.log) {
+				console.log.apply(console, arguments);
+			}
+			return self;
+		};
+
+
+
+		self.runRoutine = function (routine) {
+
+			// Pick from stored routines
+			if (self.routines[routine]) {
+				routine = self.routines[routine];
+			}
+
+			if (routine.callback) {
+
+				// Handle input
+				var input = [self.win];
+				if (routine.input && routine.input instanceof Array) {
+					input = routine.input;
+				}
+
+				// Run validity test
+				if (routine.test && !routine.test.apply(this, input)) {
+					return false;
+				}
+
+				// Run initialization callback
+				self.trace('Launching callback', routine.callback);
+				return routine.callback.apply(this, input);
+			}
+
+			return null;
+		};
+
+		// All of the document
+		self.open = function () {
+			for (var key in self.routines) {
+				self.trace('Starting routine ' + key, self.routines[key]);
+				if (self.runRoutine(self.routines[key]) === false) {
+					self.notice(key + ' initialization routine could not be run during startup');
+				}
+			}
 		};
 
 	};
 
-	root.lib = new Lib();
+	root.janitor = new Main(root);
 
 })(window);

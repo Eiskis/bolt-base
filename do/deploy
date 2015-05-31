@@ -4,5 +4,13 @@
 cd "$(dirname "$0")"
 cd ..
 
-# Deploy to production with Rocketeer. See config under .rocketeer/
-php bin/rocketeer.phar deploy --on="production"
+# Deploy with Rocketeer. See config under .rocketeer/
+
+# Target specified
+if [ $1 ]; then
+	php bin/rocketeer.phar deploy --on=$1
+
+# Deploy to default
+else
+	php bin/rocketeer.phar deploy
+fi

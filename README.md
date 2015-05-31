@@ -25,17 +25,18 @@ Still broken as hell, don't use it.
 - Investigate Bolt update process
 - Environment
 	- Ensure permission scheme works (avoid sudo, specify users/groups on remote...)
-		- dbcheck_ts
-		- files/
-		- database
-		- *.ymls
+		- `dbcheck_ts`
+		- `files/`
+		- `database`
+		- `*.yml`
 	- Ansible scripts?
-- nextcss
-- recipes on top level
-- preprocessor support?
-- ko gulp tasks
-    - add attr data-component="my-component"
-    - wrap css
+- NextCSS
+- Preprocessor support?
+- Knockout
+	- Build components with Gulp tasks
+    - Wrap component templates in `data-component="my-component"`
+    - Wrap component CSS in attr selectors
+    - Print templates in script tags
 
 
 
