@@ -68,55 +68,6 @@
 
 				}
 
-			},
-
-			// Prevents parent element from scrolling when a child element is scrolled to its boundaries
-			scrollScoping: function (event) {
-				var element = $(this);
-				var scrollTop = this.scrollTop;
-				var scrollHeight = this.scrollHeight;
-				var height = element.outerHeight();
-				var delta = event.originalEvent.wheelDelta;
-				var up = delta > 0;
-
-				// var scopedChildren = element.find('.scopedscroll');
-
-				var prevent = function () {
-
-					// Think of the children
-					// FIXME: might be slow, fails on fast scrolls
-					// if (scopedChildren.length) {
-					// 	for (var i = 0; i < scopedChildren.length; i++) {
-					// 		var child = $(scopedChildren[i]);
-
-					// 		// Scrolling needs to continue
-					// 		if (
-					// 			up && child.scrollTop() > 0 ||
-					// 			!up && child.scrollTop() < child[0].scrollHeight - child.outerHeight()
-					// 		) {
-					// 			return true;
-					// 		}
-
-					// 	}
-					// }
-
-					event.stopPropagation();
-					event.preventDefault();
-					event.returnValue = false;
-					return false;
-				}
-
-				// Scrolling down, but this will take us past the bottom
-				if (!up && -delta > scrollHeight - height - scrollTop) {
-					element.scrollTop(scrollHeight);
-					return prevent();
-
-				// Scrolling up, but this will take us past the top
-				} else if (up && delta > scrollTop) {
-					element.scrollTop(0);
-					return prevent();
-				}
-
 			}
 
 		};
@@ -142,12 +93,12 @@
 				}
 			},
 
-			ScrollScoper: {
+			ScrollScope: {
 				test: function (win) {
-					return win.ScrollScoper ? true : false;
+					return win.ScrollScope ? true : false;
 				},
 				callback: function (win) {
-					return win.ScrollScoper.attach(win.document, true);
+					return $(win.document).scrollScope();
 				}
 			},
 
