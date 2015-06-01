@@ -2,14 +2,14 @@
 {# FIXME: could be set somewhere else #}
 {% set ogtype = 'website' %}
 {% set sitetitle = app.config.get('general/sitename') %}
-{% set sitedescription = app.config.get('general/payoff') %}
+{% set pagedescription = app.config.get('general/payoff') %}
 {% set iconurl = 'images/icons/icon.png' %} {# PNG #}
 {% set splashimageurl = 'images/splash/splash.jpg' %}
 
 
 
 {# Adjustments #}
-{% set title = sitetitle %}
+{% set pagetitle = sitetitle %}
 {% set splashimageurl = paths.theme ~ splashimageurl %}
 
 {# Splash images #}
@@ -22,7 +22,7 @@
 
 	{# Teaser text #}
 	{% if record.teaser is not empty %}
-		{% set sitedescription = record.teaser %}
+		{% set pagedescription = record.teaser %}
 	{% endif %}
 
 	{# Splash image #}
@@ -32,7 +32,7 @@
 
 	{# Record-specific title #}
 	{% if record.title is not empty %}
-		{% set title = record.title ~ ' - ' ~ title %}
+		{% set pagetitle = record.title ~ ' - ' ~ pagetitle %}
 	{% endif %}
 
 {% endif %}
@@ -45,18 +45,25 @@
 {# The tags #}
 
 {# Basics #}
-<title>{{ title }}</title>
+<title>{{ pagetitle }}</title>
 <meta name="application-name" content="{{ sitetitle }}">
-<meta name="description" content="{{ sitedescription }}">
+<meta name="description" content="{{ pagedescription }}">
 
 {# Open Graph (Facebook) #}
 <meta property="og:site_name" content="{{ sitetitle }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ sitedescription }}">
+<meta property="og:title" content="{{ pagetitle }}">
+<meta property="og:description" content="{{ pagedescription }}">
 <meta property="og:url" content="{{ paths.canonicalurl }}">
 <meta property="og:image" content="{{ splashimageurl }}">
 <meta property="og:app_id" content="{{ facebookappid }}">
 <meta property="og:type" content="{{ ogtype }}">
+
+{# Twitter #}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@{{ theme.config.services.twitter.username }}">
+<meta name="twitter:title" content="{{ pagetitle }}">
+<meta name="twitter:description" content="{{ pagedescription }}">
+<meta name="twitter:image" content="{{ splashimageurl }}">
 
 {# Main and alternative locales #}
 <meta property="og:locale" content="{{ locale }}">
