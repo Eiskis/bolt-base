@@ -6,4 +6,4 @@ cd ..
 
 # Run Gulp to build and watch theme assets
 cd theme/base/
-./node_modules/.bin/gulp build-and-watch --debug
+./node_modules/.bin/gulp watch --debug

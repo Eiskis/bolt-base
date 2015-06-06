@@ -11,7 +11,9 @@
     "gulp-batch": "^1.0.5",
     "gulp-concat": "^2.5.2",
     "gulp-css-url-adjuster": "^0.2.3",
+    "gulp-debug": "^2.0.1",
     "gulp-if": "^1.2.5",
+    "gulp-less": "^3.0.3",
     "gulp-load-plugins": "^0.10.0",
     "gulp-minify-css": "^1.1.1",
     "gulp-plumber": "^1.0.1",
@@ -26,7 +28,7 @@
     "bower-install": "bower install",
     "build": "gulp build",
     "clear": "gulp clear",
-    "build-and-watch": "gulp build-and-watch"
+    "build-and-watch": "gulp watch"
   },
   "repository": {
     "type": "git",

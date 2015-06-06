@@ -2,7 +2,6 @@
 .button {
 	display: inline-block;
 	padding: 0.67em 1em 0.67em 1em;
-
 	transition-property: color, background-color, border-color, box-shadow, padding, transform;
 }
 
@@ -18,11 +17,11 @@
 	/*Stroke button*/
 	.button.stroke {
 		border-width: 1px;
-		border-color: #27a9e1;
+		border-color: @blue;
 	}
 		.button.stroke:focus,
 		.button.stroke:hover {
-			color: #0093d2;
+			color: @blue-offset-dark;
 		}
 	.inverted .button.stroke {
 		border-color: #fff;
@@ -48,7 +47,7 @@
 
 	/*Button colors*/
 	.button.white {
-		color: #27a9e1;
+		color: @blue;
 	}
 		.button.white:hover,
 		.button.white:focus {
@@ -56,7 +55,7 @@
 		}
 	.button.blue:hover,
 	.button.blue:focus {
-		background-color: #0093d2;
+		background-color: @blue-offset-dark;
 	}
 
 	/*Greyscale buttons*/
