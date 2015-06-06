@@ -5,7 +5,6 @@ namespace Bolt;
 use Bolt\Debug\DebugToolbarEnabler;
 use Bolt\Exception\LowlevelException;
 use Bolt\Helpers\Str;
-use Bolt\Library as Lib;
 use Bolt\Provider\LoggerServiceProvider;
 use Bolt\Provider\PathServiceProvider;
 use Bolt\Provider\WhoopsServiceProvider;
@@ -14,8 +13,6 @@ use Doctrine\DBAL\DBALException;
 use RandomLib;
 use SecurityLib;
 use Silex;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Stopwatch;
 
 class Application extends Silex\Application
@@ -255,8 +252,8 @@ class Application extends Silex\Application
         $this->register(
             new Silex\Provider\WebProfilerServiceProvider(),
             [
-                'profiler.cache_dir'    => $this['resources']->getPath('cache') . '/profiler',
-                'profiler.mount_prefix' => '/_profiler', // this is the default
+                'profiler.cache_dir'                => $this['resources']->getPath('cache') . '/profiler',
+                'profiler.mount_prefix'             => '/_profiler', // this is the default
                 'web_profiler.debug_toolbar.enable' => false,
             ]
         );
@@ -267,13 +264,6 @@ class Application extends Silex\Application
 
         // Register the toolbar item for our Bolt nipple.
         $this->register(new Provider\BoltProfilerServiceProvider());
-
-        // Temporarily work around breakage in Silex\Provider\WebProfilerServiceProvider
-        // in 1.0.6 and fixed in https://github.com/silexphp/Silex-WebProfiler/pull/63
-        $this['data_collector.templates'] = array_merge(
-            $this['data_collector.templates'],
-            [['twig', '@WebProfiler/Collector/twig.html.twig']]
-        );
     }
 
     public function initLocale()
@@ -313,12 +303,6 @@ class Application extends Silex\Application
             ['locale_fallbacks' => [Application::DEFAULT_LOCALE]]
         );
 
-        // Loading stub functions for when intl / IntlDateFormatter isn't available.
-        if (!function_exists('intl_get_error_code')) {
-            require_once $this['resources']->getPath('root/vendor/symfony/locale/Symfony/Component/Locale/Resources/stubs/functions.php');
-            require_once $this['resources']->getPath('root/vendor/symfony/locale/Symfony/Component/Locale/Resources/stubs/IntlDateFormatter.php');
-        }
-
         $this->register(new Provider\TranslationServiceProvider());
     }
 
@@ -350,7 +334,9 @@ class Application extends Silex\Application
             }
         });
 
-        $this->register(new Silex\Provider\UrlGeneratorServiceProvider())
+        $this
+            ->register(new Silex\Provider\HttpFragmentServiceProvider())
+            ->register(new Silex\Provider\UrlGeneratorServiceProvider())
             ->register(new Silex\Provider\ValidatorServiceProvider())
             ->register(new Provider\RoutingServiceProvider())
             ->register(new Silex\Provider\ServiceControllerServiceProvider()) // must be after Routing
@@ -416,6 +402,7 @@ class Application extends Silex\Application
 
     public function initExtensions()
     {
+        $this['extensions']->checkLocalAutoloader();
         $this['extensions']->initialize();
     }
 

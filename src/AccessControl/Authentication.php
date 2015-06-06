@@ -5,7 +5,6 @@ use Bolt\Application;
 use Bolt\Translation\Translator as Trans;
 use Doctrine\DBAL\DBALException;
 use Hautelook\Phpass\PasswordHash;
-use Silex;
 use Symfony\Component\HttpFoundation\Request;
 use UAParser;
 
@@ -433,8 +432,8 @@ class Authentication
 
             $shadowlink = sprintf(
                 '%s%sresetpassword?token=%s',
-                $this->app['paths']['hosturl'],
-                $this->app['paths']['bolt'],
+                $this->app['resources']->getUrl('hosturl'),
+                $this->app['resources']->getUrl('bolt'),
                 urlencode($shadowtoken)
             );
 
@@ -648,6 +647,15 @@ class Authentication
         }
     }
 
+    /**
+     * Get the name of either the users or authtoken table.
+     *
+     * @param string $table
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
     private function getTableName($table)
     {
         $prefix = $this->app['config']->get('general/database/prefix', 'bolt_');

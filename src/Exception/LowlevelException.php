@@ -62,9 +62,9 @@ HTML;
      * Security caveat: the message is inserted into the page unescaped, so
      * make sure that it contains valid HTML with proper encoding applied.
      *
-     * @param string $message
-     * @param null   $code
-     * @param null   $previous
+     * @param string     $message
+     * @param integer    $code
+     * @param \Exception $previous
      */
     public function __construct($message, $code = null, $previous = null)
     {
@@ -91,6 +91,11 @@ HTML;
         echo $output;
     }
 
+    /**
+     * Callback for register_shutdown_function() to handle fatal errors.
+     *
+     * @param \Silex\Application $app
+     */
     public static function catchFatalErrors($app = null)
     {
         // Get last error, if any
@@ -110,8 +115,8 @@ HTML;
             }
 
             // Detect if we're being called from a core, an extension or vendor
-            $isBoltCoreError  = strpos($error['file'], $app['resources']->getPath('rootpath') . '/src');
-            $isVendorError    = strpos($error['file'], $app['resources']->getPath('rootpath') . '/vendor');
+            $isBoltCoreError  = strpos($error['file'], $app['resources']->getPath('rootpath/src'));
+            $isVendorError    = strpos($error['file'], $app['resources']->getPath('rootpath/vendor'));
             $isExtensionError = strpos($error['file'], $app['resources']->getPath('extensions'));
 
             // Assemble error trace
@@ -172,6 +177,13 @@ HTML;
     {
     }
 
+    /**
+     * Remove HTML elements from the error output.
+     *
+     * @param string $output
+     *
+     * @return string
+     */
     private static function cleanHTML($output)
     {
         $output = preg_replace('/<title>.*<\/title>/smi', "", $output);

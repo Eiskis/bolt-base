@@ -32,7 +32,6 @@ class Content implements \ArrayAccess
     /** @var boolean Whether this is a "real" contenttype or an embedded ones */
     private $isRootType;
 
-
     /**
      * @param \Silex\Application $app
      * @param string             $contenttype
@@ -1067,10 +1066,10 @@ class Content implements \ArrayAccess
      */
     public function editlink()
     {
-        $perm = "contenttype:" . $this->contenttype['slug'] . ":edit:" . $this->id;
+        $perm = 'contenttype:' . $this->contenttype['slug'] . ':edit:' . $this->id;
 
         if ($this->app['users']->isAllowed($perm)) {
-            return Lib::path('editcontent', ['contenttypeslug' => $this->contenttype['slug'], 'id' => $this->id ]);
+            return $this->app->generatePath('editcontent', ['contenttypeslug' => $this->contenttype['slug'], 'id' => $this->id ]);
         } else {
             return false;
         }

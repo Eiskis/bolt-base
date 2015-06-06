@@ -1,7 +1,28 @@
-Bolt 2.2 DEV-head
+Bolt 2.3 DEV-head
 -----------------
 
 Not yet released. 
+
+ - Lots (list needs to be compiled)
+
+
+Bolt 2.2.1
+----------
+
+Released 2015-06-05. Notable chages: 
+
+ - Update: Silex is now version 1.3.0
+ - Added: Implement `title_format:`, to control the behaviour of what's seen as the 'title' in overviews and listings. See #3635
+ - Changed: Create the extension's composer.json if only a local extension exists. See #3627
+ - Fixed: Use the Silex HttpFragmentServiceProvider as TwigCoreExtension has been removed in Silex 1.3. See #3632
+ - Fixed: Two more overrides in `composer.json` for symfony components that got bumped to v2.7.0. See #3634
+ - Fixed: Extend SSL/TLS Handling. Fixes bug/warnings in Packagemanager. See #3633
+ - Fixed: Generated `<meta>`-tags always stay in the `<head>` section, now. See #3637
+
+Bolt 2.2.0
+----------
+
+Released 2015-06-04. Notable changes: 
 
  - Added: Stop Finder from recursing common build folders and place a limit on the maximum depth it will recurse otherwise. (Thanks @Cooperaj, see #3069)
  - Fixed: Removing default taxonomylink route leads to exception (See #3070)
@@ -109,8 +130,26 @@ Not yet released.
  - Fixed: Fix pagination for searching via `getContent()`` or `{% setcontent %}`. (See #3496)
  - Fixed: Handle empty composer config, e.g. themes (See #3509)
  - Fixed: Use correct service key (See #3507)
+ - Return to previous page, with paging and filtering. See #3588
+ - Add a try-exception when parsing `allowtwig` fields.
+ - Call abort for simpleredirect on "Save and return to overview".
+ - Tweaking the delay, making behaviour bit nicer for "fast clickers". Fixes #3513
+ - Fixes server-side error when ajaxy-deleting records that were created programmatically.
+ - Prevent composer from sneaking in any `v2.7.0` symfony components. Remove `symfony/locale`.
+ - Return to previous page, with paging and filtering. See #3588
+ - Add a try-exception when parsing `allowtwig` fields.
+ - Call abort for simpleredirect on "Save and return to overview".
+ - Tweaking the delay, making behaviour bit nicer for "fast clickers". Fixes #3513
+ - Fixes server-side error when ajaxy-deleting records that were created programmatically.
+ - Prevent composer from sneaking in any `v2.7.0` symfony components. Remove `symfony/locale`.
+ - Local extension autoloader See #3607
+ - Request cache fix. See #3561
+ - To make content 'stick' after saving, use `contentkey` instead of `key`. #3527
+ - Make sure `$unserdata` is an array, and not merely `false`. See #3526
+ - Handle Flysystem exception correctly when a file is not found. See #3519
 
-Bolt 2.1.8
+
+Bolt 2.1.9
 ----------
 
 Released 2015-04-29. Notable changes: 
@@ -118,6 +157,7 @@ Released 2015-04-29. Notable changes:
  - Fixed: `attrib` for images. (See #3487)
  - Fixed: Fix pagination for searching via `getContent()`` or `{% setcontent %}`. (See #3496)
  - Fixed: Use 'alt' instead of 'title' in Image fieldtype's attributes. (See #3505)
+
 
 Bolt 2.1.8
 ----------

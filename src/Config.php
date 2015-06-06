@@ -797,11 +797,11 @@ class Config
 
         // Check DB-tables integrity
         if (!$wrongctype && $this->app['integritychecker']->needsCheck() &&
-           (count($this->app['integritychecker']->checkTablesIntegrity()) > 0) &&
+           ($this->app['integritychecker']->needsUpdate()) &&
             $this->app['users']->getCurrentUsername()) {
             $msg = Trans::__(
                 "The database needs to be updated/repaired. Go to 'Configuration' > '<a href=\"%link%\">Check Database</a>' to do this now.",
-                ['%link%' => Lib::path('dbcheck')]
+                ['%link%' => $this->app->generatePath('dbcheck')]
             );
             $this->app['logger.flash']->error($msg);
 
@@ -972,7 +972,7 @@ class Config
 
         // Backend and Async need access to `app/view/twig`
         if ($end == 'backend' || $end == 'async') {
-            $twigpath[] = realpath($this->app['resources']->getPath('app') . '/view/twig');
+            $twigpath[] = realpath($this->app['resources']->getPath('app/view/twig'));
             if ($this->app['resources']->hasPath('composerbackendviews')) {
                 $backendviewpath = $this->app['resources']->getPath('composerbackendviews');
                 if (file_exists($backendviewpath)) {
@@ -1000,7 +1000,7 @@ class Config
 
         // We add these later, because the order is important: By having theme/ourtheme first,
         // files in that folder will take precedence. For instance when overriding the menu template.
-        $twigpath[] = realpath($this->app['resources']->getPath('app') . '/theme_defaults');
+        $twigpath[] = realpath($this->app['resources']->getPath('app/theme_defaults'));
 
         return $twigpath;
     }
@@ -1047,14 +1047,14 @@ class Config
             file_exists($dir . '/permissions.yml') ? filemtime($dir . '/permissions.yml') : 10000000000,
             file_exists($dir . '/config_local.yml') ? filemtime($dir . '/config_local.yml') : 0,
         ];
-        if (file_exists($this->app['resources']->getPath('cache') . '/config_cache.php')) {
-            $this->cachetimestamp = filemtime($this->app['resources']->getPath('cache') . '/config_cache.php');
+        if (file_exists($this->app['resources']->getPath('cache/config_cache.php'))) {
+            $this->cachetimestamp = filemtime($this->app['resources']->getPath('cache/config_cache.php'));
         } else {
             $this->cachetimestamp = 0;
         }
 
         if ($this->cachetimestamp > max($timestamps)) {
-            $this->data = Lib::loadSerialize($this->app['resources']->getPath('cache') . '/config_cache.php');
+            $this->data = Lib::loadSerialize($this->app['resources']->getPath('cache/config_cache.php'));
 
             // Check if we loaded actual data.
             if (count($this->data) < 4 || empty($this->data['general'])) {
@@ -1088,12 +1088,12 @@ class Config
         $this->data['version'] = $this->app->getVersion();
 
         if ($this->get('general/caching/config')) {
-            Lib::saveSerialize($this->app['resources']->getPath('cache') . '/config_cache.php', $this->data);
+            Lib::saveSerialize($this->app['resources']->getPath('cache/config_cache.php'), $this->data);
 
             return;
         }
 
-        @unlink($this->app['resources']->getPath('cache') . '/config_cache.php');
+        @unlink($this->app['resources']->getPath('cache/config_cache.php'));
     }
 
     /**
@@ -1111,69 +1111,6 @@ class Config
             // Invalidate cache for next request.
             @unlink($paths['cache'] . '/config_cache.php');
         }
-    }
-
-    /**
-     * @deprecated Use get('general/database') instead
-     *
-     * @return array
-     */
-    public function getDBOptions()
-    {
-        return $this->get('general/database');
-    }
-
-    /**
-     * Utility function to determine which 'end' we're using right now.
-     * Can be either "frontend", "backend", "async" or "cli".
-     *
-     * NOTE: If the Request object has not been initialized by Silex yet,
-     * we create a local version based on the request globals.
-     *
-     * @param string $mountpoint
-     *
-     * @return string
-     */
-    public function getWhichEnd($mountpoint = '')
-    {
-        // Get a request object, if not initialized by Silex yet, we'll create our own
-        try {
-            /** @var Request $request */
-            $request = $this->app['request'];
-            if ($zone = Zone::get($request)) {
-                $this->app['end'] = $zone;
-                return $zone;
-            }
-        } catch (\RuntimeException $e) {
-            // Return CLI if request not already exist and we're on the CLI
-            if (php_sapi_name() == 'cli') {
-                $this->app['end'] = 'cli';
-
-                return 'cli';
-            }
-
-            $request = Request::createFromGlobals();
-        }
-
-        // Default mountpoint is branding path (defaults to 'bolt' unless changed in config)
-        if (empty($mountpoint)) {
-            $mountpoint = $this->get('general/branding/path');
-        }
-
-        // Ensure left slash on mountpoint
-        $mountpoint = '/' . ltrim($mountpoint, '/');
-
-        if (strpos($request->getPathInfo(), '/async') === 0 || $request->isXmlHttpRequest()) {
-            $end = 'async';
-        } elseif (strpos($request->getPathInfo(), $mountpoint) === 0) {
-            $end = 'backend';
-        } else {
-            $end = 'frontend';
-        }
-
-        $this->app['end'] = $end;
-
-        return $end;
     }
 
     /**
@@ -1200,5 +1137,60 @@ class Config
         $now = date_format(new \DateTime($timezone), 'Y-m-d H:i:s');
 
         return $now;
+    }
+
+    /**
+     * Use get('general/database') instead
+     *
+     * @deprecated Since 2.1, to be removed in 3.0.
+     *
+     * @return array
+     */
+    public function getDBOptions()
+    {
+        return $this->get('general/database');
+    }
+
+    /**
+     * Use {@see Zone} instead with a {@see Request}.
+     *
+     * Going forward, decisions determined by current request
+     * should be done in an app or route middleware.
+     * Application should be setup agnostic to the current request.
+     *
+     * Route middlewares apply only to a certain route or group of routes.
+     * See {@see \Bolt\Controller\Async\AsyncBase::before} for an example.
+     *
+     * App middlewares apply to all routes.
+     * See classes in \Bolt\EventListener for examples of these.
+     * These middlewares could also be filtered by checking for Zone inside of listener.
+     *
+     * @deprecated Since 2.3, to be removed in 3.0.
+     *
+     * @return string
+     */
+    public function getWhichEnd()
+    {
+        $zone = $this->determineZone();
+        $this->app['end'] = $zone; // This is also deprecated
+        return $zone;
+    }
+
+    private function determineZone()
+    {
+        if (PHP_SAPI === 'cli') {
+            return 'cli';
+        }
+        /** @var \Symfony\Component\HttpFoundation\RequestStack $stack */
+        $stack = $this->app['request_stack'];
+        $request = $stack->getCurrentRequest() ?: Request::createFromGlobals();
+
+        if ($zone = Zone::get($request)) {
+            return $zone;
+        }
+
+        /** @var \Bolt\EventListener\ZoneGuesser $guesser */
+        $guesser = $this->app['listener.zone_guesser'];
+        return $guesser->setZone($request);
     }
 }

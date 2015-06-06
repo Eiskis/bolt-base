@@ -86,7 +86,7 @@ class Extend extends BackendBase
      * Generate a copy of a theme package.
      *
      * @param Request $request
-
+     *
      * @throws PackageManagerException
      *
      * @return Response
@@ -105,7 +105,7 @@ class Extend extends BackendBase
         }
 
         $source = $this->resources()->getPath('extensions/vendor/' . $theme);
-        $destination = $this->resources()->getPath('extensions/themebase/' . $newName);
+        $destination = $this->resources()->getPath('themebase/' . $newName);
         if (is_dir($source)) {
             try {
                 $filesystem = new Filesystem();

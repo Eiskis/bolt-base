@@ -2,216 +2,52 @@
 
 namespace Bolt\Composer;
 
-use Bolt\Composer\Action\BoltExtendJson;
-use Bolt\Composer\Action\CheckPackage;
-use Bolt\Composer\Action\DumpAutoload;
-use Bolt\Composer\Action\InstallPackage;
-use Bolt\Composer\Action\RemovePackage;
-use Bolt\Composer\Action\RequirePackage;
-use Bolt\Composer\Action\SearchPackage;
-use Bolt\Composer\Action\ShowPackage;
-use Bolt\Composer\Action\UpdatePackage;
-use Bolt\Library as Lib;
 use Bolt\Translation\Translator as Trans;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Ring\Client\ClientUtils;
 use Silex\Application;
 
 class PackageManager
 {
-    /**
-     * @var array
-     */
-    private $options;
+    /** @var \Silex\Application */
+    protected $app;
+    /** @var boolean */
+    protected $started = false;
+    /** @var boolean */
+    protected $useSsl;
 
-    /**
-     * @var \Bolt\Composer\Action\CheckPackage
-     */
-    private $check;
-
-    /**
-     * @var \Bolt\Composer\Action\DumpAutoload
-     */
-    private $dumpautoload;
-
-    /**
-     * @var \Bolt\Composer\Action\BoltExtendJson
-     */
-    private $initJson;
-
-    /**
-     * @var \Bolt\Composer\Action\InstallPackage
-     */
-    private $install;
-
-    /**
-     * @var \Bolt\Composer\Action\RemovePackage
-     */
-    private $remove;
-
-    /**
-     * @var \Bolt\Composer\Action\RequirePackage
-     */
-    private $require;
-
-    /**
-     * @var \Bolt\Composer\Action\SearchPackage
-     */
-    private $search;
-
-    /**
-     * @var \Bolt\Composer\Action\ShowPackage
-     */
-    private $show;
-
-    /**
-     * @var \Bolt\Composer\Action\UpdatePackage
-     */
-    private $update;
-
-    /**
-     * @var \Bolt\Composer\Factory
-     */
-    private $factory;
-
-    /**
-     * @var \Silex\Application
-     */
-    private $app;
-
-    /**
-     * @var array|null
-     */
+    /** @var array|null  */
     private $json;
+    /** @var string[] */
+    private $messages = [];
+    /** @var string Holds the output from Composer\IO\BufferIO */
+    private $ioOutput;
 
     /**
-     * @var string[]
+     * Constructor.
+     *
+     * @param Application $app
      */
-    private $messages = [];
-
     public function __construct(Application $app)
     {
         $this->app = $app;
 
         // Set composer environment variables
-        putenv('COMPOSER_HOME=' . $this->app['resources']->getPath('cache') . '/composer');
+        putenv('COMPOSER_HOME=' . $this->app['resources']->getPath('cache/composer'));
 
-        // Set default options
-        $this->setOptions();
-
-        // Set up
         $this->setup();
     }
 
-    public function getMessages()
-    {
-        return $this->messages;
-    }
-
     /**
-     * Return/create our Factory object.
-     *
-     * @return Factory
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * If the extension project area is writable, ensure the JSON is up-to-date
-     * and test connection to the extension server.
-     *
-     * $app['extend.writeable'] is originally set in Extend::register()
-     *
-     * If all is OK, set $app['extend.online'] to TRUE
-     */
-    private function setup()
-    {
-        if ($this->app['extend.writeable']) {
-            // Copy/update installer helper
-            $this->copyInstaller();
-
-            // Do required JSON update/set up
-            $this->updateJson();
-
-            // Ping the extensions server to confirm connection
-            $response = $this->ping(true);
-
-            // @see http://tools.ietf.org/html/rfc2616#section-13.4
-            $httpOk = [200, 203, 206, 300, 301, 302, 307, 410];
-            if (in_array($response, $httpOk)) {
-                $this->app['extend.online'] = true;
-            } else {
-                $this->messages[] = $this->app['extend.site'] . ' is unreachable.';
-            }
-        }
-
-        if ($this->app['extend.online']) {
-            // Create our Factory
-            $this->factory = new Factory($this->app, $this->options);
-        }
-    }
-
-    /**
-     * Get the options.
+     * Get the stored messages.
      *
      * @return string[]
      */
-    public function getOptions()
+    public function getMessages()
     {
-        return $this->options;
-    }
-
-    /**
-     * Get a single option.
-     *
-     * @param string $key
-     *
-     * @return string|boolean|null
-     */
-    public function getOption($key)
-    {
-        return $this->options[$key];
-    }
-
-    /**
-     * Get a new Composer object.
-     *
-     * @return \Composer\Composer
-     */
-    public function getComposer()
-    {
-        return $this->factory->getComposer();
-    }
-
-    /**
-     * Get configured minimum stability.
-     *
-     * @return string
-     */
-    public function getMinimumStability()
-    {
-        return $this->factory->getMinimumStability();
-    }
-
-    /**
-     * Get a new IO object.
-     *
-     * @return \Composer\IO\IOInterface
-     */
-    public function getIO()
-    {
-        return $this->factory->getIO();
-    }
-
-    /**
-     * Get a new dependency resolver pool object.
-     *
-     * @return \Composer\DependencyResolver\Pool
-     */
-    public function getPool()
-    {
-        return $this->factory->getPool();
+        return $this->messages;
     }
 
     /**
@@ -221,7 +57,67 @@ class PackageManager
      */
     public function getOutput()
     {
-        return $this->factory->getIO()->getOutput();
+        return $this->ioOutput;
+    }
+
+    /**
+     * Set the output from the last IO.
+     *
+     * @param string $output
+     */
+    public function setOutput($output)
+    {
+        $this->ioOutput = $output;
+    }
+
+    /**
+     * Set up function.
+     *
+     * - Copy/update the installer event class
+     * - Update the composer.json
+     * - Test connection to the server
+     */
+    private function setup()
+    {
+        if ($this->started) {
+            return;
+        }
+
+        if ($this->app['extend.writeable']) {
+            // Do required JSON update/set up
+            $this->updateJson();
+
+            // Ping the extensions server to confirm connection
+            $this->ping(true);
+        }
+
+        $this->started = true;
+    }
+
+    /**
+     * Check if we can/should use SSL/TLS/HTTP2 or HTTP.
+     *
+     * @return boolean
+     */
+    public function useSsl()
+    {
+        if ($this->useSsl !== null) {
+            return $this->useSsl;
+        }
+
+        if (!extension_loaded('openssl')) {
+            return $this->useSsl = false;
+        }
+
+        try {
+            ClientUtils::getDefaultCaBundle();
+
+            return $this->useSsl = true;
+        } catch (\RuntimeException $e) {
+            $this->messages[] = $e->getMessage();
+
+            return $this->useSsl = false;
+        }
     }
 
     /**
@@ -231,11 +127,7 @@ class PackageManager
      */
     public function checkPackage()
     {
-        if (!$this->check) {
-            $this->check = new CheckPackage($this->app);
-        }
-
-        return $this->check->execute();
+        return $this->app['extend.action']['check']->execute();
     }
 
     /**
@@ -243,11 +135,7 @@ class PackageManager
      */
     public function dumpautoload()
     {
-        if (!$this->dumpautoload) {
-            $this->dumpautoload = new DumpAutoload($this->app);
-        }
-
-        $this->dumpautoload->execute();
+        $this->app['extend.action']['autoload']->execute();
     }
 
     /**
@@ -257,12 +145,7 @@ class PackageManager
      */
     public function installPackages()
     {
-        if (!$this->install) {
-            $this->install = new InstallPackage($this->app);
-        }
-
-        // 0 on success or a positive error code on failure
-        return $this->install->execute();
+        return $this->app['extend.action']['install']->execute();
     }
 
     /**
@@ -274,12 +157,7 @@ class PackageManager
      */
     public function removePackage(array $packages)
     {
-        if (!$this->remove) {
-            $this->remove = new RemovePackage($this->app);
-        }
-
-        // 0 on success or a positive error code on failure
-        return $this->remove->execute($packages);
+        return $this->app['extend.action']['remove']->execute($packages);
     }
 
     /**
@@ -292,12 +170,7 @@ class PackageManager
      */
     public function requirePackage(array $packages)
     {
-        if (!$this->require) {
-            $this->require = new RequirePackage($this->app);
-        }
-
-        // 0 on success or a positive error code on failure
-        return $this->require->execute($packages);
+        return $this->app['extend.action']['require']->execute($packages);
     }
 
     /**
@@ -309,11 +182,7 @@ class PackageManager
      */
     public function searchPackage(array $packages)
     {
-        if (!$this->search) {
-            $this->search = new SearchPackage($this->app);
-        }
-
-        return $this->search->execute($packages);
+        return $this->app['extend.action']['search']->execute($packages);
     }
 
     /**
@@ -328,11 +197,7 @@ class PackageManager
      */
     public function showPackage($target, $package = '', $version = '', $root = false)
     {
-        if (!$this->show) {
-            $this->show = new ShowPackage($this->app);
-        }
-
-        return $this->show->execute($target, $package, $version, $root);
+        return $this->app['extend.action']['show']->execute($target, $package, $version, $root);
     }
 
     /**
@@ -344,12 +209,7 @@ class PackageManager
      */
     public function updatePackage(array $packages)
     {
-        if (!$this->update) {
-            $this->update = new UpdatePackage($this->app);
-        }
-
-        // 0 on success or a positive error code on failure
-        return $this->update->execute($packages);
+        return $this->app['extend.action']['update']->execute($packages);
     }
 
     /**
@@ -360,11 +220,7 @@ class PackageManager
      */
     public function initJson($file, array $data = [])
     {
-        if (!$this->initJson) {
-            $this->initJson = new BoltExtendJson($this->options);
-        }
-
-        $this->initJson->execute($file, $data);
+        $this->app['extend.action']['json']->execute($file, $data);
     }
 
     /**
@@ -381,7 +237,7 @@ class PackageManager
         ];
 
         // Installed Composer packages
-        $installed = $this->showPackage('installed');
+        $installed = $this->app['extend.action']['show']->execute('installed');
         $packages['installed'] = $this->formatPackageResponse($installed);
 
         // Pending Composer packages
@@ -500,20 +356,10 @@ class PackageManager
         // Check if we have a config file, and if it's readable. (yet)
         $configfilepath = $this->app['resources']->getPath('extensionsconfig/' . $configfilename);
         if (is_readable($configfilepath)) {
-            return Lib::path('fileedit', ['namespace' => 'config', 'file' => 'extensions/' . $configfilename]);
+            return $this->app->generatePath('fileedit', ['namespace' => 'config', 'file' => 'extensions/' . $configfilename]);
         }
 
         return null;
-    }
-
-    /**
-     * Install/update extension installer helper.
-     */
-    private function copyInstaller()
-    {
-        $class = new \ReflectionClass("Bolt\\Composer\\ExtensionInstaller");
-        $filename = $class->getFileName();
-        copy($filename, $this->options['basedir'] . '/ExtensionInstaller.php');
     }
 
     /**
@@ -521,16 +367,13 @@ class PackageManager
      */
     private function updateJson()
     {
-        $initjson = new BoltExtendJson($this->options);
-        $this->json = $initjson->updateJson($this->app);
+        $this->json = $this->app['extend.action']['json']->updateJson();
     }
 
     /**
      * Ping site to see if we have a valid connection and it is responding correctly.
      *
      * @param boolean $addquery
-     *
-     * @return boolean
      */
     private function ping($addquery = false)
     {
@@ -549,56 +392,37 @@ class PackageManager
         }
 
         try {
-            /** @var $reponse \GuzzleHttp\Message\Response */
-            $response = $this->app['guzzle.client']->head($uri, [], ['query' => $query]);
+            $this->app['guzzle.client']->head($uri, [], ['query' => $query, 'exceptions' => true, 'connect_timeout' => 5]);
 
-            return $response->getStatusCode();
+            $this->app['extend.online'] = true;
+        } catch (ClientException $e) {
+            // Thrown for 400 level errors
+            $this->messages[] = Trans::__(
+                "Client error: %errormessage%",
+                ['%errormessage%' => $e->getMessage()]
+            );
+            $this->app['extend.online'] = false;
         } catch (RequestException $e) {
+            // Thrown for connection timeout, DNS errors, etc
             $this->messages[] = Trans::__(
                 "Testing connection to extension server failed: %errormessage%",
                 ['%errormessage%' => $e->getMessage()]
             );
+            $this->app['extend.online'] = false;
+        } catch (ServerException $e) {
+            // Thrown for 500 level errors
+            $this->messages[] = Trans::__(
+                "Extension server returned an error: %errormessage%",
+                ['%errormessage%' => $e->getMessage()]
+            );
+            $this->app['extend.online'] = false;
+        } catch (\Exception $e) {
+            // Catch all
+            $this->messages[] = Trans::__(
+                "Generic failure while testing connection to extension server: %errormessage%",
+                ['%errormessage%' => $e->getMessage()]
+            );
+            $this->app['extend.online'] = false;
         }
-
-        return false;
-    }
-
-    /**
-     * Set the default options.
-     */
-    private function setOptions()
-    {
-        $this->options = [
-            'basedir'                => $this->app['resources']->getPath('extensions'),
-            'composerjson'           => $this->app['resources']->getPath('extensions') . '/composer.json',
-
-            'dryrun'                 => null,    // dry-run              - Outputs the operations but will not execute anything (implicitly enables --verbose)
-            'verbose'                => true,    // verbose              - Shows more details including new commits pulled in when updating packages
-            'nodev'                  => null,    // no-dev               - Disables installation of require-dev packages
-            'noautoloader'           => null,    // no-autoloader        - Skips autoloader generation
-            'noscripts'              => null,    // no-scripts           - Skips the execution of all scripts defined in composer.json file
-            'withdependencies'       => true,    // with-dependencies    - Add also all dependencies of whitelisted packages to the whitelist
-            'ignoreplatformreqs'     => null,    // ignore-platform-reqs - Ignore platform requirements (php & ext- packages)
-            'preferstable'           => null,    // prefer-stable        - Prefer stable versions of dependencies
-            'preferlowest'           => null,    // prefer-lowest        - Prefer lowest versions of dependencies
-
-            'sortpackages'           => true,    // sort-packages        - Sorts packages when adding/updating a new dependency
-            'prefersource'           => false,   // prefer-source        - Forces installation from package sources when possible, including VCS information
-            'preferdist'             => true,    // prefer-dist          - Forces installation from package dist (archive) even for dev versions
-            'update'                 => true,    // [Custom]             - Do package update as well
-            'noupdate'               => null,    // no-update            - Disables the automatic update of the dependencies
-            'updatenodev'            => true,    // update-no-dev        - Run the dependency update with the --no-dev option
-            'updatewithdependencies' => true,    // update-with-dependencies - Allows inherited dependencies to be updated with explicit dependencies
-
-            'dev'                    => null,    // dev - Add requirement to require-dev
-                                                 //       Removes a package from the require-dev section
-                                                 //       Disables autoload-dev rules
-
-            'onlyname'              => true,     // only-name - Search only in name
-
-            'optimizeautoloader'    => true,     // optimize-autoloader - Optimizes PSR0 and PSR4 packages to be loaded with classmaps too, good for production.
-        ];
-
-        return $this->options;
     }
 }

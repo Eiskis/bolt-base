@@ -2,7 +2,6 @@
 
 namespace Bolt\Twig\Handler;
 
-use Bolt\Library as Lib;
 use Bolt\Translation\Translator as Trans;
 use Silex;
 
@@ -211,7 +210,7 @@ class AdminHandler
 
         $matches = [];
         if (preg_match('/ ([a-z0-9_-]+\.yml)/i', $str, $matches)) {
-            $path = Lib::path('fileedit', ['namespace' => 'config', 'file' => $matches[1]]);
+            $path = $this->app->generatePath('fileedit', ['namespace' => 'config', 'file' => $matches[1]]);
             $link = sprintf(' <a href="%s">%s</a>', $path, $matches[1]);
             $str = preg_replace('/ ([a-z0-9_-]+\.yml)/i', $link, $str);
         }
