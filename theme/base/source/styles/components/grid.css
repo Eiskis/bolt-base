@@ -105,7 +105,7 @@
 		}
 		/*Three last orphans*/
 		.grid.fifth .grid-cell:nth-child(5n+1):nth-last-child(3) {
-			margin-left: 25%;
+			margin-left: 20%;
 		}
 		/*Four last orphans*/
 		.grid.fifth .grid-cell:nth-child(5n+1):nth-last-child(4) {
@@ -209,7 +209,7 @@
 		}
 		/*Three last orphans*/
 		.grid.tiny-fifth .grid-cell:nth-child(5n+1):nth-last-child(3) {
-			margin-left: 25%;
+			margin-left: 20%;
 		}
 		/*Four last orphans*/
 		.grid.tiny-fifth .grid-cell:nth-child(5n+1):nth-last-child(4) {
@@ -313,7 +313,7 @@
 		}
 		/*Three last orphans*/
 		.grid.small-fifth .grid-cell:nth-child(5n+1):nth-last-child(3) {
-			margin-left: 25%;
+			margin-left: 20%;
 		}
 		/*Four last orphans*/
 		.grid.small-fifth .grid-cell:nth-child(5n+1):nth-last-child(4) {
@@ -417,7 +417,7 @@
 		}
 		/*Three last orphans*/
 		.grid.medium-fifth .grid-cell:nth-child(5n+1):nth-last-child(3) {
-			margin-left: 25%;
+			margin-left: 20%;
 		}
 		/*Four last orphans*/
 		.grid.medium-fifth .grid-cell:nth-child(5n+1):nth-last-child(4) {
@@ -521,7 +521,7 @@
 		}
 		/*Three last orphans*/
 		.grid.large-fifth .grid-cell:nth-child(5n+1):nth-last-child(3) {
-			margin-left: 25%;
+			margin-left: 20%;
 		}
 		/*Four last orphans*/
 		.grid.large-fifth .grid-cell:nth-child(5n+1):nth-last-child(4) {
