@@ -1,10 +1,10 @@
 # app/resources/translations/pl_PL/messages.pl_PL.yml – generated on 2015-03-11 20:05:06 CET
 
 # Warning: Translations are in the process of being moved to a new keyword-based translation
-#          at the moment. This is an ongoing process. Translations currently in the 
-#          repository are automatically mapped to the new scheme. Be aware that there 
-#          can be a race condition between that process and your PR so that it's 
-#          eventually necessary to remap your translations. If you're planning on 
+#          at the moment. This is an ongoing process. Translations currently in the
+#          repository are automatically mapped to the new scheme. Be aware that there
+#          can be a race condition between that process and your PR so that it's
+#          eventually necessary to remap your translations. If you're planning on
 #          updating your translations, it's best to ask on IRC to time your contribution
 #          in order to prevent merge conflicts.
 
@@ -239,8 +239,8 @@
 "Place on stack": "Miejsce na stosie"
 "Please choose the record you want to link to:": "Wproszę wybrać rekord, który chcesz linkować:"
 "Please confirm that you want to remove this extension?": "Proszę potwierdzić czy chcesz usunąć to rozszerzenie?"
-"Please enter a new file name": "Proszę wprowadzić nazwę dla nowego pliku"
-"Please enter a new folder name": "Proszę wprowadzić nazwę dla nowego katalogu"
+"Please enter a new file name!": "Proszę wprowadzić nazwę dla nowego pliku!"
+"Please enter a new folder name!": "Proszę wprowadzić nazwę dla nowego katalogu!"
 "Please log on.": "Proszę się zalogować"
 "Please provide a username": "Prosze podać nazwę użytkownika"
 "Prefill database": "Wypełnij bazę danych"
@@ -256,7 +256,6 @@
 "Read more": "Czytaj dalej"
 "Readme": "Przeczytaj To"
 "Related content": "Powiązana zawartość"
-"Related content:": "Powiązana zawartość:"
 "Relationships": "Relacje"
 "Remove selected": "Usuń wybrane"
 "Rename %foldername%": "Zmiań nazwę %foldername%"
@@ -337,7 +336,7 @@
 "There are no users in the database. Please create the first user.": "Nie ma żadnych użytkowników w bazie danych. Proszę utworzyć pierwszego użytkownika."
 "There are no users present in the system. Please create the first user, which will be granted root privileges.": "Brak użytkowników w systemie. Proszę utworzyć pierwszego użytkownika, który uzyska uprawnienia root."
 "There should always be at least one 'root' user. You have just been promoted. Congratulations!": "Zawsze powinien być co najmniej jeden użytkownik 'root'. Właśnie awansowałeś. Gratulacje!"
-"There was an error uploading the file.\\nMake sure that the file type is of:\\n%typelist%": "Wystąpił błąd podczas wysyłania pliku.\\nUpewnij się że typ pliku jest jednym z:\\n %typelist%"
+"There was an error uploading the file.\\nMake sure that the file type is of:\\n%TYPELIST%": "Wystąpił błąd podczas wysyłania pliku.\\nUpewnij się że typ pliku jest jednym z:\\n %TYPELIST%"
 "This is a checkbox": "To jest checkbox"
 "This record is related to:": "Ten rekord jest powiązany z:"
 "This website is <a href='%url%' target='_blank' title='Sophisticated, lightweight & simple CMS'>Built with Bolt</a>.": "Tą witrynę stworzono z użyciem <a href='%url%' target='_blank' title='Wyrafinowany, lekki i prosty CMS'>Bolt</a>."

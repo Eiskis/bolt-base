@@ -17,9 +17,9 @@ class FieldSaveTest extends BoltUnitTest
     public function testRelationsSave()
     {
         $app = $this->getApp();
-        $app['integritychecker']->repairTables();
+        $app['schema']->repairTables();
         $this->addSomeContent();
-        $em = new EntityManager($app['db'], $app['dispatcher'], $app['storage.metadata']);
+        $em = $app['storage'];
         $repo = $em->getRepository('showcases');
 
         $record = $repo->find(1);
@@ -40,11 +40,13 @@ class FieldSaveTest extends BoltUnitTest
     public function testTaxonomySave()
     {
         $app = $this->getApp();
-        $app['integritychecker']->repairTables();
-        $em = new EntityManager($app['db'], $app['dispatcher'], $app['storage.metadata']);
+        $app['schema']->repairTables();
+        $this->addSomeContent();
+        $em = $app['storage'];
         $repo = $em->getRepository('showcases');
 
         $record = $repo->find(1);
+
         $this->assertTrue(is_array($record->categories));
         $this->assertTrue(is_array($record->tags));
 
@@ -59,6 +61,7 @@ class FieldSaveTest extends BoltUnitTest
     protected function addSomeContent()
     {
         $app = $this->getApp();
+        $this->addDefaultUser($app);
         $app['request'] = Request::create('/');
         $app['config']->set('taxonomy/categories/options', ['news']);
         $prefillMock = new LoripsumMock();
@@ -68,8 +71,8 @@ class FieldSaveTest extends BoltUnitTest
         $storage->prefill(['showcases', 'entries', 'pages']);
 
         // We also set some relations between showcases and entries
-        $showcases = $storage->getContent("showcases");
-        $randEntries = $storage->getContent("entries/random/2");
+        $showcases = $storage->getContent('showcases');
+        $randEntries = $storage->getContent('entries/random/2');
         foreach ($showcases as $show) {
             foreach ($randEntries as $key => $entry) {
                 $show->setRelation('entries', $key);

@@ -18,7 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 class Render
 {
     public $app;
+    /** @var boolean */
     public $safe;
+    /** @var string */
+    public $twigKey;
 
     /**
      * Set up the object.
@@ -68,8 +71,12 @@ class Render
     public function postProcess(Response $response)
     {
         $html = $response->getContent();
-        $html = $this->app['extensions']->processSnippetQueue($html);
-        $html = $this->app['extensions']->processAssets($html);
+
+        /** @var \Bolt\Asset\QueueInterface $queue */
+        foreach ($this->app['asset.queues'] as $queue) {
+            $html = $queue->process($html);
+        }
+
         $this->cacheRequest($html);
 
         return $html;
@@ -121,7 +128,7 @@ class Render
     /**
      * Get the duration (in seconds) for the cache.
      *
-     * @return int;
+     * @return integer
      */
     public function cacheDuration()
     {

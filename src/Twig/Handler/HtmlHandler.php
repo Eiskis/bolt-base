@@ -3,6 +3,7 @@
 namespace Bolt\Twig\Handler;
 
 use Bolt\Application;
+use Bolt\Content;
 use Bolt\Helpers\Html;
 use Bolt\Helpers\Str;
 use Maid\Maid;
@@ -24,6 +25,26 @@ class HtmlHandler
     public function __construct(Silex\Application $app)
     {
         $this->app = $app;
+    }
+
+    /**
+     * Take a file name and add a HTML query paramter with a unique hash based
+     * on the site's salt value and the file modification time, or file name
+     * if the file can't be found by the function.
+     *
+     * @param string $fileName
+     *
+     * @return string
+     */
+    public function cacheHash($fileName)
+    {
+        $fullPath = $this->app['resources']->getPath('root') . '/' . $fileName;
+
+        if (is_readable($fullPath)) {
+            return "$fileName?v=" . $this->app['asset.file.hash']($fullPath);
+        } elseif (is_readable($fileName)) {
+            return "$fileName?v=" . $this->app['asset.file.hash']($fileName);
+        }
     }
 
     /**
@@ -50,7 +71,7 @@ class HtmlHandler
      *
      * @return string
      */
-    public function editable($html, $content, $field, $safe)
+    public function editable($html, Content $content, $field, $safe)
     {
         // Editing content from within content? NOPE NOPE NOPE.
         if ($safe) {

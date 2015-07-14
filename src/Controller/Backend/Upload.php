@@ -18,7 +18,7 @@ class Upload extends BackendBase
 {
     protected function addRoutes(ControllerCollection $c)
     {
-        $c->match('/{namespace}', 'actionUploadNamespace')
+        $c->match('/{namespace}', 'uploadNamspace')
             ->before([$this, 'before'])
             ->value('namespace', 'files')
             ->bind('upload');
@@ -96,6 +96,7 @@ class Upload extends BackendBase
             // Remove the .lock file attached to the file
             $result->confirm();
 
+            $successfulFiles = [];
             if ($result instanceof File) {
                 $successfulFiles = [$result->name];
             } elseif ($result instanceof Collection) {

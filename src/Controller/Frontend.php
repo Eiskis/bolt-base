@@ -2,7 +2,7 @@
 
 namespace Bolt\Controller;
 
-use Bolt\Extensions\Snippets\Location as SnippetLocation;
+use Bolt\Asset\Target;
 use Bolt\Helpers\Input;
 use Bolt\Pager;
 use Bolt\Response\BoltResponse;
@@ -91,7 +91,7 @@ class Frontend extends ConfigurableBase
     {
         $content = $this->getContent($this->getOption('general/homepage'));
 
-        $template = $this->templateChooser()->homepage();
+        $template = $this->templateChooser()->homepage($content);
 
         $globals = [
             'records' => $content,
@@ -195,9 +195,9 @@ class Frontend extends ConfigurableBase
         if (!empty($liveEditor)) {
             $jsFile = $this->app['resources']->getUrl('app') . 'view/js/ckeditor/ckeditor.js';
             $cssFile = $this->app['resources']->getUrl('app') . 'view/css/liveeditor.css';
-            $this->extensions()->insertSnippet(SnippetLocation::BEFORE_HEAD_JS, '<script>window.boltIsEditing = true;</script>');
-            $this->extensions()->addJavascript($jsFile, ['late' => false, 'priority' => 1]);
-            $this->extensions()->addCss($cssFile, false, 5);
+            $this->app['asset.queue.snippet']->add(Target::BEFORE_HEAD_JS, '<script>window.boltIsEditing = true;</script>');
+            $this->app['asset.queue.file']->add('javascript', $jsFile, ['late' => false, 'priority' => 1]);
+            $this->app['asset.queue.file']->add('stylesheet', $cssFile, ['late' => false, 'priority' => 5]);
         }
 
         // Then, select which template to use, based on our 'cascading templates rules'
@@ -333,11 +333,12 @@ class Frontend extends ConfigurableBase
     /**
      * The search result page controller.
      *
-     * @param Request $request The Symfony Request
+     * @param Request $request      The Symfony Request
+     * @param array   $contenttypes The content type slug(s) you want to search for
      *
      * @return BoltResponse
      */
-    public function search(Request $request)
+    public function search(Request $request, array $contenttypes = null)
     {
         $q = '';
         $context = __FUNCTION__;
@@ -378,7 +379,7 @@ class Frontend extends ConfigurableBase
             $filters = null;
         }
 
-        $result = $this->app['storage']->searchContent($q, null, $filters, $limit, $offset);
+        $result = $this->app['storage']->searchContent($q, $contenttypes, $filters, $limit, $offset);
 
         $pager = [
             'for'          => $context,
@@ -387,7 +388,7 @@ class Frontend extends ConfigurableBase
             'current'      => $page,
             'showing_from' => $offset + 1,
             'showing_to'   => $offset + count($result['results']),
-            'link'         => '/search?q=' . rawurlencode($q) . '&page_search='
+            'link'         => $this->generateUrl('search', ['q' => $q]) . '&page_search='
         ];
 
         $this->app['storage']->setPager($context, $pager);

@@ -22,8 +22,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class FrontendTest extends ControllerUnitTest
 {
     /**
-     * @covers Zone::get
-     * @covers Zone::isFrontend
+     * @covers \Bolt\Controller\Zone::get
+     * @covers \Bolt\Controller\Zone::isFrontend
      */
     public function testControllerZone()
     {
@@ -125,9 +125,33 @@ class FrontendTest extends ControllerUnitTest
         $this->assertNotEmpty($response->getGlobalContext());
     }
 
-    public function testCanonicalUrl()
+    /**
+     * @return array
+     */
+    public function testCanonicalUrlProvider()
+    {
+        return [
+            ['http://bolt.dev/', null, false],
+            ['http://bolt.dev/', null, true],
+            ['https://foo.dev/', 'https://foo.dev/', false],
+            ['https://foo.dev/', 'https://foo.dev/', true],
+            ['http://bar.dev/', 'http://bar.dev/', false],
+            ['http://bar.dev/', 'http://bar.dev/', true],
+        ];
+    }
+
+    /**
+     * @dataProvider testCanonicalUrlProvider
+     */
+    public function testCanonicalUrl($expected, $config_canonical, $use_https)
     {
         $this->getService('config')->set('general/homepage', 'showcase/1');
+
+        if ($use_https) {
+            $_SERVER['HTTPS'] == 'on';
+            $_SERVER['SERVER_PORT'] == 443;
+        }
+
         $this->setRequest(Request::create('/'));
 
         $templates = $this->getMock('Bolt\TemplateChooser', ['record'], [$this->getApp()]);
@@ -137,9 +161,14 @@ class FrontendTest extends ControllerUnitTest
         $this->setService('templatechooser', $templates);
 
         $response = $this->controller()->record($this->getRequest(), 'showcase', '1');
+
+        if ($config_canonical) {
+            $this->getService('resources')->setUrl('canonicalurl', $config_canonical);
+        }
+
         $canonical = $this->getService('resources')->getUrl('canonical');
 
-        $this->assertEquals('http://bolt.dev/', $canonical);
+        $this->assertEquals($expected, $canonical);
 
         $this->assertTrue($response instanceof BoltResponse);
         $this->assertSame('index.twig', $response->getTemplateName());
@@ -397,13 +426,11 @@ class FrontendTest extends ControllerUnitTest
         $this->setRequest(Request::create('/'));
         $this->getService('config')->set('general/maintenance_mode', true);
 
-        $users = $this->getMock('Bolt\Users', ['isAllowed'], [$this->getApp()]);
-
-        $users->expects($this->once())
+        $permissions = $this->getMock('Bolt\AccessControl\Permissions', ['isAllowed'], [$this->getApp()]);
+        $permissions->expects($this->any())
             ->method('isAllowed')
             ->will($this->returnValue(false));
-
-        $this->setService('users', $users);
+        $this->setService('permissions', $permissions);
 
         $response = $this->controller()->before($this->getRequest());
 
@@ -415,11 +442,11 @@ class FrontendTest extends ControllerUnitTest
         $this->setRequest(Request::create('/'));
         $this->getService('config')->set('general/maintenance_mode', true);
 
-        $users = $this->getMock('Bolt\Users', ['isAllowed'], [$this->getApp()]);
-        $users->expects($this->once())
+        $permissions = $this->getMock('Bolt\AccessControl\Permissions', ['isAllowed'], [$this->getApp()]);
+        $permissions->expects($this->any())
             ->method('isAllowed')
             ->will($this->returnValue(true));
-        $this->setService('users', $users);
+        $this->setService('permissions', $permissions);
 
         $response = $this->controller()->before($this->getRequest());
 

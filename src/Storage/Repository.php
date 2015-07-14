@@ -4,7 +4,7 @@ namespace Bolt\Storage;
 use Bolt\Events\HydrationEvent;
 use Bolt\Events\StorageEvent;
 use Bolt\Events\StorageEvents;
-use Bolt\Mapping\ClassMetadata;
+use Bolt\Storage\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Query\QueryBuilder;
 
@@ -46,20 +46,39 @@ class Repository implements ObjectRepository
     }
 
     /**
+     * Creates a new empty entity and passes the supplied data to the constructor.
+     *
+     * @param array $params
+     *
+     * @return Content
+     */
+    public function create($params = null)
+    {
+        $entityClass = $this->getClassName();
+        return new $entityClass($params);
+    }
+
+    /**
      * Creates a new QueryBuilder instance that is prepopulated for this entity name.
      *
      * @param string $alias
-     * @param string $indexBy The index for the from.
      *
      * @return QueryBuilder
      */
-    public function createQueryBuilder($alias = null, $indexBy = null)
+    public function createQueryBuilder($alias = null)
     {
         if (null === $alias) {
             $alias = $this->getAlias();
         }
+
+        if (empty($alias)) {
+            $select = "*";
+        } else {
+            $select = $alias.".*";
+        }
+
         return $this->em->createQueryBuilder()
-            ->select($alias.".*")
+            ->select($select)
             ->from($this->getTableName(), $alias);
     }
 
@@ -69,7 +88,11 @@ class Repository implements ObjectRepository
     public function find($id)
     {
         $qb = $this->getLoadQuery();
-        $result = $qb->where($this->getAlias().'.id = :id')->setParameter('id', $id)->execute()->fetch();
+        $result = $qb->where($this->getAlias().'.id = :id')
+            ->setParameter('id', $id)
+            ->execute()
+            ->fetch();
+
         if ($result) {
             return $this->hydrate($result, $qb);
         }
@@ -91,6 +114,8 @@ class Repository implements ObjectRepository
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         $qb = $this->findWithCriteria($criteria, $orderBy, $limit, $offset);
+        $qb->select('*');
+
         $result = $qb->execute()->fetchAll();
 
         if ($result) {
@@ -147,6 +172,36 @@ class Repository implements ObjectRepository
             $qb->setFirstResult($offset);
         }
         return $qb;
+    }
+
+    /**
+     * Internal method to hydrate and return a QueryBuilder query
+     *
+     * @return array Entity | false
+     **/
+    protected function findWith(QueryBuilder $query)
+    {
+        $result = $query->execute()->fetchAll();
+        if ($result) {
+            return $this->hydrateAll($result, $query);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Internal method to hydrate and return a single QueryBuilder result
+     *
+     * @return Entity | false
+     **/
+    protected function findOneWith(QueryBuilder $query)
+    {
+        $result = $query->execute()->fetch();
+        if ($result) {
+            return $this->hydrate($result, $query);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -230,7 +285,9 @@ class Repository implements ObjectRepository
         $qb = $this->em->createQueryBuilder();
         $qb->insert($this->getTableName());
         $querySet->append($qb);
+        $this->getPersister()->disableField('id');
         $this->persister->persist($querySet, $entity, $this->em);
+        $this->getPersister()->enableField('id');
 
         return $querySet->execute();
     }
@@ -314,6 +371,14 @@ class Repository implements ObjectRepository
     public function setPersister(Persister $persister)
     {
         $this->persister = $persister;
+    }
+
+    /**
+     * @return Persister $persister
+     */
+    public function getPersister()
+    {
+        return $this->persister;
     }
 
     /**

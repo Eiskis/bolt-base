@@ -19,7 +19,9 @@ class EventListenerServiceProvider implements ServiceProviderInterface
             return new Listener\ExceptionListener(
                 $rootPath,
                 $app['render'],
-                $app['logger.system']
+                $app['logger.system'],
+                $app['session'],
+                $app['config']->get('general/debug', false)
             );
         });
 
@@ -54,7 +56,7 @@ class EventListenerServiceProvider implements ServiceProviderInterface
 
         $app['listener.snippet'] = $app->share(function ($app) {
             return new Listener\SnippetListener(
-                $app['extensions'],
+                $app['asset.queue.snippet'],
                 $app['config'],
                 $app['resources'],
                 $app['render']

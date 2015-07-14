@@ -9,6 +9,7 @@ module.exports = function(grunt) {
         path: {
             tmp: 'tmp',
             pages: 'tmp/pages',
+            sourcemaps: '../view/maps',
             doc: {
                 js: 'docs/js',
                 php: 'docs/php'
@@ -17,7 +18,6 @@ module.exports = function(grunt) {
                 js: 'js',
                 lib: 'lib',
                 sass: 'sass',
-                node: 'node_modules',
                 bower: 'bower_components'
             },
             dest: {
@@ -51,6 +51,7 @@ module.exports = function(grunt) {
                 '<%= path.src.js %>/modules/fields.js',
                 '<%= path.src.js %>/modules/fields/geolocation.js',
                 '<%= path.src.js %>/modules/fields/slug.js',
+                '<%= path.src.js %>/modules/fields/templateselect.js',
                 // Old stuff
                 '<%= path.src.js %>/fnc-helpers.js',
                 '<%= path.src.js %>/activity.js',
@@ -99,6 +100,7 @@ module.exports = function(grunt) {
         jitGrunt: {
             staticMappings: {
                 pages: 'grunt-tasks/pages.js',
+                sass: 'grunt-tasks/sass.js',
                 htmllint: 'grunt-html'
             }
         }

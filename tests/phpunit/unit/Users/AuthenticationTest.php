@@ -2,6 +2,7 @@
 namespace Bolt\Tests\Users;
 
 use Bolt\Tests\BoltUnitTest;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class to test correct operation of src/AuthenticationTest.
@@ -34,11 +35,14 @@ class AuthenticationTest extends BoltUnitTest
     public function testLoginWithUsername()
     {
         // Setup test
-        $users = $this->getMock('Bolt\AccessControl\Authentication', ['login'], [$this->getApp()]);
+        $app = $this->getApp();
+        $users = $this->getLoginMock($app);
+
         $users->expects($this->once())->method('login')->willReturn(true);
 
         // Run test
-        $result = $users->login('anotheruser', 'test123');
+        $request = new Request();
+        $result = $users->login($request, 'anotheruser', 'test123');
 
         // Check result
         $this->assertEquals(true, $result);
@@ -50,11 +54,13 @@ class AuthenticationTest extends BoltUnitTest
     public function testLoginWithEmail()
     {
         // Setup test
-        $users = $this->getMock('Bolt\AccessControl\Authentication', ['login'], [$this->getApp()]);
+        $app = $this->getApp();
+        $users = $this->getLoginMock($app);
         $users->expects($this->once())->method('login')->willReturn(true);
 
         // Run test
-        $result = $users->login('test@example.com', 'test123');
+        $request = new Request();
+        $result = $users->login($request, 'test@example.com', 'test123');
 
         // Check result
         $this->assertEquals(true, $result);

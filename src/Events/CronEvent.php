@@ -4,23 +4,24 @@ namespace Bolt\Events;
 use Silex\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Event class for system compulsory cron jobs.
  */
 class CronEvent extends Event
 {
-    /**
-     * @var \Silex\Application
-     */
+    /** @var \Silex\Application */
     private $app;
 
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
     public $output;
 
+    /**
+     * Constructor.
+     *
+     * @param Application     $app
+     * @param OutputInterface $output
+     */
     public function __construct(Application $app, OutputInterface $output = null)
     {
         $this->app = $app;
@@ -34,7 +35,13 @@ class CronEvent extends Event
         $this->app['dispatcher']->addListener(CronEvents::CRON_YEARLY, [$this, 'doRunScheduledJobs']);
     }
 
-    public function doRunScheduledJobs(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+    /**
+     * Process jobs.
+     *
+     * @param Event  $event
+     * @param string $eventName
+     */
+    public function doRunScheduledJobs(Event $event, $eventName)
     {
         switch ($eventName) {
             case CronEvents::CRON_HOURLY:
@@ -77,7 +84,7 @@ class CronEvent extends Event
     {
         // Clear the cache
         $this->app['cache']->clearCache();
-        $this->notify("Clearing cache");
+        $this->notify('Clearing cache');
 
         // Trim system log files
         $this->app['logger.manager']->trim('system');

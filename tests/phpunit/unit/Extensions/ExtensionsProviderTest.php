@@ -3,6 +3,7 @@ namespace Bolt\Tests\Extensions;
 
 use Bolt\Extensions;
 use Bolt\Extensions\Snippets\Location as SnippetLocation;
+use Bolt\Storage\Entity;
 use Bolt\Tests\BoltUnitTest;
 
 /**
@@ -28,7 +29,7 @@ HTML;
 <html>
 <head>
 <meta charset="utf-8" />
-<link rel="stylesheet" href="testfile.css" media="screen">
+<link rel="stylesheet" href="testfile.css?v=5e544598b8d78644071a6f25fd8bba82" media="screen">
 <link rel="stylesheet" href="existing.css" media="screen">
 </head>
 <body>
@@ -45,7 +46,7 @@ HTML;
 </head>
 <body>
 <script src="existing.js"></script>
-<link rel="stylesheet" href="testfile.css" media="screen">
+<link rel="stylesheet" href="testfile.css?v=5e544598b8d78644071a6f25fd8bba82" media="screen">
 </body>
 </html>
 HTML;
@@ -58,7 +59,7 @@ HTML;
 </head>
 <body>
 <script src="existing.js"></script>
-<script src="testfile.js"></script>
+<script src="testfile.js?v=289fc946f38fee1a3e947eca1d6208b6"></script>
 </body>
 </html>
 HTML;
@@ -71,7 +72,7 @@ HTML;
 </head>
 <body>
 <script src="existing.js"></script>
-<script src="testfile.js"></script>
+<script src="testfile.js?v=289fc946f38fee1a3e947eca1d6208b6"></script>
 </body>
 </html>
 HTML;
@@ -167,6 +168,16 @@ HTML;
 </html>
 HTML;
 
+    public function getApp()
+    {
+        $app = parent::getApp();
+        $app['asset.file.hash'] = $app->protect(function ($fileName) {
+            return md5($fileName);
+        });
+
+        return $app;
+    }
+
     public function tearDown()
     {
     }
@@ -205,8 +216,11 @@ HTML;
         $app = $this->getApp();
         $app['logger.system'] = new Mock\Logger();
         $app['extensions']->register(new Mock\BadExtensionSnippets($app));
+        $html = $app['asset.queue.snippet']->process($this->template);
+        $this->assertEquals($this->html($this->template), $this->html($html));
+
         $this->assertEquals(
-            'Snippet loading failed for badextensionsnippets: BadExtensionSnippets',
+            'Snippet loading failed for Bolt\Tests\Extensions\Mock\BadExtensionSnippets with callable a:2:{i:0;O:47:"Bolt\Tests\Extensions\Mock\BadExtensionSnippets":0:{}i:1;s:18:"badSnippetCallBack";}',
             $app['logger.system']->lastLog()
         );
     }
@@ -291,9 +305,45 @@ HTML;
     public function testLocalload()
     {
         $app = $this->makeApp();
-        $app['resources']->setPath('extensions', __DIR__."/resources");
+        $app['resources']->setPath('extensions', __DIR__ . '/resources');
+        $jsonFile = $app['resources']->getPath('extensions/composer.json');
+        $lockFile = $app['resources']->getPath('cache/.local.autoload.built');
+        @unlink($jsonFile);
+        @unlink($lockFile);
+
         $app->initialize();
         $this->assertTrue($app['extensions']->isEnabled('testlocal'));
+
+        $this->assertFileExists($jsonFile, 'Extension composer.json file not created');
+        $json = json_decode(file_get_contents($jsonFile), true);
+
+        $this->assertTrue(unlink($jsonFile), 'Unable to remove composer.json file');
+
+        $this->assertArrayHasKey('autoload', $json);
+        $this->assertArrayHasKey('psr-4', $json['autoload']);
+        $this->assertArrayHasKey('Bolt\\Extensions\\TestVendor\\TestExt\\', $json['autoload']['psr-4']);
+        $this->assertSame(
+            'local/testvendor/testext/',
+            $json['autoload']['psr-4']['Bolt\\Extensions\\TestVendor\\TestExt\\']
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testLocalloadAutoload()
+    {
+        $app = $this->makeApp();
+        $app['resources']->setPath('extensions', __DIR__ . '/resources');
+        $app->initialize();
+
+        require_once __DIR__ .'/resources/vendor/autoload.php';
+
+        $koala = new \Bolt\Extensions\TestVendor\TestExt\GumLeaves();
+        $this->assertSame('Koala Power!', $koala->getDropBear());
+
+        @unlink($app['resources']->getPath('extensions/composer.json'));
+        @unlink($app['resources']->getPath('cache/.local.autoload.built'));
     }
 
     public function testSnippet()
@@ -432,6 +482,7 @@ HTML;
     public function testAddMenuOption()
     {
         $app = $this->getApp();
+        $this->setSessionUser(new Entity\Users());
         $app['extensions']->addMenuOption('My Test', 'mytest');
         $this->assertTrue($app['extensions']->hasMenuOptions());
         $this->assertEquals(1, count($app['extensions']->getMenuOptions()));
@@ -440,27 +491,30 @@ HTML;
     public function testInsertWidget()
     {
         $app = $this->getApp();
+        $this->setSessionUser(new Entity\Users());
         $app['extensions']->insertWidget('test', SnippetLocation::START_OF_BODY, "", "testext", "", false);
-        $this->expectOutputString("<section><div class='widget' id='widget-dacf7046' data-key='dacf7046'></div></section>");
+        $this->expectOutputString("<section><div class='widget' id='widget-74854909' data-key='74854909'></div></section>");
         $app['extensions']->renderWidgetHolder('test', SnippetLocation::START_OF_BODY);
     }
 
     public function testWidgetCaches()
     {
         $app = $this->getApp();
+        $this->setSessionUser(new Entity\Users());
         $app['cache'] = new Mock\Cache();
         $app['extensions']->register(new Mock\SnippetCallbackExtension($app));
-        $this->assertFalse($app['cache']->fetch('5e4c97cb'));
+        $this->assertFalse($app['cache']->fetch('72bde68d'));
         $app['extensions']->insertWidget('test', SnippetLocation::AFTER_JS, "snippetCallBack", "snippetcallback", "", false);
 
         // Double call to ensure second one hits cache
-        $html = $app['extensions']->renderWidget('5e4c97cb');
-        $this->assertEquals($html, $app['cache']->fetch('widget_5e4c97cb'));
+        $html = $app['extensions']->renderWidget('72bde68d');
+        $this->assertEquals($html, $app['cache']->fetch('widget_72bde68d'));
     }
 
     public function testInvalidWidget()
     {
         $app = $this->getApp();
+        $this->setSessionUser(new Entity\Users());
         $app['extensions']->insertWidget('test', SnippetLocation::START_OF_BODY, "", "testext", "", false);
         $result = $app['extensions']->renderWidget('fakekey');
         $this->assertEquals("Invalid key 'fakekey'. No widget found.", $result);
@@ -469,16 +523,18 @@ HTML;
     public function testWidgetWithCallback()
     {
         $app = $this->getApp();
+        $this->setSessionUser(new Entity\Users());
         $app['extensions']->register(new Mock\SnippetCallbackExtension($app));
 
         $app['extensions']->insertWidget('test', SnippetLocation::AFTER_JS, "snippetCallBack", "snippetcallback", "", false);
-        $html = $app['extensions']->renderWidget('5e4c97cb');
+        $html = $app['extensions']->renderWidget('72bde68d');
         $this->assertEquals('<meta name="test-snippet" />', $html);
     }
 
     public function testWidgetWithGlobalCallback()
     {
         $app = $this->getApp();
+        $this->setSessionUser(new Entity\Users());
         $app['extensions']->register(new Mock\SnippetCallbackExtension($app));
 
         $app['extensions']->insertWidget(
@@ -489,7 +545,7 @@ HTML;
             "",
             false
         );
-        $html = $app['extensions']->renderWidget('7e2b9a48');
+        $html = $app['extensions']->renderWidget('cbc5cb6a');
         $this->assertEquals('<meta name="test-widget" />', $html);
     }
 
@@ -515,7 +571,7 @@ HTML;
     }
 }
 
-function globalSnippet($app, $string)
+function globalSnippet($string)
 {
     return nl2br($string);
 }

@@ -39,9 +39,12 @@
             {{ __('Id') }}
         </a></th>
 
-        <th style="width:80%"><a href="{{ link }}{% if request('order') == content.TitleColumnName() %}-{% endif %}{{ content.TitleColumnName() }}">
-            {{ __('Title') }} / {{ __('Excerpt') }}
-        </a></th>
+        <th style="width:80%">
+            <a href="{{ link }}{% if request('order') == content.TitleColumnName()|first %}-{% endif %}{{ content.TitleColumnName()|first }}">
+                {{ __('Title') }} / {{ __('Excerpt') }}
+            </a>
+        </th>
+
 
         <th>&nbsp;</th>
 
@@ -125,7 +128,7 @@
                     <i class="fa fa-edit"></i> {{ __('Edit') }}
                 </a>
                 {% endif %}
-                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
 
                     <i class="fa fa-info-sign"></i>
                     <span class="caret"></span>

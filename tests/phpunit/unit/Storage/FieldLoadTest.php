@@ -19,9 +19,9 @@ class FieldLoadTest extends BoltUnitTest
         $this->resetDb();
         $app = $this->getApp();
         $this->addNewUser($app, 'admin', 'Admin', 'admin');
-        $app['integritychecker']->repairTables();
+        $app['schema']->repairTables();
         $this->addSomeContent();
-        $em = new EntityManager($app['db'], $app['dispatcher'], $app['storage.metadata']);
+        $em = $app['storage'];
         $repo = $em->getRepository('showcases');
 
         $record = $repo->find(1);
@@ -35,8 +35,8 @@ class FieldLoadTest extends BoltUnitTest
     public function testTaxonomyLoad()
     {
         $app = $this->getApp();
-        $app['integritychecker']->repairTables();
-        $em = new EntityManager($app['db'], $app['dispatcher'], $app['storage.metadata']);
+        $app['schema']->repairTables();
+        $em = $app['storage'];
         $repo = $em->getRepository('showcases');
 
         $record = $repo->find(1);

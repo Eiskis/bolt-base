@@ -11,10 +11,10 @@
 #  no unused messages
 #  no untranslated messages
 #  no untranslated keyword based messages
-# 379 translations
+# 382 translations
 # 132 keyword based translations
 
-#--- 379 translations ---------------------------------------------------------
+#--- 382 translations ---------------------------------------------------------
 
 "%contenttypes% overview": "%contenttypes% overview"
 "%name% № %id%": "%name% № %id%"
@@ -225,8 +225,8 @@ contenttypes.general.choose-an-entry: "Choose an entry"
 "Permissions": "Permissions"
 "Place on stack": "Place on stack"
 "Please choose the record you want to link to:": "Please choose the record you want to link to:"
-"Please enter a new file name": "Please enter a new file name"
-"Please enter a new folder name": "Please enter a new folder name"
+"Please enter a new file name!": "Please enter a new file name!"
+"Please enter a new folder name!": "Please enter a new folder name!"
 "Please log on.": "Please log on."
 "Please provide a username": "Please provide a username"
 "Prefill database": "Pre-fill database"
@@ -244,7 +244,6 @@ contenttypes.general.choose-an-entry: "Choose an entry"
 "Read more": "Read more"
 "Recent %contenttypes%": "Recent %contenttypes%"
 "Related content": "Related content"
-"Related content:": "Related content:"
 "Relationships": "Relationships"
 "Rename %foldername%": "Rename %foldername%"
 "Roles": "Roles"
@@ -398,6 +397,9 @@ users.your-password: "Your password"
 "none": "none"
 "of": "of"
 "show all": "show all"
+"This template adds new fields. Save, then refresh to see these changes.": "This template adds new fields. Save, then refresh to see these changes."
+"You may lose some of your template fields with this change. Go to the template section and note down the values before doing this.": "You may lose some of your template fields with this change. Go to the template section and note down the values before doing this."
+"Warning": "Warning"
 
 #--- 132 keyword based translations -------------------------------------------
 

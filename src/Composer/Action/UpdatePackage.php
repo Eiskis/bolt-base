@@ -5,7 +5,6 @@ namespace Bolt\Composer\Action;
 use Bolt\Exception\PackageManagerException;
 use Bolt\Helpers\Arr;
 use Composer\Installer;
-use Silex\Application;
 
 /**
  * Composer update package class.
@@ -32,7 +31,7 @@ final class UpdatePackage extends BaseAction
         $packageManagerOptions = $this->app['extend.action.options'];
 
         // Handle passed in options
-        if (!$options) {
+        if (!empty($options)) {
             $options = Arr::mergeRecursiveDistinct($packageManagerOptions, $options);
         } else {
             $options = $packageManagerOptions;

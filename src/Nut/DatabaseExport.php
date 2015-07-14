@@ -2,7 +2,7 @@
 
 namespace Bolt\Nut;
 
-use Bolt\Database\Migration\Export;
+use Bolt\Storage\Migration\Export;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,9 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DatabaseExport extends BaseCommand
 {
-    /** @var array Contenttypes in use */
-    private $contenttypes = [];
-
     protected function configure()
     {
         $this

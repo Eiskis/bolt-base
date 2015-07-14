@@ -1,5 +1,4 @@
 <?php
-
 namespace Bolt;
 
 use Bolt\Controller\Zone;
@@ -43,7 +42,7 @@ class Config
      * Use {@see Config::getFields} instead.
      * Will be made protected in Bolt 3.0.
      *
-     * @var Field\Manager
+     * @var Storage\Field\Manager
      */
     public $fields;
 
@@ -59,7 +58,7 @@ class Config
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->fields = new Field\Manager();
+        $this->fields = new Storage\Field\Manager();
         $this->defaultConfig = $this->getDefaults();
 
         $this->initialize();
@@ -72,7 +71,7 @@ class Config
             $this->saveCache();
 
             // if we have to reload the config, we will also want to make sure the DB integrity is checked.
-            $this->app['integritychecker']->invalidate();
+            $this->app['schema']->invalidate();
         } else {
 
             // In this case the cache is loaded, but because the path of the theme
@@ -160,8 +159,8 @@ class Config
      * For example:
      * $var = $config->get('general/wysiwyg/ck/contentsCss');
      *
-     * @param string $path
-     * @param string $default
+     * @param string       $path
+     * @param string|array $default
      *
      * @return mixed
      */
@@ -452,8 +451,8 @@ class Config
         $contentType['groups'] = $groups;
 
         // Make sure taxonomy is an array.
-        if (isset($contentType['taxonomy']) && !is_array($contentType['taxonomy'])) {
-            $contentType['taxonomy'] = [$contentType['taxonomy']];
+        if (isset($contentType['taxonomy'])) {
+            $contentType['taxonomy'] = (array) $contentType['taxonomy'];
         }
 
         // when adding relations, make sure they're added by their slug. Not their 'name' or 'singular name'.
@@ -495,9 +494,7 @@ class Config
                     $field['extensions'] = $acceptableFileTypes;
                 }
 
-                if (!is_array($field['extensions'])) {
-                    $field['extensions'] = [$field['extensions']];
-                }
+                $field['extensions'] = (array) $field['extensions'];
             }
 
             // If field is an "image" type, make sure the 'extensions' are set, and it's an array.
@@ -509,19 +506,12 @@ class Config
                     );
                 }
 
-                if (!is_array($field['extensions'])) {
-                    $field['extensions'] = [$field['extensions']];
-                }
+                $field['extensions'] = (array) $field['extensions'];
             }
 
-            // If field is a "Select" type, make sure the array is a "hash" (as opposed to a "map")
-            // For example: [ 'yes', 'no' ] => { 'yes': 'yes', 'no': 'no' }
-            // The reason that we do this, is because if you set values to ['blue', 'green'], that is
-            // what you'd expect to see in the database. Not '0' and '1', which is what would happen,
-            // if we didn't "correct" it here.
-            // @see used hack: http://stackoverflow.com/questions/173400/how-to-check-if-php-array-is-associative-or-sequential
-            if ($field['type'] == 'select' && isset($field['values']) && is_array($field['values']) &&
-                array_values($field['values']) === $field['values']) {
+            // Make indexed arrays into associative for select fields
+            // e.g.: [ 'yes', 'no' ] => { 'yes': 'yes', 'no': 'no' }
+            if ($field['type'] === 'select' && isset($field['values']) && is_array($field['values']) && Arr::isIndexedArray($field['values'])) {
                 $field['values'] = array_combine($field['values'], $field['values']);
             }
 
@@ -529,14 +519,14 @@ class Config
                 $hasGroups = true;
             }
 
-            // Make sure we have these keys and every field has a group set
+            // Make sure we have these keys and every field has a group set.
             $field = array_replace(
                 [
+                    'class'   => '',
+                    'default' => '',
+                    'group'   => $currentGroup,
                     'label'   => '',
                     'variant' => '',
-                    'default' => '',
-                    'pattern' => '',
-                    'group'   => $currentGroup,
                 ],
                 $field
             );
@@ -546,17 +536,12 @@ class Config
             $currentGroup = $field['group'];
             $groups[$currentGroup] = 1;
 
-            // Prefix class with "form-control"
-            $field['class'] = 'form-control' . (isset($field['class']) ? ' ' . $field['class'] : '');
-
             $fields[$key] = $field;
         }
 
         // Make sure the 'uses' of the slug is an array.
-        if (isset($fields['slug']) && isset($fields['slug']['uses']) &&
-            !is_array($fields['slug']['uses'])
-        ) {
-            $fields['slug']['uses'] = [$fields['slug']['uses']];
+        if (isset($fields['slug']) && isset($fields['slug']['uses'])) {
+            $fields['slug']['uses'] = (array) $fields['slug']['uses'];
         }
 
         return [$fields, $hasGroups ? array_keys($groups) : false];
@@ -796,8 +781,8 @@ class Config
         }
 
         // Check DB-tables integrity
-        if (!$wrongctype && $this->app['integritychecker']->needsCheck() &&
-           ($this->app['integritychecker']->needsUpdate()) &&
+        if (!$wrongctype && $this->app['schema']->needsCheck() &&
+           ($this->app['schema']->needsUpdate()) &&
             $this->app['users']->getCurrentUsername()) {
             $msg = Trans::__(
                 "The database needs to be updated/repaired. Go to 'Configuration' > '<a href=\"%link%\">Check Database</a>' to do this now.",
@@ -841,7 +826,7 @@ class Config
     /**
      * A getter to access the fields manager.
      *
-     * @return Field\Manager
+     * @return Storage\Field\Manager
      **/
     public function getFields()
     {
@@ -865,7 +850,6 @@ class Config
             ],
             'sitename'                    => 'Default Bolt site',
             'homepage'                    => 'page/*',
-            'homepage_template'           => 'index.twig',
             'locale'                      => \Bolt\Application::DEFAULT_LOCALE,
             'recordsperpage'              => 10,
             'recordsperdashboardwidget'   => 5,

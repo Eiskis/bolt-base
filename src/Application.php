@@ -67,7 +67,7 @@ class Application extends Silex\Application
 
     protected function initConfig()
     {
-        $this->register(new Provider\IntegrityCheckerProvider())
+        $this->register(new Provider\DatabaseSchemaProvider())
             ->register(new Provider\ConfigServiceProvider());
     }
 
@@ -136,18 +136,6 @@ class Application extends Silex\Application
     public function initLogger()
     {
         $this->register(new LoggerServiceProvider(), []);
-
-        // Debug log
-        if ($this['config']->get('general/debuglog/enabled')) {
-            $this->register(
-                new Silex\Provider\MonologServiceProvider(),
-                [
-                    'monolog.name'    => 'bolt',
-                    'monolog.level'   => constant('Monolog\Logger::' . strtoupper($this['config']->get('general/debuglog/level'))),
-                    'monolog.logfile' => $this['resources']->getPath('cache') . '/' . $this['config']->get('general/debuglog/filename')
-                ]
-            );
-        }
     }
 
     /**
@@ -161,7 +149,7 @@ class Application extends Silex\Application
                 'db.options' => $this['config']->get('general/database')
             ]
         );
-        $this->register(new Database\InitListener());
+        $this->register(new Storage\Database\InitListener());
 
         $this->checkDatabaseConnection();
 
@@ -268,10 +256,7 @@ class Application extends Silex\Application
 
     public function initLocale()
     {
-        $configLocale = $this['config']->get('general/locale', Application::DEFAULT_LOCALE);
-        if (!is_array($configLocale)) {
-            $configLocale = [$configLocale];
-        }
+        $configLocale = (array) $this['config']->get('general/locale', Application::DEFAULT_LOCALE);
 
         // $app['locale'] should only be a single value.
         $this['locale'] = reset($configLocale);
@@ -300,7 +285,10 @@ class Application extends Silex\Application
 
         $this->register(
             new Silex\Provider\TranslationServiceProvider(),
-            ['locale_fallbacks' => [Application::DEFAULT_LOCALE]]
+            [
+                'translator.cache_dir' => $this['resources']->getPath('cache/trans'),
+                'locale_fallbacks'     => [Application::DEFAULT_LOCALE]
+            ]
         );
 
         $this->register(new Provider\TranslationServiceProvider());
@@ -342,7 +330,6 @@ class Application extends Silex\Application
             ->register(new Silex\Provider\ServiceControllerServiceProvider()) // must be after Routing
             ->register(new Provider\PermissionsServiceProvider())
             ->register(new Provider\StorageServiceProvider())
-            ->register(new Provider\RecordModifierServiceProvider()) // Temporary
             ->register(new Provider\AuthenticationServiceProvider())
             ->register(new Provider\UsersServiceProvider())
             ->register(new Provider\CacheServiceProvider())
@@ -363,6 +350,7 @@ class Application extends Silex\Application
             ->register(new Provider\MarkdownServiceProvider())
             ->register(new Provider\ControllerServiceProvider())
             ->register(new Provider\EventListenerServiceProvider())
+            ->register(new Provider\AssetServiceProvider())
         ;
 
         $this['paths'] = $this['resources']->getPaths();
@@ -394,7 +382,7 @@ class Application extends Silex\Application
             $this['swiftmailer.use_spool'] = $this['config']->get('general/mailoptions/spool');
         }
 
-        if ($this['config']->get('general/mailoptions/transport') == 'mail') {
+        if ($this['config']->get('general/mailoptions/transport') === 'mail') {
             // Use the 'mail' transport. Discouraged, but some people want it. ¯\_(ツ)_/¯
             $this['swiftmailer.transport'] = \Swift_MailTransport::newInstance();
         }

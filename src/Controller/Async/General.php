@@ -1,7 +1,7 @@
 <?php
 namespace Bolt\Controller\Async;
 
-use Bolt\Response\BoltResponse;
+use Bolt\Pager;
 use GuzzleHttp\Exception\RequestException;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,7 +85,7 @@ class General extends AsyncBase
 
         $context = [
             'contenttype' => $contenttype,
-            'entries'     => $this->app['logger.manager.change']->getChangelogByContentType($contenttype, $options)
+            'entries'     => $this->storage()->getRepository('Bolt\Storage\Entity\LogChange')->getChangeLogByContentType($contenttype, $options)
         ];
 
         return $this->render('components/panel-change-record.twig', ['context' => $context]);
@@ -140,12 +140,18 @@ class General extends AsyncBase
     /**
      * Get the 'latest activity' for the dashboard.
      *
+     * @param Request $request
+     *
      * @return \Bolt\Response\BoltResponse
      */
-    public function latestActivity()
+    public function latestActivity(Request $request)
     {
-        $change = $this->app['logger.manager']->getActivity('change', 8);
-        $system = $this->app['logger.manager']->getActivity('system', 8, null, 'authentication');
+        // Test/get page number
+        $param = Pager::makeParameterId('activity');
+        $page = ($request->query) ? $request->query->get($param, $request->query->get('page', 1)) : 1;
+
+        $change = $this->app['logger.manager']->getActivity('change', $page, 8);
+        $system = $this->app['logger.manager']->getActivity('system', $page, 8, ['context' => ['authentication', 'security']]);
 
         $response = $this->render('components/panel-activity.twig', ['context' => [
             'change' => $change,
@@ -323,15 +329,19 @@ class General extends AsyncBase
 
             return $news;
         } else {
-            $source = 'http://news.bolt.cm/';
+            $source = $this->getOption('general/branding/news_source', 'http://news.bolt.cm/');
             $curl = $this->getDashboardCurlOptions($hostname, $source);
 
             $this->app['logger.system']->info('Fetching from remote server: ' . $source, ['event' => 'news']);
 
             try {
                 $fetchedNewsData = $this->app['guzzle.client']->get($curl['url'], [], $curl['options'])->getBody(true);
-                $fetchedNewsItems = json_decode($fetchedNewsData);
-
+                if ($this->getOption('general/branding/news_variable')) {
+                    $newsVariable = $this->getOption('general/branding/news_variable');
+                    $fetchedNewsItems = json_decode($fetchedNewsData)->$newsVariable;
+                } else {
+                    $fetchedNewsItems = json_decode($fetchedNewsData);
+                }
                 if ($fetchedNewsItems) {
                     $news = [];
 
@@ -400,7 +410,7 @@ class General extends AsyncBase
 
         return [
             'url'     => $url,
-            'options' => $proxies ? array_merge($options, $proxies) : $options
+            'options' => !empty($proxies) ? array_merge($options, $proxies) : $options
         ];
     }
 
@@ -427,7 +437,7 @@ class General extends AsyncBase
             $options['contentid'] = intval($contentid);
         }
 
-        $changelog = $this->app['logger.manager.change']->getChangelogByContentType($contenttype['slug'], $options);
+        $changelog = $this->storage()->getRepository('Bolt\Storage\Entity\LogChange')->getChangeLogByContentType($contenttype['slug'], $options);
 
         $context = [
             'changelog'   => $changelog,
