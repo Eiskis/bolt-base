@@ -14,7 +14,6 @@
     "lodash": "~3.9.3",
     "fastclick": "~1.0.6",
     "natural-scroll": "~0.2.1",
-    "scroll-scope": "~0.1.0",
-    "filament-sticky": "~0.1.6"
+    "scroll-scope": "~0.1.0"
   }
 }
