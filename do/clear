@@ -10,3 +10,8 @@ php app/nut cache:clear
 # Check and update database
 php app/nut database:check
 php app/nut database:update
+
+# Clear extra packages from theme
+cd theme/base/
+npm prune
+./node_modules/.bin/bower prune

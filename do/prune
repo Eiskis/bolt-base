@@ -4,41 +4,52 @@
 cd "$(dirname "$0")"
 cd ..
 
-#
-# Prune project
-#
-# - Clean up the project from unnecessary files
-# - Mainly for running in production server
-# - This removes plenty of stuff that is kept in Git, including .git itself
-# - Project cannot be built after this (so run prune only after building)
+# Exit with info message by default
+if [ "$1" == "really" ]; then
+	echo "Pruning..."
 
-# Git: remove all traces of Git files
-find . | grep .git | xargs rm -rf
+	#
+	# Prune project
+	#
+	# - Clean up the project from unnecessary files
+	# - Mainly for running in production server
+	# - This removes plenty of stuff that is kept in Git, including .git itself
+	# - Project cannot be built after this (so run prune only after building)
 
-# Rocketeer confs
-rm -rf .rocketeer/
+	# Git: remove all traces of Git files
+	find . | grep .git | xargs rm -rf
 
-# Docs
-rm changelog.md
-rm contributing.md
-rm README.md
-rm app/LICENSE.txt
-rm app/src/README.md
+	# Rocketeer confs
+	rm -rf .rocketeer/
 
-# Theme
-rm -rf theme/base/bower_components/
-rm -rf theme/base/node_modules/
-rm -rf theme/base/recipes/
-rm -rf theme/base/source/
-rm theme/base/bower.json
-rm theme/base/gulpfile.js
-rm theme/base/package.json
-rm theme/base/README.md
+	# Docs
+	rm changelog.md
+	rm contributing.md
+	rm README.md
+	rm app/LICENSE.txt
+	rm app/src/README.md
 
-# CI & tests
-rm -rf tests/
-rm .scrutinizer.yml
-rm .travis.yml
-rm .travis.nginx.yml
-rm codeception.yml
-rm phpunit.xml.dist
+	# Theme
+	rm -rf theme/base/bower_components/
+	rm -rf theme/base/node_modules/
+	rm -rf theme/base/recipes/
+	rm -rf theme/base/source/
+	rm theme/base/bower.json
+	rm theme/base/gulpfile.js
+	rm theme/base/package.json
+	rm theme/base/README.md
+
+	# CI & tests
+	rm -rf tests/
+	rm .scrutinizer.yml
+	rm .travis.yml
+	rm .travis.nginx.yml
+	rm codeception.yml
+	rm phpunit.xml.dist
+
+	echo "Pruned."
+
+else
+	echo "Run with \"really\" to prune the project of VC and other unnecessary files."
+
+fi
