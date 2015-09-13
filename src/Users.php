@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Users
 {
+    /** @internal Visibility will be changed to 'private' for these two in Bolt 3.0 */
     public $users = [];
     public $currentuser;
 
@@ -65,7 +66,7 @@ class Users
     {
         $request = Request::createFromGlobals();
 
-        return $this->app['authentication']->isValidSession($request->cookies->get($this->app['token.authentication.name']));
+        return $this->app['access_control']->isValidSession($request->cookies->get($this->app['token.authentication.name']));
     }
 
     /**
@@ -75,7 +76,7 @@ class Users
     {
         $request = Request::createFromGlobals();
 
-        return $this->app['authentication']->isValidSession($request->cookies->get($this->app['token.authentication.name']));
+        return $this->app['access_control']->isValidSession($request->cookies->get($this->app['token.authentication.name']));
     }
 
     /**
@@ -129,7 +130,7 @@ class Users
      */
     public function getActiveSessions()
     {
-        return $this->app['authentication']->getActiveSessions();
+        return $this->app['access_control']->getActiveSessions();
     }
 
     /**
@@ -165,7 +166,7 @@ class Users
     {
         $request = Request::createFromGlobals();
 
-        return $this->app['authentication.login']->login($request, $user, $password);
+        return $this->app['access_control.login']->login($request, $user, $password);
     }
 
     /**
@@ -173,7 +174,7 @@ class Users
      */
     protected function loginEmail($email, $password)
     {
-        return $this->app['authentication.login']->login($email, $password);
+        return $this->app['access_control.login']->login($email, $password);
     }
 
     /**
@@ -181,7 +182,7 @@ class Users
      */
     public function loginUsername($username, $password)
     {
-        return $this->app['authentication.login']->login($username, $password);
+        return $this->app['access_control.login']->login($username, $password);
     }
 
     /**
@@ -191,7 +192,7 @@ class Users
     {
         $request = Request::createFromGlobals();
 
-        return $this->app['authentication.login']->login($request, null, null);
+        return $this->app['access_control.login']->login($request, null, null);
     }
 
     /**
@@ -199,7 +200,7 @@ class Users
      */
     public function resetPasswordRequest($username)
     {
-        return $this->app['authentication.password']->resetPasswordRequest($username);
+        return $this->app['access_control.password']->resetPasswordRequest($username);
     }
 
     /**
@@ -207,7 +208,7 @@ class Users
      */
     public function resetPasswordConfirm($token)
     {
-        return $this->app['authentication.password']->resetPasswordConfirm($token);
+        return $this->app['access_control.password']->resetPasswordConfirm($token);
     }
 
     /**
@@ -215,7 +216,7 @@ class Users
      */
     public function logout()
     {
-        return $this->app['authentication']->revokeSession();
+        return $this->app['access_control']->revokeSession();
     }
 
     /**
@@ -244,9 +245,9 @@ class Users
 
             /** @var \Bolt\Storage\Entity\Users $userEntity */
             foreach ($tempusers as $userEntity) {
-                $key = $userEntity->getUsername();
+                $id = $userEntity->getId();
                 $userEntity->setPassword('**dontchange**');
-                $this->users[$key] = $userEntity->toArray();
+                $this->users[$id] = $userEntity->toArray();
             }
         }
 
@@ -262,7 +263,7 @@ class Users
     {
         $rows = $this->repository->hasUsers();
 
-        return $rows ? $rows['count'] : 0;
+        return $rows ? (integer) $rows['count'] : 0;
     }
 
     /**
@@ -274,6 +275,15 @@ class Users
      */
     public function getUser($userId)
     {
+        // Make sure users have been 'got' already.
+        $this->getUsers();
+
+        // In most cases by far, we'll request an ID, and we can return it here.
+        if (array_key_exists($userId, $this->users)) {
+            return $this->users[$userId];
+        }
+
+        // Fallback: See if we can get it by username or email address.
         if ($userEntity = $this->repository->getUser($userId)) {
             $userEntity->setPassword('**dontchange**');
 
@@ -343,18 +353,18 @@ class Users
     /**
      * Enable or disable a user, specified by id.
      *
-     * @param integer|string $id
-     * @param boolean        $enabled
+     * @param integer|string  $id
+     * @param boolean|integer $enabled
      *
      * @return integer
      */
-    public function setEnabled($id, $enabled = 1)
+    public function setEnabled($id, $enabled = true)
     {
         if (!$user = $this->getUser($id)) {
             return false;
         }
 
-        $user['enabled'] = $enabled;
+        $user['enabled'] = (integer) $enabled;
 
         return $this->saveUser($user);
     }
@@ -600,6 +610,6 @@ class Users
      */
     public function updateUserLogin($user)
     {
-        return $this->app['authentication']->updateUserLogin($user);
+        return $this->app['access_control']->updateUserLogin($user);
     }
 }

@@ -89,8 +89,10 @@ class Export extends AbstractMigration
         // last record so we can close off if need be
         if ($last) {
             $last = false;
-            $end  = array_keys($records);
-            $end  = end($end);
+            $keys = array_keys($records);
+            $end  = end($keys);
+        } else {
+            $end = null;
         }
 
         foreach ($records as $key => $record) {
@@ -137,10 +139,10 @@ class Export extends AbstractMigration
         if (empty($contenttype)) {
             $this->setError(true)->setErrorMessage("The requested Contenttype '$contenttypeslugs' doesn't exist!");
         } elseif (!isset($this->contenttypes[$contenttypeslugs])) {
-            $this->contenttypes[$contenttypeslugs] = $contenttype;
+            $this->contenttypes[] = $contenttypeslugs;
         }
 
-        return this;
+        return $this;
     }
 
     /**

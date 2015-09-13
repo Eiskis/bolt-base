@@ -36,7 +36,7 @@ class Login extends AccessChecker
             $app['logger.system'],
             $app['permissions'],
             $app['randomgenerator'],
-            $app['authentication.cookie.options']
+            $app['access_control.cookie.options']
         );
 
         $this->app = $app;
@@ -85,7 +85,7 @@ class Login extends AccessChecker
             return false;
         }
 
-        $hasher = new PasswordHash($this->app['authentication.hash.strength'], true);
+        $hasher = new PasswordHash($this->app['access_control.hash.strength'], true);
         if (!$hasher->CheckPassword($password, $userEntity->getPassword())) {
             $this->loginFailed($userEntity);
 
@@ -137,13 +137,13 @@ class Login extends AccessChecker
         if (!$userEntity = $this->repositoryUsers->getUser($userName)) {
             $this->flashLogger->error(Trans::__('Your account is disabled. Sorry about that.'));
 
-            return;
+            return null;
         }
 
         if (!$userEntity->getEnabled()) {
             $this->flashLogger->error(Trans::__('Your account is disabled. Sorry about that.'));
 
-            return;
+            return null;
         }
 
         return $userEntity;
@@ -185,6 +185,7 @@ class Login extends AccessChecker
         // Update the failed login attempts, and perhaps throttle the logins.
         $userEntity->setFailedlogins($userEntity->getFailedlogins() + 1);
         $userEntity->setThrottleduntil($this->throttleUntil($userEntity->getFailedlogins() + 1));
+        unset($userEntity->password);
         $this->repositoryUsers->save($userEntity);
     }
 
@@ -237,7 +238,7 @@ class Login extends AccessChecker
      *
      * @param Entity\Users $userEntity
      *
-     * @return Entity\Token
+     * @return Entity\Authtoken
      */
     protected function updateAuthToken($userEntity)
     {

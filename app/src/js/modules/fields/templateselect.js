@@ -8,6 +8,7 @@
  * @param {Object} $ - jQuery.
  */
 (function (bolt, $) {
+    'use strict';
 
     /**
      * Bolt.fields.templateselect mixin container.
@@ -31,6 +32,16 @@
         var select = $(fieldset).find('select'),
             warning = $(fieldset).find('p'),
             container = warning.parent();
+
+        select.select2({
+            width: '100%',
+            allowClear: true,
+            placeholder: {
+                id: '',
+                text: bolt.data('field.templateselect.text.default')
+            },
+            minimumResultsForSearch: Infinity
+        });
 
         // Warn the user of potential template field changes if they change a templateselect field.
         select.change(function() {

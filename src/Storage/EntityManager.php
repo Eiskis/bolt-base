@@ -5,6 +5,7 @@ use Bolt\Storage;
 use Bolt\Storage\Mapping\MetadataDriver;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata as ClassMetadataInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -55,6 +56,14 @@ class EntityManager
     public function createQueryBuilder()
     {
         return new QueryBuilder($this->conn);
+    }
+
+    /**
+     * @return ExpressionBuilder
+     */
+    public function createExpressionBuilder()
+    {
+        return new ExpressionBuilder($this->conn);
     }
 
     /**
@@ -290,7 +299,7 @@ class EntityManager
      * @param array  $pager
      * @param array  $whereparameters
      *
-     * @return \Bolt\Content|\Bolt\Content[]
+     * @return \Bolt\Legacy\Content|\Bolt\Legacy\Content[]
      */
     public function getContent($textquery, $parameters = [], &$pager = [], $whereparameters = [])
     {

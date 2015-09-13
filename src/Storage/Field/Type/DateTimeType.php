@@ -7,7 +7,7 @@ namespace Bolt\Storage\Field\Type;
  *
  * @author Ross Riley <riley.ross@gmail.com>
  */
-class DateTimeType extends FieldTypeBase
+class DateTimeType extends DateType
 {
     /**
      * @inheritdoc

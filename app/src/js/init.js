@@ -9,7 +9,7 @@ var init = {
         var noticeID = 'dateDepublishNotice',
             msg = $('#datedepublish').data('notice');
 
-        $('#datedepublish, #statusselect').on('change', function(event){
+        $('#datedepublish, #statusselect').on('change', function (){
 
             var status = $('#statusselect').val(),
                 depublish = $('#datedepublish').val();
@@ -43,16 +43,15 @@ var init = {
      * @returns {undefined}
      */
     bindEditFile: function (data) {
-        $('#saveeditfile').bind('click', function (e) {
+        $('#saveeditfile').bind('click', function () {
 
             // If not on mobile (i.e. Codemirror is present), copy back to the textarea.
-            if (typeof(CodeMirror) !== 'undefined') {
+            if (typeof CodeMirror !== 'undefined') {
                 $('#form_contents').val(editor.getValue());
             }
 
             // Ping @rarila: How the heck would I get bolt.data('editcontent.msg.saving') here?
             var saving = "Saving …",
-                savedon = $('p.lastsaved').html(),
                 msgNotSaved = "Not saved";
 
             // Disable the buttons, to indicate stuff is being done.
@@ -79,7 +78,7 @@ var init = {
                 });
         });
 
-        if (typeof(CodeMirror) !== 'undefined') {
+        if (typeof CodeMirror !== 'undefined') {
             var editor = CodeMirror.fromTextArea(document.getElementById('form_contents'), {
                 lineNumbers: true,
                 autofocus: true,
@@ -129,7 +128,7 @@ var init = {
             var reParam = new RegExp('(?:[\?&]|&)' + paramName + '=([^&]+)', 'i'),
                 match = window.location.search.match(reParam);
 
-            return (match && match.length > 1) ? match[1] : null;
+            return match && match.length > 1 ? match[1] : null;
         };
         var funcNum = getUrlParam('CKEditorFuncNum');
 
@@ -145,12 +144,12 @@ var init = {
         });
     },
 
-    bindCkFileSelect: function (data) {
+    bindCkFileSelect: function () {
         var getUrlParam = function (paramName) {
             var reParam = new RegExp('(?:[\?&]|&)' + paramName + '=([^&]+)', 'i'),
                 match = window.location.search.match(reParam);
 
-            return (match && match.length > 1) ? match[1] : null;
+            return match && match.length > 1 ? match[1] : null;
         };
 
         var funcNum = getUrlParam('CKEditorFuncNum');
@@ -193,11 +192,25 @@ var init = {
      * @returns {undefined}
      */
     dashboardCheckboxes: function () {
-        // Check all checkboxes
-        $(".dashboardlisting tr th:first-child input:checkbox").click(function () {
+        var getSelectedItems = function () {
+            var aItems = [];
+
+            $('.dashboardlisting input:checked[name="checkRow"]').each(function () {
+                if ($(this).parents('tr').attr('id')) {
+                    aItems.push($(this).parents('tr').attr('id').substr(5));
+                }
+            });
+
+            return aItems;
+        };
+
+        // Check all checkboxes.
+        $('.dashboardlisting tr th:first-child input:checkbox[name="checkRow"]').click(function () {
             var checkedStatus = this.checked;
-            $(this).closest('tbody').find('td input:checkbox').each(function () {
+
+            $(this).closest('tbody').find('td input:checkbox[name="checkRow"]').each(function () {
                 this.checked = checkedStatus;
+
                 if (checkedStatus === this.checked) {
                     $(this).closest('table tbody tr').removeClass('row-checked');
                 }
@@ -206,9 +219,11 @@ var init = {
                 }
             });
         });
-        // Check if any records in the overview have been checked, and if so: show action buttons
-        $('.dashboardlisting input:checkbox').click(function () {
+
+        // Check if any records in the overview have been checked, and if so: show action buttons.
+        $('.dashboardlisting input:checkbox[name="checkRow"]').click(function () {
             var aItems = getSelectedItems();
+
             if (aItems.length >= 1) {
                 // if checked
                 $('a.checkchosen').removeClass('disabled');
@@ -219,26 +234,27 @@ var init = {
                 $('a.showifchosen').hide();
             }
         });
-        // Delete chosen Items
-        $("a.deletechosen").click(function (e) {
+
+        // Delete chosen Items.
+        $('a.deletechosen').click(function (e) {
             e.preventDefault();
             var aItems = getSelectedItems(),
-                notice,
-                rec;
+                notice;
 
             if (aItems.length > 0) {
-                notice = aItems.length === 1 ?
-                    Bolt.data('recordlisting.delete_one') : Bolt.data('recordlisting.delete_mult');
+                notice = aItems.length === 1 ? Bolt.data('recordlisting.delete_one')
+                                             : Bolt.data('recordlisting.delete_mult');
+
                 bootbox.confirm(notice, function (confirmed) {
                     $('.alert').alert();
                     if (confirmed === true) {
-                        // Delete request
+                        // Delete request.
                         $.ajax({
                             url: Bolt.conf('paths.bolt') + 'content/deletecontent/' +
                                 $('#item_' + aItems[0]).closest('table').data('contenttype') + '/' + aItems.join(',') +
                                 '?bolt_csrf_token=' + $('#item_' + aItems[0]).closest('table').data('bolt_csrf_token'),
                             type: 'get',
-                            success: function (feedback) {
+                            success: function () {
                                 var items = [];
                                 $.each(aItems, function (index, id) {
                                     items.push(document.getElementById('item_' + id));
@@ -296,7 +312,7 @@ var init = {
             } else {
                 mouseEvt = event;
             }
-            $(item).parent().on('show.bs.dropdown', function (e) {
+            $(item).parent().on('show.bs.dropdown', function () {
 
                 // Prevent breakage on old IE.
                 if (typeof mouseEvt !== "undefined" && mouseEvt !== null) {
@@ -308,7 +324,7 @@ var init = {
                     profilerHeight = 37; // The size of the Symfony Profiler Bar is 37px.
 
                     // The whole menu must fit when trying to 'dropup', but always prefer to 'dropdown' (= default).
-                    if ((mousey - menuHeight) > 20 && menuVisY < profilerHeight) {
+                    if (mousey - menuHeight > 20 && menuVisY < profilerHeight) {
                         menu.css({
                             top: 'auto',
                             bottom: '100%'
@@ -387,59 +403,6 @@ var init = {
      },
 
     /*
-     * Omnisearch
-     *
-     * @returns {undefined}
-     */
-    omnisearch: function () {
-        $('.omnisearch').select2({
-            placeholder: '',
-            minimumInputLength: 3,
-            multiple: true, // this is for better styling …
-            ajax: {
-                url: Bolt.conf('paths.async') + 'omnisearch',
-                dataType: 'json',
-                data: function (term, page) {
-                    return {
-                        q: term
-                    };
-                },
-                results: function (data, page) {
-                    var results = [];
-                    $.each(data, function (index, item) {
-                        results.push({
-                            id: item.path,
-                            path: item.path,
-                            label: item.label,
-                            priority: item.priority
-                        });
-                    });
-
-                    return {results: results};
-                }
-            },
-            formatResult: function (item) {
-                var markup = '<table class="omnisearch-result"><tr>' +
-                    '<td class="omnisearch-result-info">' +
-                    '<div class="omnisearch-result-label">' + item.label + '</div>' +
-                    '<div class="omnisearch-result-description">' + item.path + '</div>' +
-                    '</td></tr></table>';
-
-                return markup;
-            },
-            formatSelection: function (item) {
-                window.location.href = item.path;
-
-                return item.label;
-            },
-            dropdownCssClass: "bigdrop",
-            escapeMarkup: function (m) {
-                return m;
-            }
-        });
-    },
-
-    /*
      * Toggle options for showing / hiding the password input on the logon screen.
      *
      * @returns {undefined}
@@ -457,12 +420,12 @@ var init = {
             }
         });
 
-        $('.login-forgot').bind('click', function (e) {
+        $('.login-forgot').bind('click', function () {
             $('.login-group, .password-group').hide();
             $('.reset-group').show();
         });
 
-        $('.login-remembered').bind('click', function (e) {
+        $('.login-remembered').bind('click', function () {
             $('.login-group, .password-group').show();
             $('.reset-group').hide();
         });
@@ -482,7 +445,7 @@ var init = {
     },
 
     uploads: function () {
-        $('input[data-upload]').each(function (item) {
+        $('input[data-upload]').each(function () {
             var data = $(this).data('upload'),
                 accept = $(this).attr('accept').replace(/\./g, ''),
                 autocomplete_conf;
@@ -535,7 +498,7 @@ var init = {
             opacity: '0.5',
             axis: 'y',
             handle: '.sorthandle',
-            update: function (e, ui) {
+            update: function () {
                 var serial = $(this).sortable('serialize');
                 // Sorting request
                 $.ajax({
@@ -543,7 +506,7 @@ var init = {
                         $(this).parent('table').data('contenttype'),
                     type: 'POST',
                     data: serial,
-                    success: function (feedback) {
+                    success: function () {
                         // Do nothing
                     }
                 });

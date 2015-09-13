@@ -31,18 +31,21 @@ abstract class BoltUnitTest extends \PHPUnit_Framework_TestCase
     protected function resetDb()
     {
         // Make sure we wipe the db file to start with a clean one
-        if (is_readable(TEST_ROOT . '/bolt.db')) {
-            unlink(TEST_ROOT . '/bolt.db');
-            copy(PHPUNIT_ROOT . '/resources/db/bolt.db', TEST_ROOT . '/bolt.db');
+        if (is_readable(PHPUNIT_WEBROOT . '/app/database/bolt.db')) {
+            unlink(PHPUNIT_WEBROOT . '/app/database/bolt.db');
+            copy(PHPUNIT_ROOT . '/resources/db/bolt.db', PHPUNIT_WEBROOT . '/app/database/bolt.db');
         }
     }
 
-    protected function getApp()
+    protected function getApp($boot = true)
     {
         if (!$this->app) {
             $this->app = $this->makeApp();
             $this->app->initialize();
-            $this->app->boot();
+
+            if ($boot) {
+                $this->app->boot();
+            }
         }
         return $this->app;
     }
@@ -50,6 +53,7 @@ abstract class BoltUnitTest extends \PHPUnit_Framework_TestCase
     protected function makeApp()
     {
         $config = new Standard(TEST_ROOT);
+        $this->setAppPaths($config);
         $config->verify();
 
         $bolt = new Application(['resources' => $config]);
@@ -61,14 +65,27 @@ abstract class BoltUnitTest extends \PHPUnit_Framework_TestCase
                 'driver' => 'pdo_sqlite',
                 'prefix' => 'bolt_',
                 'user'   => 'test',
-                'path'   => TEST_ROOT . '/bolt.db'
+                'path'   => PHPUNIT_WEBROOT . '/app/database/bolt.db'
             ]
         );
+
         $bolt['config']->set('general/canonical', 'bolt.dev');
-        $bolt['resources']->setPath('files', PHPUNIT_ROOT . '/resources/files');
         $bolt['slugify'] = Slugify::create();
 
+        $this->setAppPaths($bolt['resources']);
+
         return $bolt;
+    }
+
+    protected function setAppPaths($config)
+    {
+        $config->setPath('config', PHPUNIT_WEBROOT . '/app/config');
+        $config->setPath('cache', PHPUNIT_WEBROOT . '/app/cache');
+        $config->setPath('web', PHPUNIT_WEBROOT . '/');
+        $config->setPath('files', PHPUNIT_WEBROOT . '/files');
+        $config->setPath('themebase', PHPUNIT_WEBROOT . '/theme/');
+        $config->setPath('extensionsconfig', PHPUNIT_WEBROOT . '/config/extensions');
+        $config->setPath('extensions', PHPUNIT_WEBROOT . '/extensions');
     }
 
     protected function rmdir($dir)
@@ -167,7 +184,7 @@ abstract class BoltUnitTest extends \PHPUnit_Framework_TestCase
             ->method('isValidSession')
             ->will($this->returnValue(true));
 
-        $app['authentication'] = $auth;
+        $app['access_control'] = $auth;
     }
 
     /**
@@ -187,7 +204,7 @@ abstract class BoltUnitTest extends \PHPUnit_Framework_TestCase
                 $app['logger.system'],
                 $app['permissions'],
                 $app['randomgenerator'],
-                $app['authentication.cookie.options']
+                $app['access_control.cookie.options']
             ]
         );
 

@@ -57,6 +57,8 @@ class TwigExtension extends \Twig_Extension
             new \Twig_SimpleFunction('first',              [$this, 'first']),
             new \Twig_SimpleFunction('getuser',            [$this, 'getUser']),
             new \Twig_SimpleFunction('getuserid',          [$this, 'getUserId']),
+            new \Twig_SimpleFunction('hattr',              [$this, 'hattr'],       $safe),
+            new \Twig_SimpleFunction('hclass',             [$this, 'hclass'],      $safe),
             new \Twig_SimpleFunction('htmllang',           [$this, 'htmlLang']),
             new \Twig_SimpleFunction('image',              [$this, 'image']),
             new \Twig_SimpleFunction('imageinfo',          [$this, 'imageInfo']),
@@ -136,19 +138,27 @@ class TwigExtension extends \Twig_Extension
     {
         /** @var \Bolt\Config $config */
         $config = $this->app['config'];
+        $configVal = $this->safe ? null : $config;
         /** @var \Bolt\Users $users */
         $users = $this->app['users'];
         /** @var \Bolt\Configuration\ResourceManager $resources */
         $resources = $this->app['resources'];
-
-        $configVal = $this->safe ? null : $config;
-        $usersVal = $this->safe ? null : $users->getUsers();
 
         $zone = null;
         /** @var RequestStack $requestStack */
         $requestStack = $this->app['request_stack'];
         if ($request = $requestStack->getCurrentRequest()) {
             $zone = Zone::get($request);
+        }
+
+        // User calls can cause exceptions that block the exception handler
+        try {
+            /** @deprecated Since 2.3 to be removed in 3.0 */
+            $usersVal = $this->safe ? null : $users->getUsers();
+            $usersCur = $users->getCurrentUser();
+        } catch (\Exception $e) {
+            $usersVal = null;
+            $usersCur = null;
         }
 
         // Structured to allow PHPStorm's SymfonyPlugin to provide code completion
@@ -160,7 +170,7 @@ class TwigExtension extends \Twig_Extension
             'async'        => $zone === Zone::ASYNC,
             'paths'        => $resources->getPaths(),
             'theme'        => $config->get('theme'),
-            'user'         => $users->getCurrentUser(),
+            'user'         => $usersCur,
             'users'        => $usersVal,
             'config'       => $configVal,
         ];
@@ -254,6 +264,22 @@ class TwigExtension extends \Twig_Extension
     public function getUserId($who)
     {
         return $this->handlers['user']->getUserId($who);
+    }
+
+    /**
+     * @see \Bolt\Twig\Handler\AdminHandler::hattr()
+     */
+    public function hattr($attributes)
+    {
+        return $this->handlers['admin']->hattr($attributes);
+    }
+
+    /**
+     * @see \Bolt\Twig\Handler\AdminHandler::hclass()
+     */
+    public function hclass($classes)
+    {
+        return $this->handlers['admin']->hclass($classes);
     }
 
     /**

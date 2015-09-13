@@ -10,6 +10,8 @@
  *
  */
 (function (bolt, $, moment) {
+    'use strict';
+
     /**
      * Collection of input elements.
      *
@@ -39,9 +41,6 @@
      * @memberof Bolt.datetime
      */
     datetime.init = function () {
-        // Set global datepicker locale
-        $.datepicker.setDefaults($.datepicker.regional[bolt.conf('locale.long')]);
-
         // Find out if locale uses 24h format
         is24h = moment.localeData()._longDateFormat.LT.replace(/\[.+?\]/gi, '').match(/A/) ? false : true;
 
@@ -81,7 +80,9 @@
      */
     datetime.update = function () {
         for (var i in fields) {
-            display(fields[i]);
+            if (fields.hasOwnProperty(i)) {
+                display(fields[i]);
+            }
         }
     };
 
@@ -180,7 +181,7 @@
         }
 
         // Set date field
-        setDate = (date === '' || date === '0000-00-00') ? '' : $.datepicker.parseDate('yy-mm-dd', date);
+        setDate = date === '' || date === '0000-00-00' ? '' : $.datepicker.parseDate('yy-mm-dd', date);
         field.date.datepicker('setDate', setDate);
 
         // Set time field, but only if the date isn't '0000-00-00'
@@ -196,7 +197,7 @@
                 time = field.data.val().slice(11, 16);
             } else {
                 hour = parseInt(time.slice(0, 2));
-                postfix = (hour < 12) ? ' AM' : ' PM';
+                postfix = hour < 12 ? ' AM' : ' PM';
                 time = (hour % 12 || 12) + time.slice(2, 5) + postfix;
             }
             field.time.val(time);
@@ -249,8 +250,8 @@
      * @returns {InputElements}
      */
     function elements(item) {
-        var field = {},
-            container = item.next();
+        var container = item.closest('.datetime-container'),
+            field = {};
 
         field.data = item;
         field.date = container.find('input.datepicker');

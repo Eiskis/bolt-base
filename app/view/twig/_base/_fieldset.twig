@@ -1,28 +1,26 @@
-{% from 'editcontent/_macros.twig' import infopop %}
+{% import '_macro/_buic.twig' as buic %}
 
 {#=== INIT ===========================================================================================================#}
 
 {% set attributes_fieldset = {
     class:            'form-group',
     data_bolt_field:  block('fieldset_type'),
-    data_bolt_fconf:  fieldset_conf|default() is iterable ? fieldset_conf : null
+    data_bolt_fconf:  fieldset_conf|default() is iterable ? fieldset_conf|json_encode : null
 } %}
 
 {% set attributes_label = {
-    class:  block('fieldset_label_class') ~ (block('fieldset_label_class') == 'col-xs-12' ? '' : ' control-label'),
+    class:  'main ' ~ block('fieldset_label_class') ~ (block('fieldset_label_class') == 'col-xs-12' ? '' : ' control-label'),
     for:    block('fieldset_label_for'),
 } %}
 
 {% if block('fieldset_label_info') %}
-    {% set field_label = infopop(block('fieldset_label_text'), block('fieldset_label_info')) %}
-{% else %}
-    {% set field_label = block('fieldset_label_text') %}
+    {% set field_info = buic.info(block('fieldset_label_text'), block('fieldset_label_info')) %}
 {% endif %}
 
 {#=== OUTPUT =========================================================================================================#}
 
 <fieldset{{ macro.attr(attributes_fieldset) }}>
     <legend class="sr-only">{% block fieldset_label_text %}{% endblock fieldset_label_text %}</legend>
-    <label{{ macro.attr(attributes_label) }}>{{ field_label }}</label>
+    <label{{ macro.attr(attributes_label) }}>{{ block('fieldset_label_text') }}{{ field_info|default('') }}</label>
     {% block fieldset_controls %}{% endblock fieldset_controls %}
 </fieldset>

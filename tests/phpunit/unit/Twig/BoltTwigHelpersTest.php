@@ -145,7 +145,7 @@ class BoltTwigHelpersTest extends BoltUnitTest
         $this->assertEquals('…', mb_substr($excerpt1, -1, 1, 'UTF-8'));
 
         // If passed an object excerpt will try to call an excerpt() method on it
-        $mock = $this->getMock('Bolt\Content', ['excerpt'], [$app]);
+        $mock = $this->getMock('Bolt\Legacy\Content', ['excerpt'], [$app]);
         $mock->expects($this->any())
             ->method('excerpt')
             ->will($this->returnValue('called'));
@@ -205,9 +205,10 @@ class BoltTwigHelpersTest extends BoltUnitTest
 
         // Test on normal mode
         $app = $this->getApp();
+        $app['resources']->setPath('files', PHPUNIT_ROOT . '/resources');
         $handlers = $this->getTwigHandlers($app);
         $twig = new TwigExtension($app, $handlers, false);
-        $img = '../generic-logo.png';
+        $img = 'generic-logo.png';
         $info = $twig->imageInfo($img);
         $this->assertEquals(12, count($info));
 

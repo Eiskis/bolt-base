@@ -52,7 +52,7 @@
     },
     "require-dev" : {
         "bolt/codingstyle" : "~1.0",
-        "codeception/codeception" : "2.0.12",
+        "codeception/codeception" : "*",
         "lstrojny/phpunit-function-mocker" : "dev-master@dev",
         "m6web/symfony2-coding-standard" : "dev-master@dev",
         "phpmd/phpmd" : "~2.2",
@@ -60,7 +60,7 @@
         "phpunit/php-code-coverage" : "~2.0",
         "phpunit/phpunit" : "~4.4",
         "sebastian/phpcpd" : "~2.0",
-        "squizlabs/php_codesniffer" : "~2.3"
+        "squizlabs/php_codesniffer" : "~2.0"
     },
     "minimum-stability" : "beta",
     "config" : {
@@ -70,7 +70,10 @@
     "autoload" : {
         "psr-4" : {
             "Bolt\\" : "src"
-        }
+        },
+        "files" : [
+            "app/deprecated.php"
+        ]
     },
     "autoload-dev" : {
         "psr-4" : {

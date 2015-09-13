@@ -151,6 +151,12 @@ class Records extends BackendBase
             'publish' => 'published',
             'draft'   => 'draft',
         ];
+        // Map actions to requred permission
+        $actionPermissions = [
+            'publish' => 'publish',
+            'held'    => 'depublish',
+            'draft'   => 'depublish',
+        ];
 
         if (!isset($actionStatuses[$action])) {
             $this->flashes()->error(Trans::__('No such action for content.'));
@@ -162,9 +168,9 @@ class Records extends BackendBase
         $content = $this->getContent("$contenttypeslug/$id");
         $title = $content->getTitle();
 
-        if (!$this->isAllowed("contenttype:$contenttypeslug:edit:$id") ||
+        if (!$this->isAllowed("contenttype:$contenttypeslug:{$actionPermissions[$action]}:$id") ||
         !$this->users()->isContentStatusTransitionAllowed($content['status'], $newStatus, $contenttypeslug, $id)) {
-            $this->flashes()->error(Trans::__('You do not have the right privileges to edit that record.'));
+            $this->flashes()->error(Trans::__('You do not have the right privileges to %ACTION% that record.', ['%ACTION%' => $actionPermissions[$action]]));
 
             return $this->redirectToRoute('overview', ['contenttypeslug' => $contenttypeslug]);
         }
@@ -196,19 +202,16 @@ class Records extends BackendBase
             return $this->redirectToRoute('dashboard');
         }
 
-        $contenttype = $this->getContentType($contenttypeslug);
-
-        $filter = [];
-
-        $contentparameters = ['paging' => true, 'hydrate' => true];
-
         // Order has to be set carefully. Either set it explicitly when the user
-        // sorts, or fall back to what's defined in the contenttype. The exception
-        // is a contenttype that has a "grouping taxonomy", because that should
-        // override it. The exception is handled in $app['storage']->getContent().
+        // sorts, or fall back to what's defined in the contenttype. Except for
+        // a ContentType that has a "grouping taxonomy", as that should override
+        // it. That exception state is handled by the query OrderHandler.
+        $contenttype = $this->getContentType($contenttypeslug);
+        $contentparameters = ['paging' => true, 'hydrate' => true];
         $contentparameters['order'] = $request->query->get('order', $contenttype['sort']);
         $contentparameters['page'] = $request->query->get('page');
 
+        $filter = [];
         if ($request->query->get('filter')) {
             $contentparameters['filter'] = $request->query->get('filter');
             $filter[] = $request->query->get('filter');
@@ -234,7 +237,8 @@ class Records extends BackendBase
         $context = [
             'contenttype'     => $contenttype,
             'multiplecontent' => $multiplecontent,
-            'filter'          => $filter
+            'filter'          => $filter,
+            'permissions'     => $this->getContentTypeUserPermissions($contenttypeslug, $this->users()->getCurrentUser())
         ];
 
         return $this->render('overview/overview.twig', $context);
@@ -298,6 +302,7 @@ class Records extends BackendBase
             'relations'        => $relations,
             'show_contenttype' => $showContenttype,
             'related_content'  => is_null($relations) ? null : $content->related($showContenttype['slug']),
+            'permissions'      => $this->getContentTypeUserPermissions($contenttypeslug, $this->users()->getCurrentUser())
         ];
 
         return $this->render('relatedto/relatedto.twig', $context);

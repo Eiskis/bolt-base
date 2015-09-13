@@ -54,7 +54,7 @@ class Users extends BackendBase
     {
         $currentuser = $this->getUser();
         $users = $this->users()->getUsers();
-        $sessions = $this->authentication()->getActiveSessions();
+        $sessions = $this->accessControl()->getActiveSessions();
 
         foreach ($users as $name => $user) {
             if (($key = array_search(Permissions::ROLE_EVERYONE, $user['roles'], true)) !== false) {
@@ -242,7 +242,7 @@ class Users extends BackendBase
                 break;
 
             case 'enable':
-                if ($this->users()->setEnabled($id, 1)) {
+                if ($this->users()->setEnabled($id, true)) {
                     $this->app['logger.system']->info("Enabled user '{$user->getDisplayname()}'.", ['event' => 'security']);
                     $this->flashes()->info(Trans::__("User '%s' is enabled.", ['%s' => $user->getDisplayname()]));
                 } else {
@@ -324,10 +324,10 @@ class Users extends BackendBase
     public function viewRoles()
     {
         $contenttypes = $this->getOption('contenttypes');
-        $permissions = ['view', 'edit', 'create', 'publish', 'depublish', 'change-ownership'];
+        $permissions = $this->app['permissions']->getContentTypePermissions();
         $effectivePermissions = [];
         foreach ($contenttypes as $contenttype) {
-            foreach ($permissions as $permission) {
+            foreach (array_keys($permissions) as $permission) {
                 $effectivePermissions[$contenttype['slug']][$permission] =
                 $this->app['permissions']->getRolesByContentTypePermission($permission, $contenttype['slug']);
             }
@@ -366,7 +366,8 @@ class Users extends BackendBase
         }
 
         $login = $this->login()->login($request, $userEntity->getUsername(), $form->get('password')->getData());
-        if ($login && $token = $this->session()->get('authentication')) {
+        $token = $this->session()->get('authentication');
+        if ($login && $token) {
             $this->flashes()->clear();
             $this->flashes()->info(Trans::__('Welcome to your new Bolt site, %USER%.', ['%USER%' => $userEntity->getDisplayname()]));
 
@@ -654,7 +655,7 @@ class Users extends BackendBase
 
         if ($this->getRepository()->save($userEntity)) {
             $this->flashes()->success(Trans::__('page.edit-users.message.user-saved', ['%user%' => $userEntity->getDisplayname()]));
-            $this->notifyUserSave($userEntity->getDisplayname(), $userEntity->getEmail(), $firstuser);
+            $this->notifyUserSave($request, $userEntity->getDisplayname(), $userEntity->getEmail(), $firstuser);
         } else {
             $this->flashes()->error(Trans::__('page.edit-users.message.saving-user', ['%user%' => $userEntity->getDisplayname()]));
         }
@@ -665,11 +666,12 @@ class Users extends BackendBase
     /**
      * Notify of save event.
      *
+     * @param Request $request
      * @param string  $displayName
      * @param string  $email
      * @param boolean $firstuser
      */
-    private function notifyUserSave($displayName, $email, $firstuser)
+    private function notifyUserSave(Request $request, $displayName, $email, $firstuser)
     {
         if (!$firstuser) {
             $this->app['logger.system']->info(Trans::__('page.edit-users.log.user-updated', ['%user%' => $displayName]),
@@ -677,17 +679,18 @@ class Users extends BackendBase
         } else {
             $this->app['logger.system']->info(Trans::__('page.edit-users.log.user-added', ['%user%' => $displayName]),
                 ['event' => 'security']);
-            $this->notifyUserSetupEmail($displayName, $email);
+            $this->notifyUserSetupEmail($request, $displayName, $email);
         }
     }
 
     /**
      * Send a welcome email to test mail settings.
      *
-     * @param string $displayName
-     * @param string $email
+     * @param Request $request
+     * @param string  $displayName
+     * @param string  $email
      */
-    private function notifyUserSetupEmail($displayName, $email)
+    private function notifyUserSetupEmail(Request $request, $displayName, $email)
     {
         // Create a welcome email
         $mailhtml = $this->render(
@@ -695,14 +698,17 @@ class Users extends BackendBase
             ['sitename' => $this->getOption('general/sitename')]
         )->getContent();
 
+
         try {
             // Send a welcome email
             $name = $this->getOption('general/mailoptions/senderName', $this->getOption('general/sitename'));
+            $from = ['bolt@' . $request->getHost() => $name];
             $email = $this->getOption('general/mailoptions/senderMail', $email);
             $message = $this->app['mailer']
                 ->createMessage('message')
                 ->setSubject(Trans::__('New Bolt site has been set up'))
-                ->setFrom([$email => $name])
+                ->setFrom($from)
+                ->setReplyTo($from)
                 ->setTo([$email   => $displayName])
                 ->setBody(strip_tags($mailhtml))
                 ->addPart($mailhtml, 'text/html')

@@ -3,6 +3,7 @@ namespace Bolt\Storage\Field\Type;
 
 use Bolt\Storage\EntityManager;
 use Bolt\Storage\Mapping\ClassMetadata;
+use Bolt\Storage\Query\QueryInterface;
 use Bolt\Storage\QuerySet;
 use Doctrine\DBAL\Query\QueryBuilder;
 
@@ -21,6 +22,14 @@ interface FieldTypeInterface
      * @param ClassMetadata $metadata
      */
     public function load(QueryBuilder $query, ClassMetadata $metadata);
+
+    /**
+     * Handle or ignore the query event.
+     *
+     * @param QueryInterface $query
+     * @param ClassMetadata  $metadata
+     */
+    public function query(QueryInterface $query, ClassMetadata $metadata);
 
     /**
      * Handle or ignore the persist event.

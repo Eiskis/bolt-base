@@ -34,9 +34,6 @@ class Manager
     public function __construct(Application $app)
     {
         $this->app = $app;
-
-        // Check the table integrity only once per hour, per session. (since it's pretty time-consuming.
-        $this->checktimer = 3600;
     }
 
     /**
@@ -106,9 +103,7 @@ class Manager
         $this->tables = [];
 
         foreach ($sm->listTables() as $table) {
-            if (strpos($table->getName(), $this->getTablenamePrefix()) === 0) {
-                $this->tables[$table->getName()] = $table;
-            }
+            $this->tables[$table->getName()] = $table;
         }
 
         return $this->tables;
@@ -310,7 +305,7 @@ class Manager
 
         // Some diff changes can be ignored… Because… DBAL.
         $alias = $this->getTableAlias($diff->fromTable->getName());
-        if ($ignored = $this->app['schema.tables'][$alias]->ignoredChanges()) {
+        if (isset($this->app['schema.tables'][$alias]) && $ignored = $this->app['schema.tables'][$alias]->ignoredChanges()) {
             $this->removeIgnoredChanges($this->app['schema.tables'][$alias], $diff, $ignored);
         }
 
@@ -336,9 +331,11 @@ class Manager
             return;
         }
 
-        if (isset($diff->changedColumns[$ignored['column']])
-            && $diff->changedColumns[$ignored['column']]->changedProperties === [$ignored['property']]) {
-            unset($diff->changedColumns[$ignored['column']]);
+        foreach ($ignored as $ignore) {
+            if (isset($diff->changedColumns[$ignore['column']])
+                && $diff->changedColumns[$ignore['column']]->changedProperties === [$ignore['property']]) {
+                unset($diff->changedColumns[$ignore['column']]);
+            }
         }
     }
 
@@ -351,11 +348,19 @@ class Manager
     {
         $schema = new Schema();
 
-        return array_merge(
-            $this->getBoltTablesSchema($schema),
-            $this->getContentTypeTablesSchema($schema),
-            $this->getExtensionTablesSchema($schema)
-        );
+        $tables = array_merge(
+             $this->getBoltTablesSchema($schema),
+             $this->getContentTypeTablesSchema($schema),
+             $this->getExtensionTablesSchema($schema)
+         );
+
+        foreach ($tables as $index => $table) {
+            if (strpos($table->getName(), $this->getTablenamePrefix()) === false) {
+                unset($tables[$index]);
+            }
+        }
+
+        return $tables;
     }
 
     /**
@@ -412,6 +417,8 @@ class Manager
     }
 
     /**
+     * Build the schema for base Bolt tables.
+     *
      * @param Schema $schema
      *
      * @return \Doctrine\DBAL\Schema\Table[]
@@ -419,14 +426,16 @@ class Manager
     protected function getBoltTablesSchema(Schema $schema)
     {
         $tables = [];
-        foreach ($this->app['schema.tables']->keys() as $name) {
-            $tables[] = $this->app['schema.tables'][$name]->buildTable($schema, $this->getTablename($name));
+        foreach ($this->app['schema.base_tables']->keys() as $name) {
+            $tables[] = $this->app['schema.base_tables'][$name]->buildTable($schema, $this->getTablename($name));
         }
 
         return $tables;
     }
 
     /**
+     * Build the schema for Bolt ContentType tables.
+     *
      * @param Schema $schema
      *
      * @return \Doctrine\DBAL\Schema\Table[]
@@ -437,11 +446,10 @@ class Manager
 
         // Now, iterate over the contenttypes, and create the tables if they don't exist.
         foreach ($this->app['config']->get('contenttypes') as $contenttype) {
-            $tablename = $this->getTablename($contenttype['tablename']);
-            $this->mapTableName($tablename, $contenttype['tablename']);
-
-            $tableObj = new ContentType($this->app['db']->getDatabasePlatform());
-            $myTable = $tableObj->buildTable($schema, $tablename);
+            $tableObj = $this->getContentTypeTableObject($contenttype['tablename']);
+            $tableName = $this->getTablename($contenttype['tablename']);
+            $this->mapTableName($tableName, $contenttype['tablename']);
+            $myTable = $tableObj->buildTable($schema, $tableName);
 
             if (isset($contenttype['fields']) && is_array($contenttype['fields'])) {
                 $this->addContentTypeTableColumns($tableObj, $myTable, $contenttype['fields']);
@@ -451,6 +459,25 @@ class Manager
         }
 
         return $tables;
+    }
+
+    /**
+     * Ensure any late added ContentTypes have a valid table object in the provider.
+     *
+     * @param string $contenttype
+     *
+     * @return \Bolt\Storage\Database\Schema\Table\ContentType
+     */
+    private function getContentTypeTableObject($contenttype)
+    {
+        if (!isset($this->app['schema.tables'][$contenttype])) {
+            $platform = $this->app['db']->getDatabasePlatform();
+            $this->app['schema.tables'][$contenttype] = $this->app->share(function () use ($platform) {
+                return new ContentType($platform);
+            });
+        }
+
+        return $this->app['schema.tables'][$contenttype];
     }
 
     /**

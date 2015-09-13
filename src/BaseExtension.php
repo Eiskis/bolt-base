@@ -387,8 +387,13 @@ abstract class BaseExtension implements ExtensionInterface
      */
     public function addTwigFunction($name, $callback, $options = [])
     {
+        // If we pass a callback as a simple string, we need to turn it into an array.
+        if (is_string($callback) && method_exists($this, $callback)) {
+            $callback = [$this, $callback];
+        }
+
         $this->initializeTwig();
-        $this->twigExtension->addTwigFunction(new \Twig_SimpleFunction($name, [$this, $callback], $options));
+        $this->twigExtension->addTwigFunction(new \Twig_SimpleFunction($name, $callback, $options));
     }
 
     /**
@@ -400,8 +405,13 @@ abstract class BaseExtension implements ExtensionInterface
      */
     public function addTwigFilter($name, $callback, $options = [])
     {
+        // If we pass a callback as a simple string, we need to turn it into an array.
+        if (is_string($callback) && method_exists($this, $callback)) {
+            $callback = [$this, $callback];
+        }
+
         $this->initializeTwig();
-        $this->twigExtension->addTwigFilter(new \Twig_SimpleFilter($name, [$this, $callback], $options));
+        $this->twigExtension->addTwigFilter(new \Twig_SimpleFilter($name, $callback, $options));
     }
 
     protected function initializeTwig()
@@ -440,16 +450,19 @@ abstract class BaseExtension implements ExtensionInterface
     /**
      * Insert a snippet into the generated HTML.
      *
-     * @param string $name
+     * @param string $location
      * @param string $callback
-     * @param string $var1
-     * @param string $var2
-     * @param string $var3
+     * @param array  $extraparameters
      */
     public function addSnippet($location, $callback, $extraparameters = [])
     {
         if ($callback instanceof BoltResponse) {
             $callback = (string) $callback;
+        }
+
+        // If we pass a callback as a simple string, we need to turn it into an array.
+        if (is_string($callback) && method_exists($this, $callback)) {
+            $callback = [$this, $callback];
         }
 
         $this->app['asset.queue.snippet']->add($location, $callback, $this->getName(), (array) $extraparameters);
@@ -480,6 +493,16 @@ abstract class BaseExtension implements ExtensionInterface
     public function getAssets()
     {
         return $this->app['extensions']->getAssets();
+    }
+
+    /**
+     * Clear all previously added assets.
+     *
+     * @deprecated since 2.3 and will be removed in Bolt 3
+     */
+    public function clearAssets()
+    {
+        return $this->app['asset.queue.file']->clear();
     }
 
     /**

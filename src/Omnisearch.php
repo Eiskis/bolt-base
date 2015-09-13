@@ -285,7 +285,7 @@ class Omnisearch
                 'label'       => sprintf('%s', Trans::__('Omnisearch')),
                 'description' => '',
                 'priority'    => self::OMNISEARCH_LANDINGPAGE,
-                'path'        => $this->app->generatePath('omnisearch', ['q' => $query]),
+                'path'        => $this->app->generatePath('omnisearch-results', ['q' => $query]),
             ];
         }
 
@@ -351,6 +351,7 @@ class Omnisearch
         if (!$this->showRecords) {
             return;
         }
+        $user = $this->app['users']->getCurrentUser();
 
         $searchresults = $this->app['storage']->searchContent($query);
         /** @var Content[] $searchresults */
@@ -374,6 +375,7 @@ class Omnisearch
 
             if ($withRecord) {
                 $item['record'] = $result;
+                $item['permissions'] = $this->app['permissions']->getContentTypeUserPermissions($result->contenttype['slug'], $user);
             }
 
             $this->register($item);

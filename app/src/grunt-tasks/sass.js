@@ -2,6 +2,8 @@
  * SASS-Task: Compile Sass to CSS.
  */
 module.exports = function (grunt) {
+    'use strict';
+
     var path = require('path'),
         sass = require('node-sass');
 
@@ -37,7 +39,8 @@ module.exports = function (grunt) {
                     grunt.log.error();
                     grunt.log.error(error.message);
                     if (error.file) {
-                        grunt.log.error(path.relative(process.cwd(), error.file) + '#L' + error.line + ':' + error.column);
+                        var msg = path.relative(process.cwd(), error.file) + '#L' + error.line + ':' + error.column;
+                        grunt.log.error(msg);
                     }
                     done(false);
                 } else {

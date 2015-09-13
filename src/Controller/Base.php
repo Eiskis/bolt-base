@@ -185,9 +185,9 @@ abstract class Base implements ControllerProviderInterface
      *
      * @return \Bolt\AccessControl\AccessChecker
      */
-    protected function authentication()
+    protected function accessControl()
     {
-        return $this->app['authentication'];
+        return $this->app['access_control'];
     }
 
     /**
@@ -285,7 +285,7 @@ abstract class Base implements ControllerProviderInterface
      * @param array  $pager
      * @param array  $whereparameters
      *
-     * @return \Bolt\Content|\Bolt\Content[]
+     * @return \Bolt\Legacy\Content|\Bolt\Legacy\Content[]
      */
     protected function getContent($textquery, $parameters = [], &$pager = [], $whereparameters = [])
     {
@@ -308,7 +308,7 @@ abstract class Base implements ControllerProviderInterface
      * Shortcut for {@see \Bolt\Config::get}.
      *
      * @param string $path
-     * @param string $default
+     * @param mixed  $default
      *
      * @return string|integer|array|null
      */

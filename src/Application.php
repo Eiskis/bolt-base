@@ -30,6 +30,9 @@ class Application extends Silex\Application
         $values['bolt_version'] = '2.3.0';
         $values['bolt_name'] = 'alpha 1';
         $values['bolt_released'] = false; // `true` for stable releases, `false` for alpha, beta and RC.
+        $values['bolt_long_version'] = function($app) {
+            return $app['bolt_version'] . ' ' . $app['bolt_name'];
+        };
 
         /** @internal Parameter to track a deprecated PHP version */
         $values['deprecated.php'] = version_compare(PHP_VERSION, '5.5.9', '<');
@@ -73,25 +76,30 @@ class Application extends Silex\Application
 
     protected function initSession()
     {
-        $this->register(new Provider\TokenServiceProvider())
-            ->register(new Silex\Provider\SessionServiceProvider(), [
-                'session.storage.options' => [
-                    'name'            => $this['token.session.name'],
-                    'cookie_path'     => $this['resources']->getUrl('root'),
-                    'cookie_domain'   => $this['config']->get('general/cookies_domain'),
-                    'cookie_secure'   => $this['config']->get('general/enforce_ssl'),
-                    'cookie_httponly' => true
-                ],
-                'session.test' => isset($this['session.test']) ? $this['session.test'] : false
-            ]
-        );
-
-        // Disable Silex's built-in native filebased session handler, and fall back to
-        // whatever's set in php.ini.
-        // @see: http://silex.sensiolabs.org/doc/providers/session.html#custom-session-configurations
-        if ($this['config']->get('general/session_use_storage_handler') === false) {
-            $this['session.storage.handler'] = null;
-        }
+        $this
+            ->register(new Provider\TokenServiceProvider())
+            ->register(new Provider\SessionServiceProvider(),
+                [
+                    'session.default_options' => [
+                        'cookie_lifetime' => $this['config']->get('general/cookies_lifetime'),
+                        'cookie_path'     => $this['resources']->getUrl('root'),
+                        'cookie_domain'   => $this['config']->get('general/cookies_domain'),
+                        'cookie_secure'   => $this['config']->get('general/enforce_ssl'),
+                        'cookie_httponly' => true,
+                    ],
+                    'sessions.options'        => [
+                        'main' => [
+                            'name' => $this['token.session.name'],
+                        ],
+                        'csrf' => [
+                            'name'                 => $this['token.session.name'] . '_csrf',
+                            'cookie_restrict_path' => true,
+                            'cookie_lifetime'      => 0,
+                        ],
+                    ],
+                ]
+            )
+        ;
     }
 
     public function initialize()
@@ -296,31 +304,9 @@ class Application extends Silex\Application
 
     public function initProviders()
     {
-        // Make sure we keep our current locale.
-        $currentlocale = $this['locale'];
-
-        // Setup Swiftmailer, with the selected Mail Transport options: smtp or `mail()`.
-        $this->register(new Silex\Provider\SwiftmailerServiceProvider());
-        $this->setSwiftmailerOptions();
-
         // Set up our secure random generator.
         $factory = new RandomLib\Factory();
         $this['randomgenerator'] = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
-
-        // Set up forms and use a secure CSRF secret
-        $this->register(new Silex\Provider\FormServiceProvider());
-        $this['form.secret'] = $this->share(function () {
-            if (!$this['session']->isStarted()) {
-                return;
-            } elseif ($secret = $this['session']->get('form.secret')) {
-                return $secret;
-            } else {
-                $secret = $this['randomgenerator']->generate(32);
-                $this['session']->set('form.secret', $secret);
-
-                return $secret;
-            }
-        });
 
         $this
             ->register(new Silex\Provider\HttpFragmentServiceProvider())
@@ -330,7 +316,8 @@ class Application extends Silex\Application
             ->register(new Silex\Provider\ServiceControllerServiceProvider()) // must be after Routing
             ->register(new Provider\PermissionsServiceProvider())
             ->register(new Provider\StorageServiceProvider())
-            ->register(new Provider\AuthenticationServiceProvider())
+            ->register(new Provider\QueryServiceProvider())
+            ->register(new Provider\AccessControlServiceProvider())
             ->register(new Provider\UsersServiceProvider())
             ->register(new Provider\CacheServiceProvider())
             ->register(new Provider\ExtensionServiceProvider())
@@ -351,13 +338,11 @@ class Application extends Silex\Application
             ->register(new Provider\ControllerServiceProvider())
             ->register(new Provider\EventListenerServiceProvider())
             ->register(new Provider\AssetServiceProvider())
+            ->register(new Provider\FormServiceProvider())
+            ->register(new Provider\MailerServiceProvider())
         ;
 
         $this['paths'] = $this['resources']->getPaths();
-
-        // For some obscure reason, and under suspicious circumstances $app['locale'] might become 'null'.
-        // Re-set it here, just to be sure. See https://github.com/bolt/bolt/issues/1405
-        $this['locale'] = $currentlocale;
 
         // Initialize stopwatch even if debug is not enabled.
         $this['stopwatch'] = $this->share(
@@ -365,27 +350,6 @@ class Application extends Silex\Application
                 return new Stopwatch\Stopwatch();
             }
         );
-    }
-
-    /**
-     * Set up the optional parameters for Swiftmailer
-     */
-    private function setSwiftmailerOptions()
-    {
-        if ($this['config']->get('general/mailoptions')) {
-            // Use the preferred options. Assume it's SMTP, unless set differently.
-            $this['swiftmailer.options'] = $this['config']->get('general/mailoptions');
-        }
-
-        if (is_bool($this['config']->get('general/mailoptions/spool'))) {
-            // enable or disable the mail spooler.
-            $this['swiftmailer.use_spool'] = $this['config']->get('general/mailoptions/spool');
-        }
-
-        if ($this['config']->get('general/mailoptions/transport') === 'mail') {
-            // Use the 'mail' transport. Discouraged, but some people want it. ¯\_(ツ)_/¯
-            $this['swiftmailer.transport'] = \Swift_MailTransport::newInstance();
-        }
     }
 
     public function initExtensions()
@@ -440,14 +404,13 @@ class Application extends Silex\Application
      * @param boolean $long TRUE returns 'version name', FALSE 'version'
      *
      * @return string
+     *
+     * @deprecated since 2.3, will be removed in 3.0
+     *             Use parameters in application instead
      */
     public function getVersion($long = true)
     {
-        if ($long) {
-            return trim($this['bolt_version'] . ' ' . $this['bolt_name']);
-        }
-
-        return $this['bolt_version'];
+        return $this[$long ? 'bolt_long_version' : 'bolt_version'];
     }
 
     /**
