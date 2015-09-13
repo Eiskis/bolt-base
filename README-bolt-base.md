@@ -77,7 +77,7 @@ Still broken as hell, don't use it.
 		"bolt/jsonaccess": "^1.1",
 		"bolt/rssfeed": "^2.1",
 		"bolt/sitemap": "^1.0",
-		// "timcooper/colourspectrum": "^1.0",
+		"timcooper/colourspectrum": "^1.0",
 		"foundrycode/boltredirector": "^1.0"
 	}
 ```

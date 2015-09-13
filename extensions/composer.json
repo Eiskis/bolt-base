@@ -1,4 +1,22 @@
 {
+    "autoload": {
+        "psr-4": {
+            "Bolt\\Composer\\": "",
+            "Bolt\\Composer\\EventListener\\": "/Users/jerry/Development/bolt-base/src/Composer/EventListener"
+        }
+    },
+    "config": {
+        "discard-changes": true,
+        "preferred-install": "dist"
+    },
+    "extra": {
+        "bolt-web-path": "../"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "provide": {
+        "bolt/bolt": "2.3.0"
+    },
     "repositories": {
         "packagist": false,
         "bolt": {
@@ -6,31 +24,15 @@
             "url": "https://extensions.bolt.cm/satis/"
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "config": {
-        "discard-changes": true,
-        "preferred-install": "dist"
-    },
-    "provide": {
-        "bolt/bolt": "2.3.0"
-    },
-    "extra": {
-        "bolt-web-path": ".././"
-    },
-    "autoload": {
-        "psr-4": {
-            "Bolt\\Composer\\": ""
-        }
-    },
-    "scripts": {
-        "post-package-install": "Bolt\\Composer\\ExtensionInstaller::handle",
-        "post-package-update": "Bolt\\Composer\\ExtensionInstaller::handle"
-    },
     "require": {
         "bolt/jsonaccess": "^1.1",
         "bolt/rssfeed": "^2.1",
         "bolt/sitemap": "^1.0",
-        "foundrycode/boltredirector": "^1.0"
+        "foundrycode/boltredirector": "^1.0",
+        "timcooper/colourspectrum": "^1.0"
+    },
+    "scripts": {
+        "post-package-install": "Bolt\\Composer\\EventListener\\PackageEventListener::handle",
+        "post-package-update": "Bolt\\Composer\\EventListener\\PackageEventListener::handle"
     }
 }

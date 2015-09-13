@@ -118,7 +118,7 @@ gulp.task('js-vendor', function() {
 			title: 'File (vendor JS): '
 		})))
 
-		.pipe(plugins.concat('all.js', {newLine: ';'}))
+		.pipe(plugins.concat('vendor.js', {newLine: ';'}))
 		.pipe(plugins.if(!config.debug, plugins.uglify()))
 		// .pipe(plugins.rename({suffix: '.min'}))
 		.pipe(gulp.dest(config.destination));
@@ -135,7 +135,7 @@ gulp.task('js', function () {
 			title: 'File (JS): '
 		})))
 
-		.pipe(plugins.concat('vendor.js', {newLine: ';'}))
+		.pipe(plugins.concat('all.js', {newLine: ';'}))
 		.pipe(plugins.if(!config.debug, plugins.uglify()))
 		// .pipe(plugins.rename({suffix: '.min'}))
 		.pipe(gulp.dest(config.destination));
