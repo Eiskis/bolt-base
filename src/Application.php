@@ -28,7 +28,7 @@ class Application extends Silex\Application
     public function __construct(array $values = [])
     {
         $values['bolt_version'] = '2.3.0';
-        $values['bolt_name'] = 'alpha 1';
+        $values['bolt_name'] = 'alpha 2';
         $values['bolt_released'] = false; // `true` for stable releases, `false` for alpha, beta and RC.
         $values['bolt_long_version'] = function($app) {
             return $app['bolt_version'] . ' ' . $app['bolt_name'];
@@ -78,27 +78,7 @@ class Application extends Silex\Application
     {
         $this
             ->register(new Provider\TokenServiceProvider())
-            ->register(new Provider\SessionServiceProvider(),
-                [
-                    'session.default_options' => [
-                        'cookie_lifetime' => $this['config']->get('general/cookies_lifetime'),
-                        'cookie_path'     => $this['resources']->getUrl('root'),
-                        'cookie_domain'   => $this['config']->get('general/cookies_domain'),
-                        'cookie_secure'   => $this['config']->get('general/enforce_ssl'),
-                        'cookie_httponly' => true,
-                    ],
-                    'sessions.options'        => [
-                        'main' => [
-                            'name' => $this['token.session.name'],
-                        ],
-                        'csrf' => [
-                            'name'                 => $this['token.session.name'] . '_csrf',
-                            'cookie_restrict_path' => true,
-                            'cookie_lifetime'      => 0,
-                        ],
-                    ],
-                ]
-            )
+            ->register(new Provider\SessionServiceProvider())
         ;
     }
 

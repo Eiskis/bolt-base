@@ -13,6 +13,9 @@ app/config/*_local.yml
 thumbs/
 vendor/
 phpunit.xml
+theme/*
+!theme/base-*
+!theme/default
 
 # Unless you want to store vendor's "state" in your Git repo.
 # bin
